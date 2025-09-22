@@ -2,7 +2,7 @@ name: Empaas Monitoring Build
 
 on:
   push:
-    branches: ["release/v1.0.0"] 
+    branches: ["main"] 
 
 env:
   IMAGE_NAME: esmosolutions/monitoring
@@ -26,7 +26,7 @@ jobs:
       - name: Set tag
         id: meta
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/release/v1.0.0" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             TAG="latest"
           elif [ "${{ github.ref }}" = "refs/heads/canary" ]; then
             TAG="canary"
@@ -61,7 +61,7 @@ jobs:
       - name: Set
         id: meta
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/release/v1.0.0" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             TAG="latest"
           elif [ "${{ github.ref }}" = "refs/heads/canary" ]; then
             TAG="canary"
@@ -97,7 +97,7 @@ jobs:
 
       - name: Create and push manifests
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/release/v1.0.0" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             TAG="latest"
 
             docker buildx imagetools create -t ${IMAGE_NAME}:${TAG} \

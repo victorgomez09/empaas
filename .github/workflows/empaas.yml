@@ -2,7 +2,7 @@ name: Empaas Docker Build
 
 on:
   push:
-    branches: ["release/v1.0.0"]
+    branches: ["main"]
   workflow_dispatch:
 
 env:
@@ -27,7 +27,7 @@ jobs:
       - name: Set tag and version
         id: meta
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/release/v1.0.0" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             TAG="latest"
             VERSION=$(node -p "require('./apps/empaas/package.json').version")
           elif [ "${{ github.ref }}" = "refs/heads/canary" ]; then
@@ -68,7 +68,7 @@ jobs:
         id: meta
         run: |
           VERSION=$(node -p "require('./apps/empaas/package.json').version")
-          if [ "${{ github.ref }}" = "refs/heads/release/v1.0.0" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             TAG="latest"
             VERSION=$(node -p "require('./apps/empaas/package.json').version")
           elif [ "${{ github.ref }}" = "refs/heads/canary" ]; then
@@ -109,7 +109,7 @@ jobs:
 
       - name: Create and push manifests
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/release/v1.0.0" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             VERSION=$(node -p "require('./apps/empaas/package.json').version")
             TAG="latest"
 
