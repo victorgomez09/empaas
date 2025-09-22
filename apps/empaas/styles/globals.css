@@ -1,0 +1,260 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 97.6471%;
+    --foreground: 0 0% 12.5490%;
+    --card: 0 0% 98.8235%;
+    --card-foreground: 0 0% 12.5490%;
+    --popover: 0 0% 98.8235%;
+    --popover-foreground: 0 0% 12.5490%;
+    --primary: 136.4211 53.0726% 64.9020%;
+    --primary-foreground: 0 0% 16.0784%;
+    --secondary: 222.7273 39.7590% 32.5490%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 93.7255%;
+    --muted-foreground: 0 0% 39.2157%;
+    --accent: 0 0% 90.9804%;
+    --accent-foreground: 0 0% 12.5490%;
+    --destructive: 10.2128 100% 53.9216%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 84.7059%;
+    --input: 0 0% 84.7059%;
+    --ring: 16.8000 30.4878% 32.1569%;
+    --chart-1: 16.8000 30.4878% 32.1569%;
+    --chart-2: 34.0541 100.0000% 85.4902%;
+    --chart-3: 0 0% 90.9804%;
+    --chart-4: 34.5763 100.0000% 88.4314%;
+    --chart-5: 16.0714 34.1463% 32.1569%;
+    --sidebar: 0 0% 98.4314%;
+    --sidebar-foreground: 0 0% 14.5098%;
+    --sidebar-primary: 0 0% 20.3922%;
+    --sidebar-primary-foreground: 0 0% 98.4314%;
+    --sidebar-accent: 0 0% 96.8627%;
+    --sidebar-accent-foreground: 0 0% 20.3922%;
+    --sidebar-border: 0 0% 92.1569%;
+    --sidebar-ring: 0 0% 70.9804%;
+    --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --radius: 0.25rem;
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+    --tracking-normal: 0em;
+    --spacing: 0.25rem;
+  }
+
+  .dark {
+    --background: 0 0% 6.6667%;
+    --foreground: 0 0% 93.3333%;
+    --card: 0 0% 9.8039%;
+    --card-foreground: 0 0% 93.3333%;
+    --popover: 0 0% 9.8039%;
+    --popover-foreground: 0 0% 93.3333%;
+    --primary: 136.4211 53.0726% 64.9020%;
+    --primary-foreground: 183.0769 76.4706% 10%;
+    --secondary: 222.7273 39.7590% 32.5490%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 13.3333%;
+    --muted-foreground: 0 0% 70.5882%;
+    --accent: 0 0% 16.4706%;
+    --accent-foreground: 0 0% 93.3333%;
+    --destructive: 10.2128 100% 53.9216%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 45 21.4286% 10.9804%;
+    --input: 0 0% 28.2353%;
+    --ring: 29.5082 100% 88.0392%;
+    --chart-1: 29.5082 100% 88.0392%;
+    --chart-2: 28.6957 23.7113% 19.0196%;
+    --chart-3: 0 0% 16.4706%;
+    --chart-4: 30.0000 25.0000% 21.9608%;
+    --chart-5: 30 100% 87.8431%;
+    --sidebar: 240 9.8039% 10%;
+    --sidebar-foreground: 240 4.7619% 95.8824%;
+    --sidebar-primary: 224.3265 100% 48.0392%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 6.1728% 15.8824%;
+    --sidebar-accent-foreground: 240 4.7619% 95.8824%;
+    --sidebar-border: 240 6.1728% 15.8824%;
+    --sidebar-ring: 240 7.3171% 83.9216%;
+    --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --radius: 0.25rem;
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Custom scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 0.3125rem;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 0.3125rem;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+}
+
+.xterm-viewport {
+  border-radius: 0.75rem
+    /* 12px */
+    !important;
+}
+
+.xterm .xterm-viewport {
+  overflow-y: auto !important;
+}
+
+.xterm .xterm-screen {
+  overflow: hidden;
+}
+
+@layer utilities {
+
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+}
+
+/* Codemirror */
+.cm-editor {
+  @apply w-full h-full rounded-md overflow-hidden border border-solid border-border outline-none;
+}
+
+.cm-editor .cm-scroller {
+  font-family: inherit;
+  line-height: inherit;
+}
+
+.cm-editor.cm-focused {
+  @apply outline-none;
+}
+
+/* fix: placeholder bg */
+.cm-editor .cm-activeLine:has(.cm-placeholder) {
+  background-color: transparent;
+}
+
+.compose-file-editor .cm-editor {
+  @apply min-h-[25rem];
+}
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+
+  25% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+
+  75% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+}
+
+.animate-heartbeat {
+  animation: heartbeat 2.5s infinite;
+}
+
+@media (prefers-color-scheme: dark) {
+  .swagger-ui {
+    background-color: white;
+  }
+
+  .swagger-ui .info {
+    margin: 0px !important;
+    padding-top: 1rem !important;
+  }
+}
+
+/* Docker Logs Scrollbar */
+@layer utilities {
+  .custom-logs-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground)) transparent;
+  }
+
+  .custom-logs-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-logs-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-logs-scrollbar::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 20px;
+  }
+
+  .custom-logs-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted-foreground) / 0.5);
+  }
+}
+
+.xterm-bg-257.xterm-fg-257 {
+  background-color: var(--terminal-paste) !important;
+  color: currentColor !important;
+}
+
+.cm-content,
+.cm-lineWrapping {
+  @apply font-mono;
+}
