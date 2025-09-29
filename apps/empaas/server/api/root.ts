@@ -39,6 +39,8 @@ import { stripeRouter } from "./routers/stripe";
 import { swarmRouter } from "./routers/swarm";
 import { userRouter } from "./routers/user";
 import { volumeBackupsRouter } from "./routers/volume-backups";
+import { webhookRouter } from "./routers/webhook";
+
 /**
  * This is the primary router for your server.
  *
@@ -86,6 +88,7 @@ export const appRouter = createTRPCRouter({
 	rollback: rollbackRouter,
 	volumeBackups: volumeBackupsRouter,
 	environment: environmentRouter,
+	webhook: webhookRouter,
 });
 
 // export type definition of API

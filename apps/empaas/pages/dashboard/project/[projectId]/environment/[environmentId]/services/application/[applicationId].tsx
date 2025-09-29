@@ -41,6 +41,7 @@ import { ShowPreviewDeployments } from "@/components/dashboard/application/previ
 import { ShowSchedules } from "@/components/dashboard/application/schedules/show-schedules";
 import { UpdateApplication } from "@/components/dashboard/application/update-application";
 import { ShowVolumeBackups } from "@/components/dashboard/application/volume-backups/show-volume-backups";
+import { ShowWebhooks } from "@/components/dashboard/application/webhooks/show-webhooks";
 import { DeleteService } from "@/components/dashboard/compose/delete-service";
 import { ContainerFreeMonitoring } from "@/components/dashboard/monitoring/free/container/show-free-container-monitoring";
 import { ContainerPaidMonitoring } from "@/components/dashboard/monitoring/paid/container/show-paid-container-monitoring";
@@ -78,12 +79,13 @@ import { api } from "@/utils/api";
 type TabState =
 	| "projects"
 	| "settings"
-	| "advanced"
 	| "deployments"
+	| "preview-deployments"
 	| "domains"
 	| "monitoring"
-	| "preview-deployments"
-	| "volume-backups";
+	| "volume-backups"
+	| "advanced"
+	| "webhooks";
 
 const Service = (
 	props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -550,15 +552,16 @@ const Service = (
 									<TabsTrigger value="general">General</TabsTrigger>
 									<TabsTrigger value="environment">Environment</TabsTrigger>
 									<TabsTrigger value="domains">Domains</TabsTrigger>
+									<TabsTrigger value="deployments">Deployments</TabsTrigger>
 									<TabsTrigger value="preview-deployments">
 										Preview Deployments
 									</TabsTrigger>
+									<TabsTrigger value="logs">Logs</TabsTrigger>
 									<TabsTrigger value="schedules">Schedules</TabsTrigger>
 									<TabsTrigger value="volume-backups">
 										Volume Backups
 									</TabsTrigger>
-									<TabsTrigger value="deployments">Deployments</TabsTrigger>
-									<TabsTrigger value="logs">Logs</TabsTrigger>
+									<TabsTrigger value="webhooks">Webhooks</TabsTrigger>
 									{((data?.serverId && isCloud) || !data?.server) && (
 										<TabsTrigger value="monitoring">Monitoring</TabsTrigger>
 									)}
@@ -697,6 +700,13 @@ const Service = (
 										<ShowPorts applicationId={applicationId} />
 										<ShowTraefikConfig applicationId={applicationId} />
 									</div>
+								</TabsContent>
+
+								<TabsContent
+									value="webhooks"
+									className="flex flex-col gap-2 w-full"
+								>
+									<ShowWebhooks applicationId={applicationId} />
 								</TabsContent>
 							</div>
 						</Tabs>
