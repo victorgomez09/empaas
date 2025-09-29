@@ -14,6 +14,7 @@ export type RedisNested = InferResultType<
 	"redis",
 	{ mounts: true; environment: { with: { project: true } } }
 >;
+
 export const buildRedis = async (redis: RedisNested) => {
 	const {
 		appName,
@@ -42,6 +43,7 @@ export const buildRedis = async (redis: RedisNested) => {
 		RollbackConfig,
 		UpdateConfig,
 		Networks,
+		StopGracePeriod
 	} = generateConfigContainer(redis);
 	const resources = calculateResources({
 		memoryLimit,
@@ -98,6 +100,8 @@ export const buildRedis = async (redis: RedisNested) => {
 				: [],
 		},
 		UpdateConfig,
+		...(StopGracePeriod !== undefined &&
+			StopGracePeriod !== null && { StopGracePeriod }),
 	};
 
 	try {

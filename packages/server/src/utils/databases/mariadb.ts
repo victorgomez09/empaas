@@ -14,6 +14,7 @@ export type MariadbNested = InferResultType<
 	"mariadb",
 	{ mounts: true; environment: { with: { project: true } } }
 >;
+
 export const buildMariadb = async (mariadb: MariadbNested) => {
 	const {
 		appName,
@@ -45,6 +46,7 @@ export const buildMariadb = async (mariadb: MariadbNested) => {
 		RollbackConfig,
 		UpdateConfig,
 		Networks,
+		StopGracePeriod
 	} = generateConfigContainer(mariadb);
 	const resources = calculateResources({
 		memoryLimit,
@@ -102,6 +104,8 @@ export const buildMariadb = async (mariadb: MariadbNested) => {
 				: [],
 		},
 		UpdateConfig,
+		...(StopGracePeriod !== undefined &&
+			StopGracePeriod !== null && { StopGracePeriod }),
 	};
 	try {
 		const service = docker.getService(appName);

@@ -32,6 +32,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { api } from "@/utils/api";
+import { Input } from "@/components/ui/input";
 
 const HealthCheckSwarmSchema = z
 	.object({
@@ -176,6 +177,7 @@ const addSwarmSettings = z.object({
 	modeSwarm: createStringToJSONSchema(ServiceModeSwarmSchema).nullable(),
 	labelsSwarm: createStringToJSONSchema(LabelsSwarmSchema).nullable(),
 	networkSwarm: createStringToJSONSchema(NetworkSwarmSchema).nullable(),
+	stopGracePeriodSwarm: z.bigint().nullable(),
 });
 
 type AddSwarmSettings = z.infer<typeof addSwarmSettings>;
@@ -184,6 +186,11 @@ interface Props {
 	id: string;
 	type: "postgres" | "mariadb" | "mongo" | "mysql" | "redis" | "application";
 }
+
+const hasStopGracePeriodSwarm = (
+	value: unknown,
+): value is { stopGracePeriodSwarm: bigint | number | string | null } =>
+	typeof value === "object" && value !== null && "stopGracePeriodSwarm" in value;
 
 export const AddSwarmSettings = ({ id, type }: Props) => {
 	const queryMap = {
@@ -230,6 +237,16 @@ export const AddSwarmSettings = ({ id, type }: Props) => {
 
 	useEffect(() => {
 		if (data) {
+			const stopGracePeriodValue = hasStopGracePeriodSwarm(data)
+				? data.stopGracePeriodSwarm
+				: null;
+			const normalizedStopGracePeriod =
+				stopGracePeriodValue === null || stopGracePeriodValue === undefined
+					? null
+					: typeof stopGracePeriodValue === "bigint"
+						? stopGracePeriodValue
+						: BigInt(stopGracePeriodValue);
+
 			form.reset({
 				healthCheckSwarm: data.healthCheckSwarm
 					? JSON.stringify(data.healthCheckSwarm, null, 2)
@@ -255,6 +272,7 @@ export const AddSwarmSettings = ({ id, type }: Props) => {
 				networkSwarm: data.networkSwarm
 					? JSON.stringify(data.networkSwarm, null, 2)
 					: null,
+				stopGracePeriodSwarm: normalizedStopGracePeriod,
 			});
 		}
 	}, [form, form.reset, data]);
@@ -275,6 +293,7 @@ export const AddSwarmSettings = ({ id, type }: Props) => {
 			modeSwarm: data.modeSwarm,
 			labelsSwarm: data.labelsSwarm,
 			networkSwarm: data.networkSwarm,
+			stopGracePeriodSwarm: data.stopGracePeriodSwarm ?? null,
 		})
 			.then(async () => {
 				toast.success("Swarm settings updated");
@@ -766,6 +785,57 @@ export const AddSwarmSettings = ({ id, type }: Props) => {
 											className="h-[20rem] font-mono"
 											{...field}
 											value={field?.value || ""}
+										/>
+									</FormControl>
+									<pre>
+										<FormMessage />
+									</pre>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="stopGracePeriodSwarm"
+							render={({ field }) => (
+								<FormItem className="relative max-lg:px-4 lg:pl-6 ">
+									<FormLabel>Stop Grace Period (nanoseconds)</FormLabel>
+									<TooltipProvider delayDuration={0}>
+										<Tooltip>
+											<TooltipTrigger asChild>
+												<FormDescription className="break-all w-fit flex flex-row gap-1 items-center">
+													Duration in nanoseconds
+													<HelpCircle className="size-4 text-muted-foreground" />
+												</FormDescription>
+											</TooltipTrigger>
+											<TooltipContent
+												className="w-full z-[999]"
+												align="start"
+												side="bottom"
+											>
+												<code>
+													<pre>
+														{`Enter duration in nanoseconds:
+														• 30000000000 - 30 seconds
+														• 120000000000 - 2 minutes  
+														• 3600000000000 - 1 hour
+														• 0 - no grace period`}
+													</pre>
+												</code>
+											</TooltipContent>
+										</Tooltip>
+									</TooltipProvider>
+									<FormControl>
+										<Input
+											type="number"
+											placeholder="30000000000"
+											className="font-mono"
+											{...field}
+											value={field?.value?.toString() || ""}
+											onChange={(e) =>
+												field.onChange(
+													e.target.value ? BigInt(e.target.value) : null,
+												)
+											}
 										/>
 									</FormControl>
 									<pre>
