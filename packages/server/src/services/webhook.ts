@@ -177,9 +177,9 @@ export const sendWebhook = async (
 		// Prepare headers
 		const headers: HeadersInit = {
 			"Content-Type": "application/json",
-			"X-Dokploy-Event": event.event,
-			"X-Dokploy-Signature-256": `sha256=${signature}`,
-			"X-Dokploy-Delivery": deliveryId,
+			"X-Empaas-Event": event.event,
+			"X-Empaas-Signature-256": `sha256=${signature}`,
+			"X-Empaas-Delivery": deliveryId,
 			...((webhook.headers as Record<string, string>) || {}),
 		};
 
@@ -308,8 +308,8 @@ const formatSlackPayload = (event: WebhookEvent): any => {
 				title: `${emoji} ${title}`,
 				text: event.application?.url || event.compose?.url || "",
 				fields,
-				footer: "Dokploy",
-				footer_icon: "https://dokploy.com/icon.svg",
+				footer: "Empaas",
+				footer_icon: "https://esmosolutions.es/icon.svg",
 				ts: Math.floor(new Date(event.timestamp).getTime() / 1000),
 			},
 		],
@@ -467,7 +467,7 @@ export const testWebhook = async (webhookId: string): Promise<void> => {
 			type: "github",
 			branch: "main",
 			commit: "abc123",
-			repository: "dokploy/test",
+			repository: "empaas/test",
 		},
 		trigger: {
 			type: "manual",

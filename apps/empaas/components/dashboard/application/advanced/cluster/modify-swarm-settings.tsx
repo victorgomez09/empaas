@@ -889,7 +889,7 @@ const NetworkForm = ({ form }: { form: any }) => {
 										<FormItem>
 											<FormLabel>Target</FormLabel>
 											<FormControl>
-												<Input placeholder="e.g., dokploy-network" {...field} />
+												<Input placeholder="e.g., empaas-network" {...field} />
 											</FormControl>
 											<FormMessage />
 										</FormItem>

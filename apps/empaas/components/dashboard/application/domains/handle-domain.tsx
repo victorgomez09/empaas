@@ -717,7 +717,7 @@ export const AddDomain = ({ id, type, domainId = "", children }: Props) => {
 												<FormLabel>Wildcard Domain</FormLabel>
 												<FormDescription>
 													Allow any subdomain to route to this application
-													(e.g., *-dev.dokploy.com)
+													(e.g., *-dev.empaas.com)
 												</FormDescription>
 											</div>
 											<FormControl>
