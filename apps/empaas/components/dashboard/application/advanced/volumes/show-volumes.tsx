@@ -2,6 +2,7 @@ import { Package, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { AlertBlock } from "@/components/shared/alert-block";
 import { DialogAction } from "@/components/shared/dialog-action";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -14,7 +15,6 @@ import { api } from "@/utils/api";
 import type { ServiceType } from "../show-resources";
 import { AddVolumes } from "./add-volumes";
 import { UpdateVolume } from "./update-volume";
-import { Badge } from "@/components/ui/badge";
 
 interface Props {
 	id: string;
@@ -176,10 +176,10 @@ export const ShowVolumes = ({ id, type }: Props) => {
 														const [o, g, t] = n
 															.split("")
 															.map((d) => Number.parseInt(d, 10)) as [
-																number,
-																number,
-																number,
-															];
+															number,
+															number,
+															number,
+														];
 														const fmt = (b: {
 															r: boolean;
 															w: boolean;

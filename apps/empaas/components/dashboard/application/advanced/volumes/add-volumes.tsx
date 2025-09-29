@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { AlertBlock } from "@/components/shared/alert-block";
 import { CodeEditor } from "@/components/shared/code-editor";
+import PermissionMode from "@/components/shared/permission-mode";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -29,8 +31,6 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { Badge } from "@/components/ui/badge";
-import PermissionMode from "@/components/shared/permission-mode";
 
 interface Props {
 	serviceId: string;
@@ -112,7 +112,7 @@ export const AddVolumes = ({
 			type: serviceType === "compose" ? "file" : "bind",
 			hostPath: "",
 			mountPath: serviceType === "compose" ? "/" : "",
-					uid: undefined,
+			uid: undefined,
 			gid: undefined,
 			mode: "",
 		},
@@ -150,7 +150,7 @@ export const AddVolumes = ({
 				mountPath: data.mountPath,
 				type: data.type,
 				serviceType,
-					uid: data.uid,
+				uid: data.uid,
 				gid: data.gid,
 				mode: data.mode,
 			})

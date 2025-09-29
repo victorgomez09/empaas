@@ -114,7 +114,7 @@ const createSchema = createInsertSchema(mounts, {
 			"compose",
 		])
 		.default("application"),
-		// Optional ownership and permissions
+	// Optional ownership and permissions
 	uid: z.number().int().optional(),
 	gid: z.number().int().optional(),
 	mode: z.string().optional(),

@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { AlertBlock } from "@/components/shared/alert-block";
 import { CodeEditor } from "@/components/shared/code-editor";
+import PermissionMode from "@/components/shared/permission-mode";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -26,8 +28,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { api } from "@/utils/api";
-import { Badge } from "@/components/ui/badge";
-import PermissionMode from "@/components/shared/permission-mode";
 
 const mountSchema = z.object({
 	mountPath: z.string().min(1, "Mount path required"),
@@ -75,7 +75,7 @@ const mySchema = z.discriminatedUnion("type", [
 			content: z.string().optional(),
 			filePath: z.string().min(1, "File path required"),
 		})
-			.merge(mountSchema)
+		.merge(mountSchema)
 		.merge(ownershipSchema),
 ]);
 
