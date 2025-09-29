@@ -167,6 +167,7 @@ const addPermissions = z.object({
 	canAccessToSSHKeys: z.boolean().optional().default(false),
 	canAccessToGitProviders: z.boolean().optional().default(false),
 	canCreateEnvironments: z.boolean().optional().default(false),
+	canDeleteEnvironments: z.boolean().optional().default(false),
 });
 
 type AddPermissions = z.infer<typeof addPermissions>;
@@ -206,6 +207,7 @@ export const AddUserPermissions = ({ userId }: Props) => {
 			canAccessToSSHKeys: false,
 			canAccessToGitProviders: false,
 			canCreateEnvironments: false,
+			canDeleteEnvironments: false,
 		},
 		resolver: zodResolver(addPermissions),
 	});
@@ -226,6 +228,7 @@ export const AddUserPermissions = ({ userId }: Props) => {
 				canAccessToSSHKeys: data.canAccessToSSHKeys || false,
 				canAccessToGitProviders: data.canAccessToGitProviders || false,
 				canCreateEnvironments: data.canCreateEnvironments || false,
+				canDeleteEnvironments: data.canDeleteEnvironments || false,
 			});
 		}
 	}, [form, form.formState.isSubmitSuccessful, form.reset, data, isOpen]);
@@ -246,6 +249,7 @@ export const AddUserPermissions = ({ userId }: Props) => {
 			canAccessToSSHKeys: data.canAccessToSSHKeys,
 			canAccessToGitProviders: data.canAccessToGitProviders,
 			canCreateEnvironments: data.canCreateEnvironments,
+			canDeleteEnvironments: data.canDeleteEnvironments,
 		})
 			.then(async () => {
 				toast.success("Permissions updated");
@@ -368,6 +372,26 @@ export const AddUserPermissions = ({ userId }: Props) => {
 										<FormLabel>Create Environments</FormLabel>
 										<FormDescription>
 											Allow the user to create environments
+										</FormDescription>
+									</div>
+									<FormControl>
+										<Switch
+											checked={field.value}
+											onCheckedChange={field.onChange}
+										/>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="canDeleteEnvironments"
+							render={({ field }) => (
+								<FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+									<div className="space-y-0.5">
+										<FormLabel>Delete Environments</FormLabel>
+										<FormDescription>
+											Allow the user to delete environments
 										</FormDescription>
 									</div>
 									<FormControl>

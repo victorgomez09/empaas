@@ -9,7 +9,10 @@ import {
 	findMemberById,
 	updateEnvironmentById,
 } from "@empaas/server";
-import { checkEnvironmentCreationPermission } from "@empaas/server/index";
+import {
+	checkEnvironmentCreationPermission,
+	checkEnvironmentDeletionPermission,
+} from "@empaas/server/index";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -194,14 +197,6 @@ export const environmentRouter = createTRPCRouter({
 		.input(apiRemoveEnvironment)
 		.mutation(async ({ input, ctx }) => {
 			try {
-				if (ctx.user.role === "member") {
-					await checkEnvironmentAccess(
-						ctx.user.id,
-						input.environmentId,
-						ctx.session.activeOrganizationId,
-						"access",
-					);
-				}
 				const environment = await findEnvironmentById(input.environmentId);
 				if (
 					environment.project.organizationId !==
@@ -213,27 +208,32 @@ export const environmentRouter = createTRPCRouter({
 					});
 				}
 
+				// Check environment deletion permission
+				await checkEnvironmentDeletionPermission(
+					ctx.user.id,
+					environment.projectId,
+					ctx.session.activeOrganizationId,
+				);
+
 				// Check environment access for members
 				if (ctx.user.role === "member") {
-					const { accessedEnvironments } = await findMemberById(
+					await checkEnvironmentAccess(
 						ctx.user.id,
+						input.environmentId,
 						ctx.session.activeOrganizationId,
+						"access",
 					);
-
-					if (!accessedEnvironments.includes(environment.environmentId)) {
-						throw new TRPCError({
-							code: "FORBIDDEN",
-							message: "You are not allowed to delete this environment",
-						});
-					}
 				}
 
-				const deletedEnvironment = await deleteEnvironment(input.environmentId);
-				return deletedEnvironment;
+				return await deleteEnvironment(input.environmentId);
 			} catch (error) {
+				if (error instanceof TRPCError) {
+					throw error;
+				}
 				throw new TRPCError({
 					code: "BAD_REQUEST",
 					message: `Error deleting the environment: ${error instanceof Error ? error.message : error}`,
+					cause: error,
 				});
 			}
 		}),
