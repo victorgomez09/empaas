@@ -88,6 +88,7 @@ interface Props {
 	serviceType:
 		| "application"
 		| "postgres"
+		| "libsql"
 		| "redis"
 		| "mongo"
 		| "redis"

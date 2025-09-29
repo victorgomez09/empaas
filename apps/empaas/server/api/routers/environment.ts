@@ -42,6 +42,9 @@ const filterEnvironmentServices = (
 	mysql: environment.mysql.filter((db: any) =>
 		accessedServices.includes(db.mysqlId),
 	),
+	libsql: environment.libsql.filter((db: any) =>
+		accessedServices.includes(db.libsqlId),
+	),
 	postgres: environment.postgres.filter((db: any) =>
 		accessedServices.includes(db.postgresId),
 	),

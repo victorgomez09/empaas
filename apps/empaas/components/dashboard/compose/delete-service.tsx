@@ -58,6 +58,7 @@ export const DeleteService = ({ id, type }: Props) => {
 		application: () =>
 			api.application.one.useQuery({ applicationId: id }, { enabled: !!id }),
 		mongo: () => api.mongo.one.useQuery({ mongoId: id }, { enabled: !!id }),
+		libsql: () => api.libsql.one.useQuery({ libsqlId: id }, { enabled: !!id }),
 		compose: () =>
 			api.compose.one.useQuery({ composeId: id }, { enabled: !!id }),
 	};
@@ -72,6 +73,7 @@ export const DeleteService = ({ id, type }: Props) => {
 		mariadb: () => api.mariadb.remove.useMutation(),
 		application: () => api.application.delete.useMutation(),
 		mongo: () => api.mongo.remove.useMutation(),
+		libsql: () => api.libsql.remove.useMutation(),
 		compose: () => api.compose.delete.useMutation(),
 	};
 	const { mutateAsync, isLoading } = mutationMap[type]
@@ -93,6 +95,7 @@ export const DeleteService = ({ id, type }: Props) => {
 			await mutateAsync({
 				mongoId: id || "",
 				postgresId: id || "",
+					libsqlId: id || "",
 				redisId: id || "",
 				mysqlId: id || "",
 				mariadbId: id || "",

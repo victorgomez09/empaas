@@ -2,6 +2,7 @@ import { db } from "@empaas/server/db";
 import {
 	type apiCreateProject,
 	applications,
+	libsql,
 	mariadb,
 	mongo,
 	mysql,
@@ -56,6 +57,7 @@ export const findProjectById = async (projectId: string) => {
 					mongo: true,
 					mysql: true,
 					postgres: true,
+					libsql: true,
 					redis: true,
 					compose: true,
 				},
@@ -106,6 +108,9 @@ export const validUniqueServerAppName = async (appName: string) => {
 			mariadb: {
 				where: eq(mariadb.appName, appName),
 			},
+			libsql: {
+				where: eq(libsql.appName, appName),
+			},
 			mongo: {
 				where: eq(mongo.appName, appName),
 			},
@@ -129,6 +134,7 @@ export const validUniqueServerAppName = async (appName: string) => {
 			project.mongo.length > 0 ||
 			project.mysql.length > 0 ||
 			project.postgres.length > 0 ||
+			project.libsql.length > 0 ||
 			project.redis.length > 0,
 	);
 

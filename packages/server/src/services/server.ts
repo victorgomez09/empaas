@@ -83,6 +83,7 @@ export const haveActiveServices = async (serverId: string) => {
 			mariadb: true,
 			mongo: true,
 			mysql: true,
+			libsql: true,
 			postgres: true,
 		},
 	});
@@ -98,6 +99,7 @@ export const haveActiveServices = async (serverId: string) => {
 		currentServer?.mariadb?.length +
 		currentServer?.mongo?.length +
 		currentServer?.mysql?.length +
+		currentServer?.libsql?.length +
 		currentServer?.postgres?.length;
 
 	if (total === 0) {

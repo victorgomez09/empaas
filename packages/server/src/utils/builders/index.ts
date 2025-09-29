@@ -157,7 +157,7 @@ export const runDeployHook = async (
 	const networkName =
 		Networks?.[0] && (Networks[0] as any).Target
 			? (Networks[0] as any).Target
-			: "dokploy-network";
+			: "empaas-network";
 
 	const docker = await getRemoteDocker(application.serverId);
 

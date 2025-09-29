@@ -42,6 +42,7 @@ interface Props {
 		| "redis"
 		| "mysql"
 		| "mariadb"
+		| "libsql"
 		| "compose";
 	refetch: () => void;
 	children?: React.ReactNode;

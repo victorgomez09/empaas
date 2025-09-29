@@ -131,7 +131,7 @@ type SwarmSettingsForm = z.infer<typeof SwarmSettingsFormSchema>;
 
 interface Props {
 	id: string;
-	type: "postgres" | "mariadb" | "mongo" | "mysql" | "redis" | "application";
+	type: "postgres" | "mariadb" | "mongo" | "mysql" | "redis" | "libsql" | "application";
 }
 
 // Individual form components
@@ -1184,6 +1184,7 @@ export const AddSwarmSettings = ({ id, type }: Props) => {
 		application: () =>
 			api.application.one.useQuery({ applicationId: id }, { enabled: !!id }),
 		mongo: () => api.mongo.one.useQuery({ mongoId: id }, { enabled: !!id }),
+		libsql: () => api.libsql.one.useQuery({ libsqlId: id }, { enabled: !!id }),
 	};
 	const { data, refetch } = queryMap[type]
 		? queryMap[type]()
@@ -1196,6 +1197,7 @@ export const AddSwarmSettings = ({ id, type }: Props) => {
 		mariadb: () => api.mariadb.update.useMutation(),
 		application: () => api.application.update.useMutation(),
 		mongo: () => api.mongo.update.useMutation(),
+		libsql: () => api.libsql.update.useMutation(),
 	};
 
 	const { mutateAsync, isError, error, isLoading } = mutationMap[type]
@@ -1544,6 +1546,7 @@ export const AddSwarmSettings = ({ id, type }: Props) => {
 			mysqlId: id || "",
 			mariadbId: id || "",
 			mongoId: id || "",
+			libsqlId: id || "",
 			...apiData,
 		})
 			.then(async () => {

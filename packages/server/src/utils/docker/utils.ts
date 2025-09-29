@@ -14,6 +14,7 @@ import type { RedisNested } from "../databases/redis";
 import { execAsync, execAsyncRemote } from "../process/execAsync";
 import { spawnAsync } from "../process/spawnAsync";
 import { getRemoteDocker } from "../servers/remote-docker";
+import { LibsqlNested } from "../databases/libsql";
 
 interface RegistryAuth {
 	username: string;
@@ -485,6 +486,7 @@ export const generateFileMounts = (
 		| MongoNested
 		| MariadbNested
 		| MysqlNested
+		| LibsqlNested
 		| PostgresNested
 		| RedisNested,
 ) => {

@@ -4,7 +4,7 @@ import { db } from "@empaas/server/db";
 import {
 	type apiCreateMount,
 	mounts,
-	type ServiceType,
+	ServiceType
 } from "@empaas/server/db/schema";
 import {
 	createFile,
@@ -104,6 +104,9 @@ export const createMount = async (input: typeof apiCreateMount._type) => {
 				...(input.serviceType === "mariadb" && {
 					mariadbId: serviceId,
 				}),
+				...(input.serviceType === "libsql" && {
+					libsqlId: serviceId,
+				}),
 				...(input.serviceType === "mongo" && {
 					mongoId: serviceId,
 				}),
@@ -186,6 +189,15 @@ export const findMountById = async (mountId: string) => {
 					},
 				},
 			},
+			libsql: {
+				with: {
+					environment: {
+						with: {
+							project: true,
+						},
+					},
+				},
+			},
 			postgres: {
 				with: {
 					environment: {
@@ -260,6 +272,9 @@ export const findMountOrganizationId = async (mountId: string) => {
 	if (mount.postgres) {
 		return mount.postgres.environment.project.organizationId;
 	}
+	if (mount.libsql) {
+		return mount.libsql.environment.project.organizationId;
+	}
 	if (mount.mariadb) {
 		return mount.mariadb.environment.project.organizationId;
 	}
@@ -323,6 +338,9 @@ export const findMountsByApplicationId = async (
 	switch (serviceType) {
 		case "application":
 			sqlChunks.push(eq(mounts.applicationId, serviceId));
+			break;
+		case "libsql":
+			sqlChunks.push(eq(mounts.libsqlId, serviceId));
 			break;
 		case "postgres":
 			sqlChunks.push(eq(mounts.postgresId, serviceId));
@@ -411,6 +429,10 @@ export const getBaseFilesPath = async (mountId: string) => {
 		const { APPLICATIONS_PATH } = paths(!!mount.application.serverId);
 		absoluteBasePath = path.resolve(APPLICATIONS_PATH);
 		appName = mount.application.appName;
+	} else if (mount.serviceType === "libsql" && mount.libsql) {
+		const { APPLICATIONS_PATH } = paths(!!mount.libsql.serverId);
+		absoluteBasePath = path.resolve(APPLICATIONS_PATH);
+		appName = mount.libsql.appName;
 	} else if (mount.serviceType === "postgres" && mount.postgres) {
 		const { APPLICATIONS_PATH } = paths(!!mount.postgres.serverId);
 		absoluteBasePath = path.resolve(APPLICATIONS_PATH);
@@ -448,6 +470,9 @@ export const getServerId = async (mount: MountNested) => {
 	}
 	if (mount.serviceType === "postgres" && mount?.postgres?.serverId) {
 		return mount.postgres.serverId;
+	}
+	if (mount.serviceType === "libsql" && mount?.libsql?.serverId) {
+		return mount.libsql.serverId;
 	}
 	if (mount.serviceType === "mariadb" && mount?.mariadb?.serverId) {
 		return mount.mariadb.serverId;

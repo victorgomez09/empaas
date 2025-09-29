@@ -519,6 +519,7 @@ export const settingsRouter = createTRPCRouter({
 					"redis",
 					"mongo",
 					"mariadb",
+					"libsql",
 					"sshRouter",
 					"gitProvider",
 					"bitbucket",

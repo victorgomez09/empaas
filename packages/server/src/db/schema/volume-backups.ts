@@ -14,6 +14,7 @@ import { mysql } from "./mysql";
 import { postgres } from "./postgres";
 import { redis } from "./redis";
 import { generateAppName } from "./utils";
+import { libsql } from "./libsql";
 
 export const volumeBackups = pgTable("volume_backup", {
 	volumeBackupId: text("volumeBackupId")
@@ -22,8 +23,8 @@ export const volumeBackups = pgTable("volume_backup", {
 		.$defaultFn(() => nanoid()),
 	name: text("name").notNull(),
 	volumeName: text("volumeName").notNull(),
-	prefix: text("prefix").notNull(),
 	serviceType: serviceType("serviceType").notNull().default("application"),
+	prefix: text("prefix").notNull(),
 	appName: text("appName")
 		.notNull()
 		.$defaultFn(() => generateAppName("volumeBackup")),
@@ -38,6 +39,9 @@ export const volumeBackups = pgTable("volume_backup", {
 			onDelete: "cascade",
 		},
 	),
+	libsqlId: text("libsqlId").references(() => libsql.libsqlId, {
+		onDelete: "cascade",
+	}),
 	postgresId: text("postgresId").references(() => postgres.postgresId, {
 		onDelete: "cascade",
 	}),
@@ -72,6 +76,10 @@ export const volumeBackupsRelations = relations(
 		application: one(applications, {
 			fields: [volumeBackups.applicationId],
 			references: [applications.applicationId],
+		}),
+			libsql: one(libsql, {
+			fields: [volumeBackups.libsqlId],
+			references: [libsql.libsqlId],
 		}),
 		postgres: one(postgres, {
 			fields: [volumeBackups.postgresId],

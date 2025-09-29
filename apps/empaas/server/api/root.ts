@@ -16,6 +16,7 @@ import { gitProviderRouter } from "./routers/git-provider";
 import { giteaRouter } from "./routers/gitea";
 import { githubRouter } from "./routers/github";
 import { gitlabRouter } from "./routers/gitlab";
+import { libsqlRouter } from "./routers/libsql";
 import { mariadbRouter } from "./routers/mariadb";
 import { mongoRouter } from "./routers/mongo";
 import { mountRouter } from "./routers/mount";
@@ -89,6 +90,7 @@ export const appRouter = createTRPCRouter({
 	volumeBackups: volumeBackupsRouter,
 	environment: environmentRouter,
 	webhook: webhookRouter,
+	libsql: libsqlRouter,
 });
 
 // export type definition of API

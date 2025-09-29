@@ -104,6 +104,7 @@ export type Services = {
 		| "mariadb"
 		| "application"
 		| "postgres"
+		| "libsql"
 		| "mysql"
 		| "mongo"
 		| "redis"
@@ -142,6 +143,18 @@ export const extractServicesFromEnvironment = (
 			name: item.name,
 			type: "mariadb",
 			id: item.mariadbId,
+			createdAt: item.createdAt,
+			status: item.applicationStatus,
+			description: item.description,
+			serverId: item.serverId,
+		})) || [];
+
+		const libsql: Services[] =
+		environment.libsql?.map((item) => ({
+			appName: item.appName,
+			name: item.name,
+			type: "libsql",
+			id: item.libsqlId,
 			createdAt: item.createdAt,
 			status: item.applicationStatus,
 			description: item.description,
@@ -214,6 +227,7 @@ export const extractServicesFromEnvironment = (
 		...redis,
 		...mongo,
 		...postgres,
+		...libsql,
 		...mariadb,
 		...compose,
 	);
@@ -292,6 +306,7 @@ const EnvironmentPage = (
 		!currentEnvironment ||
 		((currentEnvironment.mariadb?.length || 0) === 0 &&
 			(currentEnvironment.mongo?.length || 0) === 0 &&
+			(currentEnvironment.libsql?.length || 0) === 0 &&
 			(currentEnvironment.mysql?.length || 0) === 0 &&
 			(currentEnvironment.postgres?.length || 0) === 0 &&
 			(currentEnvironment.redis?.length || 0) === 0 &&
@@ -306,6 +321,7 @@ const EnvironmentPage = (
 		{ value: "postgres", label: "PostgreSQL", icon: PostgresqlIcon },
 		{ value: "mariadb", label: "MariaDB", icon: MariadbIcon },
 		{ value: "mongo", label: "MongoDB", icon: MongodbIcon },
+		{ value: "libsql", label: "Libsql", icon: LibsqlIcon },
 		{ value: "mysql", label: "MySQL", icon: MysqlIcon },
 		{ value: "redis", label: "Redis", icon: RedisIcon },
 		{ value: "compose", label: "Compose", icon: CircuitBoard },
@@ -349,6 +365,14 @@ const EnvironmentPage = (
 		move: api.application.move.useMutation(),
 		delete: api.application.delete.useMutation(),
 		deploy: api.application.deploy.useMutation(),
+	};
+
+	const libsqlActions = {
+		start: api.libsql.start.useMutation(),
+		stop: api.libsql.stop.useMutation(),
+		move: api.libsql.move.useMutation(),
+		delete: api.libsql.remove.useMutation(),
+		deploy: api.libsql.deploy.useMutation(),
 	};
 
 	const postgresActions = {
@@ -411,6 +435,9 @@ const EnvironmentPage = (
 					case "postgres":
 						await postgresActions.start.mutateAsync({ postgresId: serviceId });
 						break;
+					case "libsql":
+						await libsqlActions.start.mutateAsync({ libsqlId: serviceId });
+						break;
 					case "mysql":
 						await mysqlActions.start.mutateAsync({ mysqlId: serviceId });
 						break;
@@ -454,6 +481,9 @@ const EnvironmentPage = (
 						break;
 					case "compose":
 						await composeActions.stop.mutateAsync({ composeId: serviceId });
+						break;
+					case "libsql":
+						await libsqlActions.stop.mutateAsync({ libsqlId: serviceId });
 						break;
 					case "postgres":
 						await postgresActions.stop.mutateAsync({ postgresId: serviceId });
@@ -513,6 +543,12 @@ const EnvironmentPage = (
 					case "compose":
 						await composeActions.move.mutateAsync({
 							composeId: serviceId,
+							targetEnvironmentId: selectedTargetEnvironment,
+						});
+						break;
+					case "libsql":
+						await libsqlActions.move.mutateAsync({
+							libsqlId: serviceId,
 							targetEnvironmentId: selectedTargetEnvironment,
 						});
 						break;
@@ -590,6 +626,11 @@ const EnvironmentPage = (
 							deleteVolumes,
 						});
 						break;
+					case "libsql":
+						await libsqlActions.delete.mutateAsync({
+							libsqlId: serviceId,
+						});
+						break;
 					case "postgres":
 						await postgresActions.delete.mutateAsync({
 							postgresId: serviceId,
@@ -654,6 +695,11 @@ const EnvironmentPage = (
 					case "compose":
 						await composeActions.deploy.mutateAsync({
 							composeId: serviceId,
+						});
+						break;
+					case "libsql":
+						await libsqlActions.deploy.mutateAsync({
+							libsqlId: serviceId,
 						});
 						break;
 					case "postgres":
@@ -1345,6 +1391,9 @@ const EnvironmentPage = (
 																{service.type === "postgres" && (
 																	<PostgresqlIcon className="h-7 w-7" />
 																)}
+																{service.type === "libsql" && (
+																			<LibsqlIcon className="h-7 w-7" />
+																		)}
 																{service.type === "redis" && (
 																	<RedisIcon className="h-7 w-7" />
 																)}

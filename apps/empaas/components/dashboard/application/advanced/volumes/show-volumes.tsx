@@ -32,6 +32,7 @@ export const ShowVolumes = ({ id, type }: Props) => {
 		application: () =>
 			api.application.one.useQuery({ applicationId: id }, { enabled: !!id }),
 		mongo: () => api.mongo.one.useQuery({ mongoId: id }, { enabled: !!id }),
+		libsql: () => api.libsql.one.useQuery({ libsqlId: id }, { enabled: !!id }),
 		compose: () =>
 			api.compose.one.useQuery({ composeId: id }, { enabled: !!id }),
 	};

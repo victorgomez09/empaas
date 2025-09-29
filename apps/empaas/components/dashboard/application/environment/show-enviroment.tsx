@@ -44,6 +44,7 @@ export const ShowEnvironment = ({ id, type }: Props) => {
 		mariadb: () =>
 			api.mariadb.one.useQuery({ mariadbId: id }, { enabled: !!id }),
 		mongo: () => api.mongo.one.useQuery({ mongoId: id }, { enabled: !!id }),
+		libsql: () => api.libsql.one.useQuery({ libsqlId: id }, { enabled: !!id }),
 		compose: () =>
 			api.compose.one.useQuery({ composeId: id }, { enabled: !!id }),
 	};
@@ -58,6 +59,7 @@ export const ShowEnvironment = ({ id, type }: Props) => {
 		mysql: () => api.mysql.update.useMutation(),
 		mariadb: () => api.mariadb.update.useMutation(),
 		mongo: () => api.mongo.update.useMutation(),
+		libsql: () => api.libsql.update.useMutation(),
 		compose: () => api.compose.update.useMutation(),
 	};
 	const { mutateAsync, isLoading } = mutationMap[type]
@@ -90,6 +92,7 @@ export const ShowEnvironment = ({ id, type }: Props) => {
 			redisId: id || "",
 			mysqlId: id || "",
 			mariadbId: id || "",
+			libsqlId: id || "",
 			composeId: id || "",
 			env: formData.environment,
 		})
