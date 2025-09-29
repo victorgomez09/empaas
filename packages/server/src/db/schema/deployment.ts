@@ -17,10 +17,12 @@ import { rollbacks } from "./rollbacks";
 import { schedules } from "./schedule";
 import { server } from "./server";
 import { volumeBackups } from "./volume-backups";
+
 export const deploymentStatus = pgEnum("deploymentStatus", [
 	"running",
 	"done",
 	"error",
+	"cancelled",
 ]);
 
 export const deployments = pgTable("deployment", {

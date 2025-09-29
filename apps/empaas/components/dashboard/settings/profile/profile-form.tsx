@@ -152,9 +152,7 @@ export const ProfileForm = () => {
 						<User className="size-6 text-muted-foreground self-center" />
 						{t("settings.profile.title")}
 					</CardTitle>
-					<CardDescription>
-						{t("settings.profile.description")}
-					</CardDescription>
+					<CardDescription>{t("settings.profile.description")}</CardDescription>
 				</div>
 				{!data?.user.twoFactorEnabled ? <Enable2FA /> : <Disable2FA />}
 			</CardHeader>
@@ -226,9 +224,7 @@ export const ProfileForm = () => {
 										name="password"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>
-													{t("settings.profile.password")}
-												</FormLabel>
+												<FormLabel>{t("settings.profile.password")}</FormLabel>
 												<FormControl>
 													<Input
 														type="password"
@@ -247,9 +243,7 @@ export const ProfileForm = () => {
 										name="image"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>
-													{t("settings.profile.avatar")}
-												</FormLabel>
+												<FormLabel>{t("settings.profile.avatar")}</FormLabel>
 												<FormControl>
 													<RadioGroup
 														onValueChange={(e) => {
@@ -312,10 +306,10 @@ export const ProfileForm = () => {
 														<FormLabel>Allow Impersonation</FormLabel>
 														<FormDescription>
 															Enable this option to allow Empaas Cloud
-															administrators to temporarily access your
-															account for troubleshooting and support
-															purposes. This helps them quickly identify and
-															resolve any issues you may encounter.
+															administrators to temporarily access your account
+															for troubleshooting and support purposes. This
+															helps them quickly identify and resolve any issues
+															you may encounter.
 														</FormDescription>
 													</div>
 													<FormControl>

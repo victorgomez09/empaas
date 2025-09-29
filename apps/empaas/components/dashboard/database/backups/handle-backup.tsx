@@ -3,7 +3,6 @@ import {
 	CheckIcon,
 	ChevronsUpDown,
 	DatabaseZap,
-	Info,
 	PenBoxIcon,
 	PlusIcon,
 	RefreshCw,
@@ -62,7 +61,7 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { commonCronExpressions } from "../../application/schedules/handle-schedules";
+import { ScheduleFormField } from "../../application/schedules/handle-schedules";
 
 type CacheType = "cache" | "fetch";
 
@@ -264,28 +263,28 @@ export const HandleBackup = ({
 		const getDatabaseId =
 			backupType === "compose"
 				? {
-					composeId: id,
-				}
+						composeId: id,
+					}
 				: databaseType === "postgres"
 					? {
-						postgresId: id,
-					}
+							postgresId: id,
+						}
 					: databaseType === "mariadb"
 						? {
-							mariadbId: id,
-						}
+								mariadbId: id,
+							}
 						: databaseType === "mysql"
 							? {
-								mysqlId: id,
-							}
+									mysqlId: id,
+								}
 							: databaseType === "mongo"
 								? {
-									mongoId: id,
-								}
+										mongoId: id,
+									}
 								: databaseType === "web-server"
 									? {
-										userId: id,
-									}
+											userId: id,
+										}
 									: undefined;
 
 		await createBackup({
@@ -401,9 +400,9 @@ export const HandleBackup = ({
 															? "Loading...."
 															: field.value
 																? data?.find(
-																	(destination) =>
-																		destination.destinationId === field.value,
-																)?.name
+																		(destination) =>
+																			destination.destinationId === field.value,
+																	)?.name
 																: "Select Destination"}
 
 														<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -579,66 +578,9 @@ export const HandleBackup = ({
 									);
 								}}
 							/>
-							<FormField
-								control={form.control}
-								name="schedule"
-								render={({ field }) => {
-									return (
-										<FormItem>
-											<FormLabel className="flex items-center gap-2">
-												Schedule
-												<TooltipProvider>
-													<Tooltip>
-														<TooltipTrigger asChild>
-															<Info className="w-4 h-4 text-muted-foreground cursor-help" />
-														</TooltipTrigger>
-														<TooltipContent>
-															<p>
-																Cron expression format: minute hour day month
-																weekday
-															</p>
-															<p>Example: 0 0 * * * (daily at midnight)</p>
-														</TooltipContent>
-													</Tooltip>
-												</TooltipProvider>
-											</FormLabel>
-											<div className="flex flex-col gap-2">
-												<Select
-													onValueChange={(value) => {
-														field.onChange(value);
-													}}
-												>
-													<FormControl>
-														<SelectTrigger>
-															<SelectValue placeholder="Select a predefined schedule" />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent>
-														{commonCronExpressions.map((expr) => (
-															<SelectItem key={expr.value} value={expr.value}>
-																{expr.label} ({expr.value})
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-												<div className="relative">
-													<FormControl>
-														<Input
-															placeholder="Custom cron expression (e.g., 0 0 * * *)"
-															{...field}
-														/>
-													</FormControl>
-												</div>
-											</div>
-											<FormDescription>
-												Choose a predefined schedule or enter a custom cron
-												expression
-											</FormDescription>
-											<FormMessage />
-										</FormItem>
-									);
-								}}
-							/>
+
+							<ScheduleFormField name="schedule" formControl={form.control} />
+
 							<FormField
 								control={form.control}
 								name="prefix"

@@ -82,18 +82,14 @@ export const ShowNodes = ({ serverId }: Props) => {
 				) : haveAtLeastOneRegistry ? (
 					<div className="grid md:grid-cols-1 gap-4">
 						<Table>
-							<TableCaption>
-								A list of your managers / workers.
-							</TableCaption>
+							<TableCaption>A list of your managers / workers.</TableCaption>
 							<TableHeader>
 								<TableRow>
 									<TableHead className="text-left">Hostname</TableHead>
 									<TableHead className="text-right">Status</TableHead>
 									<TableHead className="text-right">Role</TableHead>
 									<TableHead className="text-right">Availability</TableHead>
-									<TableHead className="text-right">
-										Engine Version
-									</TableHead>
+									<TableHead className="text-right">Engine Version</TableHead>
 									<TableHead className="text-right">Created</TableHead>
 
 									<TableHead className="text-right">Actions</TableHead>
@@ -111,9 +107,7 @@ export const ShowNodes = ({ serverId }: Props) => {
 												{node.Status.State}
 											</TableCell>
 											<TableCell className="text-right">
-												<Badge
-													variant={isManager ? "default" : "secondary"}
-												>
+												<Badge variant={isManager ? "default" : "secondary"}>
 													{node?.Spec?.Role}
 												</Badge>
 											</TableCell>
@@ -126,10 +120,7 @@ export const ShowNodes = ({ serverId }: Props) => {
 											</TableCell>
 
 											<TableCell className="text-right">
-												<DateTooltip
-													date={node.CreatedAt}
-													className="text-sm"
-												>
+												<DateTooltip date={node.CreatedAt} className="text-sm">
 													Created{" "}
 												</DateTooltip>
 											</TableCell>
@@ -186,8 +177,8 @@ export const ShowNodes = ({ serverId }: Props) => {
 						<LockIcon className="size-8 text-muted-foreground" />
 						<div className="flex flex-row gap-2">
 							<span className="text-base text-muted-foreground ">
-								To add nodes to your cluster, you need to configure at least
-								one registry.
+								To add nodes to your cluster, you need to configure at least one
+								registry.
 							</span>
 							<TooltipProvider delayDuration={0}>
 								<Tooltip>

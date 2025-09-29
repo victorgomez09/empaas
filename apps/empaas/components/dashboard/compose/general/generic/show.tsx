@@ -144,44 +144,26 @@ export const ShowProviderFormCompose = ({ composeId }: Props) => {
 				>
 					<div className="flex flex-row items-center justify-between w-full overflow-auto">
 						<TabsList className="flex gap-4 justify-start bg-transparent">
-							<TabsTrigger
-								value="github"
-								className="rounded- gap-2"
-							>
+							<TabsTrigger value="github" className="rounded- gap-2">
 								<GithubIcon className="size-4 text-current fill-current" />
 								GitHub
 							</TabsTrigger>
-							<TabsTrigger
-								value="gitlab"
-								className="rounded- gap-2"
-							>
+							<TabsTrigger value="gitlab" className="rounded- gap-2">
 								<GitlabIcon className="size-4 text-current fill-current" />
 								GitLab
 							</TabsTrigger>
-							<TabsTrigger
-								value="bitbucket"
-								className="rounded- gap-2"
-							>
+							<TabsTrigger value="bitbucket" className="rounded- gap-2">
 								<BitbucketIcon className="size-4 text-current fill-current" />
 								Bitbucket
 							</TabsTrigger>
-							<TabsTrigger
-								value="gitea"
-								className="rounded- gap-2"
-							>
+							<TabsTrigger value="gitea" className="rounded- gap-2">
 								<GiteaIcon className="size-4 text-current fill-current" /> Gitea
 							</TabsTrigger>
-							<TabsTrigger
-								value="git"
-								className="rounded- gap-2"
-							>
+							<TabsTrigger value="git" className="rounded- gap-2">
 								<GitIcon />
 								Git
 							</TabsTrigger>
-							<TabsTrigger
-								value="raw"
-								className="rounded- gap-2"
-							>
+							<TabsTrigger value="raw" className="rounded- gap-2">
 								<CodeIcon className="size-4" />
 								Raw
 							</TabsTrigger>

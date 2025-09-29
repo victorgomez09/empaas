@@ -1,31 +1,13 @@
 "use client";
 
-import { BookIcon, CircuitBoard, GlobeIcon } from "lucide-react";
 import { useRouter } from "next/router";
 import React from "react";
-import {
-	MariadbIcon,
-	MongodbIcon,
-	MysqlIcon,
-	PostgresqlIcon,
-	RedisIcon,
-} from "@/components/icons/data-tools-icons";
-import {
-	CommandDialog,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-	CommandList,
-	CommandSeparator,
-} from "@/components/ui/command";
 import { authClient } from "@/lib/auth-client";
 // import {
 // 	extractServices,
 // 	type Services,
 // } from "@/pages/dashboard/project/[projectId]";
 import { api } from "@/utils/api";
-import { StatusTooltip } from "../shared/status-tooltip";
 
 export const SearchCommand = () => {
 	const router = useRouter();

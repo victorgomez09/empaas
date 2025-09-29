@@ -5,7 +5,5 @@ interface Props {
 }
 
 export const ShowGeneralCompose = ({ composeId }: Props) => {
-	return (
-		<ShowProviderFormCompose composeId={composeId} />
-	);
+	return <ShowProviderFormCompose composeId={composeId} />;
 };

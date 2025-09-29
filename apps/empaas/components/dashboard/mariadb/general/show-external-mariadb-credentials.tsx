@@ -100,19 +100,16 @@ export const ShowExternalMariadbCredentials = ({ mariadbId }: Props) => {
 			<CardHeader>
 				<CardTitle className="text-xl">External Credentials</CardTitle>
 				<CardDescription>
-					In order to make the database reachable trought internet is
-					required to set a port, make sure the port is not used by another
-					application or database
+					In order to make the database reachable trought internet is required
+					to set a port, make sure the port is not used by another application
+					or database
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="flex w-full flex-col gap-4">
 				{!getIp && (
 					<AlertBlock type="warning">
 						You need to set an IP address in your{" "}
-						<Link
-							href="/dashboard/settings/server"
-							className="text-primary"
-						>
+						<Link href="/dashboard/settings/server" className="text-primary">
 							{data?.serverId
 								? "Remote Servers -> Server -> Edit Server -> Update IP Address"
 								: "Web Server -> Server -> Update Server IP"}

@@ -132,12 +132,8 @@ export const ShowGitProviders = () => {
 												<div className="flex items-center justify-between p-3.5 rounded-lg bg-background border w-full">
 													<div className="flex flex-col items-center justify-between">
 														<div className="flex gap-2 flex-row items-center">
-															{isGithub && (
-																<GithubIcon className="size-5" />
-															)}
-															{isGitlab && (
-																<GitlabIcon className="size-5" />
-															)}
+															{isGithub && <GithubIcon className="size-5" />}
+															{isGitlab && <GitlabIcon className="size-5" />}
 															{isBitbucket && (
 																<BitbucketIcon className="size-5" />
 															)}
@@ -158,16 +154,13 @@ export const ShowGitProviders = () => {
 
 													<div className="flex flex-row gap-1 items-center">
 														{isBitbucket &&
-															gitProvider.bitbucket?.appPassword &&
-															!gitProvider.bitbucket?.apiToken ? (
+														gitProvider.bitbucket?.appPassword &&
+														!gitProvider.bitbucket?.apiToken ? (
 															<Badge variant="yellow">Deprecated</Badge>
 														) : null}
 														{!haveGithubRequirements && isGithub && (
 															<div className="flex flex-row gap-1 items-center">
-																<Badge
-																	variant="outline"
-																	className="text-xs"
-																>
+																<Badge variant="outline" className="text-xs">
 																	Action Required
 																</Badge>
 																<Link
@@ -197,10 +190,7 @@ export const ShowGitProviders = () => {
 														)}
 														{!haveGitlabRequirements && isGitlab && (
 															<div className="flex flex-row gap-1 items-center">
-																<Badge
-																	variant="outline"
-																	className="text-xs"
-																>
+																<Badge variant="outline" className="text-xs">
 																	Action Required
 																</Badge>
 																<Link
@@ -234,9 +224,7 @@ export const ShowGitProviders = () => {
 
 														{isBitbucket && (
 															<EditBitbucketProvider
-																bitbucketId={
-																	gitProvider.bitbucket?.bitbucketId
-																}
+																bitbucketId={gitProvider.bitbucket?.bitbucketId}
 															/>
 														)}
 
@@ -261,9 +249,7 @@ export const ShowGitProviders = () => {
 																		refetch();
 																	})
 																	.catch(() => {
-																		toast.error(
-																			"Error deleting Git Provider",
-																		);
+																		toast.error("Error deleting Git Provider");
 																	});
 															}}
 														>

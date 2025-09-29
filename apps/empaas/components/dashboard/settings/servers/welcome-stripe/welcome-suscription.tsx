@@ -133,10 +133,11 @@ export const WelcomeSuscription = () => {
 										</li>
 										{index < array.length - 1 && (
 											<Separator
-												className={`flex-1 ${index < stepper.current.index
-													? "bg-primary"
-													: "bg-muted"
-													}`}
+												className={`flex-1 ${
+													index < stepper.current.index
+														? "bg-primary"
+														: "bg-muted"
+												}`}
 											/>
 										)}
 									</React.Fragment>

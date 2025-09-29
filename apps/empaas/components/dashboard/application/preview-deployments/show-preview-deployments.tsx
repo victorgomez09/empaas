@@ -108,12 +108,13 @@ export const ShowPreviewDeployments = ({ applicationId }: Props) => {
 											className="group relative overflow-hidden border rounded-lg transition-colors"
 										>
 											<div
-												className={`absolute left-0 top-0 w-1 h-full ${status === "done"
+												className={`absolute left-0 top-0 w-1 h-full ${
+													status === "done"
 														? "bg-green-500"
 														: status === "running"
 															? "bg-yellow-500"
 															: "bg-red-500"
-													}`}
+												}`}
 											/>
 
 											<div className="p-4">

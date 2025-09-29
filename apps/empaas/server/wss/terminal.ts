@@ -1,5 +1,10 @@
 import type http from "node:http";
-import { execAsync, findServerById, IS_CLOUD, validateRequest } from "@empaas/server";
+import {
+	execAsync,
+	findServerById,
+	IS_CLOUD,
+	validateRequest,
+} from "@empaas/server";
 import { publicIpv4, publicIpv6 } from "public-ip";
 import { Client, type ConnectConfig } from "ssh2";
 import { WebSocketServer } from "ws";

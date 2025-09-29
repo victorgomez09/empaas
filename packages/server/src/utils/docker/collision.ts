@@ -1,4 +1,5 @@
 import { findComposeById } from "@empaas/server/services/compose";
+import { stringify } from "yaml";
 import { addAppNameToAllServiceNames } from "./collision/root-network";
 import { generateRandomHash } from "./compose";
 import { addSuffixToAllVolumes } from "./compose/volume";
@@ -9,7 +10,6 @@ import {
 	loadDockerComposeRemote,
 } from "./domain";
 import type { ComposeSpecification } from "./types";
-import { stringify } from "yaml";
 
 export const addAppNameToPreventCollision = (
 	composeData: ComposeSpecification,
@@ -53,10 +53,10 @@ export const randomizeIsolatedDeploymentComposeFile = async (
 
 	const newComposeFile = compose.isolatedDeployment
 		? addAppNameToPreventCollision(
-			composeData,
-			randomSuffix,
-			compose.isolatedDeploymentsVolume,
-		)
+				composeData,
+				randomSuffix,
+				compose.isolatedDeploymentsVolume,
+			)
 		: composeData;
 
 	return stringify(newComposeFile);

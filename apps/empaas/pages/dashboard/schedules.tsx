@@ -12,10 +12,7 @@ function SchedulesPage() {
 
 	return (
 		<Card className="w-full h-full !bg-transparent">
-			<ShowSchedules
-				scheduleType="empaas-server"
-				id={user?.user.id || ""}
-			/>
+			<ShowSchedules scheduleType="empaas-server" id={user?.user.id || ""} />
 		</Card>
 	);
 }

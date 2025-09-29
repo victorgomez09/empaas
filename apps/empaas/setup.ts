@@ -2,10 +2,7 @@ import { execAsync } from "@empaas/server";
 import { setupDirectories } from "@empaas/server/setup/config-paths";
 import { initializePostgres } from "@empaas/server/setup/postgres-setup";
 import { initializeRedis } from "@empaas/server/setup/redis-setup";
-import {
-	initializeNetwork,
-	initializeSwarm,
-} from "@empaas/server/setup/setup";
+import { initializeNetwork, initializeSwarm } from "@empaas/server/setup/setup";
 import {
 	createDefaultMiddlewares,
 	createDefaultServerTraefikConfig,

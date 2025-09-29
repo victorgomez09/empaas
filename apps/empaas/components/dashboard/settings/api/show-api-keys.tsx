@@ -61,8 +61,7 @@ export const ShowApiKeys = () => {
 											<span className="flex items-center gap-1">
 												<Clock className="size-3.5" />
 												Created{" "}
-												{formatDistanceToNow(new Date(apiKey.createdAt))}{" "}
-												ago
+												{formatDistanceToNow(new Date(apiKey.createdAt))} ago
 											</span>
 											{apiKey.prefix && (
 												<Badge
@@ -80,9 +79,7 @@ export const ShowApiKeys = () => {
 												>
 													<Clock className="size-3.5" />
 													Expires in{" "}
-													{formatDistanceToNow(
-														new Date(apiKey.expiresAt),
-													)}{" "}
+													{formatDistanceToNow(new Date(apiKey.expiresAt))}{" "}
 												</Badge>
 											)}
 										</div>

@@ -171,11 +171,7 @@ PORT=3000
 
 						<div className="flex flex-row justify-end gap-2">
 							{hasChanges && (
-								<Button
-									type="button"
-									variant="outline"
-									onClick={handleCancel}
-								>
+								<Button type="button" variant="outline" onClick={handleCancel}>
 									Cancel
 								</Button>
 							)}

@@ -132,9 +132,7 @@ export const ShowServers = () => {
 														<TableHead className="text-center">
 															IP Address
 														</TableHead>
-														<TableHead className="text-center">
-															Port
-														</TableHead>
+														<TableHead className="text-center">Port</TableHead>
 														<TableHead className="text-center">
 															Username
 														</TableHead>
@@ -187,10 +185,7 @@ export const ShowServers = () => {
 																</TableCell>
 																<TableCell className="text-right">
 																	<span className="text-sm text-muted-foreground">
-																		{format(
-																			new Date(server.createdAt),
-																			"PPpp",
-																		)}
+																		{format(new Date(server.createdAt), "PPpp")}
 																	</span>
 																</TableCell>
 

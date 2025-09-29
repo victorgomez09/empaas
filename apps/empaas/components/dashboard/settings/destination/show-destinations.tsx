@@ -25,8 +25,8 @@ export const ShowDestinations = () => {
 					S3 Destinations
 				</CardTitle>
 				<CardDescription>
-					Add your providers like AWS S3, Cloudflare R2, Wasabi,
-					DigitalOcean Spaces etc.
+					Add your providers like AWS S3, Cloudflare R2, Wasabi, DigitalOcean
+					Spaces etc.
 				</CardDescription>
 			</CardHeader>
 
@@ -42,8 +42,7 @@ export const ShowDestinations = () => {
 							<div className="flex flex-col items-center gap-3  min-h-[25vh] justify-center">
 								<FolderUp className="size-8 self-center text-muted-foreground" />
 								<span className="text-base text-muted-foreground">
-									To create a backup it is required to set at least 1
-									provider.
+									To create a backup it is required to set at least 1 provider.
 								</span>
 								<HandleDestinations />
 							</div>

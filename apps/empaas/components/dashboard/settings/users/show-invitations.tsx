@@ -74,17 +74,13 @@ export const ShowInvitations = () => {
 											<TableHead className="w-[100px]">Email</TableHead>
 											<TableHead className="text-center">Role</TableHead>
 											<TableHead className="text-center">Status</TableHead>
-											<TableHead className="text-center">
-												Expires At
-											</TableHead>
+											<TableHead className="text-center">Expires At</TableHead>
 											<TableHead className="text-right">Actions</TableHead>
 										</TableRow>
 									</TableHeader>
 									<TableBody>
 										{data?.map((invitation) => {
-											const isExpired = isPast(
-												new Date(invitation.expiresAt),
-											);
+											const isExpired = isPast(new Date(invitation.expiresAt));
 											return (
 												<TableRow key={invitation.id}>
 													<TableCell className="w-[100px]">
@@ -126,18 +122,13 @@ export const ShowInvitations = () => {
 													<TableCell className="text-right flex justify-end">
 														<DropdownMenu>
 															<DropdownMenuTrigger asChild>
-																<Button
-																	variant="ghost"
-																	className="h-8 w-8 p-0"
-																>
+																<Button variant="ghost" className="h-8 w-8 p-0">
 																	<span className="sr-only">Open menu</span>
 																	<MoreHorizontal className="h-4 w-4" />
 																</Button>
 															</DropdownMenuTrigger>
 															<DropdownMenuContent align="end">
-																<DropdownMenuLabel>
-																	Actions
-																</DropdownMenuLabel>
+																<DropdownMenuLabel>Actions</DropdownMenuLabel>
 																{!isExpired && (
 																	<>
 																		{invitation.status === "pending" && (
@@ -168,13 +159,9 @@ export const ShowInvitations = () => {
 																						);
 
 																					if (result.error) {
-																						toast.error(
-																							result.error.message,
-																						);
+																						toast.error(result.error.message);
 																					} else {
-																						toast.success(
-																							"Invitation deleted",
-																						);
+																						toast.success("Invitation deleted");
 																						refetch();
 																					}
 																				}}

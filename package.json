@@ -19,9 +19,9 @@
 		"docker:build:canary": "./apps/empaas/docker/build.sh canary",
 		"typecheck": "pnpm -r run typecheck",
 		"build": "pnpm -r run build",
-		"format-and-lint": "biome check .",
+		"format:lint": "biome check .",
 		"check": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
-		"format-and-lint:fix": "biome check . --write"
+		"format:lint-fix": "biome check . --write"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.1.1",

@@ -359,8 +359,8 @@ export const RestoreBackup = ({
 												>
 													{field.value
 														? destinations.find(
-															(d) => d.destinationId === field.value,
-														)?.name
+																(d) => d.destinationId === field.value,
+															)?.name
 														: "Select Destination"}
 													<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 												</Button>
@@ -793,10 +793,10 @@ export const RestoreBackup = ({
 								isLoading={isDeploying}
 								form="hook-form-restore-backup"
 								type="submit"
-							// disabled={
-							// 	!form.watch("backupFile") ||
-							// 	(backupType === "compose" && !form.watch("databaseType"))
-							// }
+								// disabled={
+								// 	!form.watch("backupFile") ||
+								// 	(backupType === "compose" && !form.watch("databaseType"))
+								// }
 							>
 								Restore
 							</Button>

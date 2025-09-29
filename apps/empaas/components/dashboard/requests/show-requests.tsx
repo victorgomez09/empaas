@@ -77,12 +77,9 @@ export const ShowRequests = () => {
 				</CardDescription>
 
 				<AlertBlock type="warning">
-					When you activate, you need to reload traefik to apply the
-					changes, you can reload traefik in{" "}
-					<Link
-						href="/dashboard/settings/server"
-						className="text-primary"
-					>
+					When you activate, you need to reload traefik to apply the changes,
+					you can reload traefik in{" "}
+					<Link href="/dashboard/settings/server" className="text-primary">
 						Settings
 					</Link>
 				</AlertBlock>
@@ -102,10 +99,10 @@ export const ShowRequests = () => {
 									</TooltipTrigger>
 									<TooltipContent>
 										<p className="max-w-80">
-											At the scheduled time, the cleanup job will keep
-											only the last 1000 entries in the access log file
-											and signal Traefik to reopen its log files. The
-											default schedule is daily at midnight (0 0 * * *).
+											At the scheduled time, the cleanup job will keep only the
+											last 1000 entries in the access log file and signal
+											Traefik to reopen its log files. The default schedule is
+											daily at midnight (0 0 * * *).
 										</p>
 									</TooltipContent>
 								</Tooltip>
@@ -230,9 +227,9 @@ export const ShowRequests = () => {
 								Requests are not activated
 							</h3>
 							<p className="text-sm max-w-md">
-								Activate requests to see incoming traffic statistics and
-								monitor your application's usage. After activation, you'll
-								need to reload Traefik for the changes to take effect.
+								Activate requests to see incoming traffic statistics and monitor
+								your application's usage. After activation, you'll need to
+								reload Traefik for the changes to take effect.
 							</p>
 						</div>
 					</div>

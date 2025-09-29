@@ -63,7 +63,8 @@ export const ShowProviderForm = ({ applicationId }: Props) => {
 			await refetch();
 		} catch (error) {
 			toast.error(
-				`Failed to disconnect repository: ${error instanceof Error ? error.message : "Unknown error"
+				`Failed to disconnect repository: ${
+					error instanceof Error ? error.message : "Unknown error"
 				}`,
 			);
 		}
@@ -154,52 +155,31 @@ export const ShowProviderForm = ({ applicationId }: Props) => {
 				>
 					<div className="flex flex-row items-center justify-between w-full overflow-auto">
 						<TabsList className="flex gap-4 justify-start bg-transparent">
-							<TabsTrigger
-								value="github"
-								className="rounded-none gap-2"
-							>
+							<TabsTrigger value="github" className="rounded-none gap-2">
 								<GithubIcon className="size-4 text-current fill-current" />
 								Github
 							</TabsTrigger>
-							<TabsTrigger
-								value="gitlab"
-								className="rounded-none gap-2"
-							>
+							<TabsTrigger value="gitlab" className="rounded-none gap-2">
 								<GitlabIcon className="size-4 text-current fill-current" />
 								Gitlab
 							</TabsTrigger>
-							<TabsTrigger
-								value="bitbucket"
-								className="rounded-none gap-2"
-							>
+							<TabsTrigger value="bitbucket" className="rounded-none gap-2">
 								<BitbucketIcon className="size-4 text-current fill-current" />
 								Bitbucket
 							</TabsTrigger>
-							<TabsTrigger
-								value="gitea"
-								className="rounded-none gap-2"
-							>
+							<TabsTrigger value="gitea" className="rounded-none gap-2">
 								<GiteaIcon className="size-4 text-current fill-current" />
 								Gitea
 							</TabsTrigger>
-							<TabsTrigger
-								value="docker"
-								className="rounded-none gap-2"
-							>
+							<TabsTrigger value="docker" className="rounded-none gap-2">
 								<DockerIcon className="size-5 text-current" />
 								Docker
 							</TabsTrigger>
-							<TabsTrigger
-								value="git"
-								className="rounded-none gap-2"
-							>
+							<TabsTrigger value="git" className="rounded-none gap-2">
 								<GitIcon />
 								Git
 							</TabsTrigger>
-							<TabsTrigger
-								value="drop"
-								className="rounded-none gap-2"
-							>
+							<TabsTrigger value="drop" className="rounded-none gap-2">
 								<UploadCloud className="size-5 text-current" />
 								Drop
 							</TabsTrigger>

@@ -11,6 +11,7 @@ import {
 	sendEmpaasRestartNotifications,
 	setupDirectories,
 } from "@empaas/server";
+import { initCancelDeployments } from "@empaas/server/index";
 import { config } from "dotenv";
 import next from "next";
 import { migration } from "@/server/db/migration";
@@ -53,6 +54,7 @@ void app.prepare().then(async () => {
 			await initCronJobs();
 			await initSchedules();
 			await initVolumeBackupsCronJobs();
+			await initCancelDeployments();
 			await sendEmpaasRestartNotifications();
 		}
 

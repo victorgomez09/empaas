@@ -2,11 +2,11 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { paths } from "@empaas/server/constants";
 import type { Domain } from "@empaas/server/services/domain";
+import { parse, stringify } from "yaml";
 import type { ApplicationNested } from "../builders";
 import { execAsyncRemote } from "../process/execAsync";
 import { writeTraefikConfigRemote } from "./application";
 import type { FileConfig } from "./file-types";
-import { parse, stringify } from "yaml";
 
 export const addMiddleware = (config: FileConfig, middlewareName: string) => {
 	if (config.http?.routers) {

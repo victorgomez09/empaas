@@ -38,10 +38,10 @@ import {
 import { processTemplate } from "@empaas/server/templates/processors";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
-import { stringify } from "yaml";
 import _ from "lodash";
 import { nanoid } from "nanoid";
 import { parse } from "toml";
+import { stringify } from "yaml";
 import { z } from "zod";
 import { slugify } from "@/lib/slug";
 import { db } from "@/server/db";
@@ -223,7 +223,7 @@ export const composeRouter = createTRPCRouter({
 			for (const operation of cleanupOperations) {
 				try {
 					await operation();
-				} catch (_) { }
+				} catch (_) {}
 			}
 
 			return composeResult;

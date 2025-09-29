@@ -3,8 +3,8 @@ import {
 	createDeploymentBackup,
 	updateDeploymentStatus,
 } from "@empaas/server/services/deployment";
-import type { MySql } from "@empaas/server/services/mysql";
 import { findEnvironmentById } from "@empaas/server/services/environment";
+import type { MySql } from "@empaas/server/services/mysql";
 import { findProjectById } from "@empaas/server/services/project";
 import { sendDatabaseBackupNotifications } from "../notifications/database-backup";
 import { execAsync, execAsyncRemote } from "../process/execAsync";

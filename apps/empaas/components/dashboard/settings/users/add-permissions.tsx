@@ -39,13 +39,13 @@ export type Services = {
 	serverId?: string | null;
 	name: string;
 	type:
-	| "mariadb"
-	| "application"
-	| "postgres"
-	| "mysql"
-	| "mongo"
-	| "redis"
-	| "compose";
+		| "mariadb"
+		| "application"
+		| "postgres"
+		| "mysql"
+		| "mongo"
+		| "redis"
+		| "compose";
 	description?: string | null;
 	id: string;
 	createdAt: string;
@@ -741,14 +741,15 @@ export const AddUserPermissions = ({ userId }: Props) => {
 																												</FormControl>
 																												<div className="flex items-center gap-2">
 																													<div
-																														className={`w-1.5 h-1.5 rounded-full ${service.type ===
-																																"application"
+																														className={`w-1.5 h-1.5 rounded-full ${
+																															service.type ===
+																															"application"
 																																? "bg-green-500"
 																																: service.type ===
-																																	"compose"
+																																		"compose"
 																																	? "bg-purple-500"
 																																	: "bg-orange-500"
-																															}`}
+																														}`}
 																													/>
 																													<FormLabel className="text-sm text-muted-foreground cursor-pointer">
 																														{service.name}

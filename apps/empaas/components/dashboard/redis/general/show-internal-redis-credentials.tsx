@@ -23,10 +23,7 @@ export const ShowInternalRedisCredentials = ({ redisId }: Props) => {
 					<div className="flex flex-col gap-2">
 						<Label>Password</Label>
 						<div className="flex flex-row gap-4">
-							<ToggleVisibilityInput
-								value={data?.databasePassword}
-								disabled
-							/>
+							<ToggleVisibilityInput value={data?.databasePassword} disabled />
 						</div>
 					</div>
 					<div className="flex flex-col gap-2">

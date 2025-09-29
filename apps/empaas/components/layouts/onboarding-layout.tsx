@@ -19,8 +19,7 @@ export const OnboardingLayout = ({ children }: Props) => {
 				<div className="relative z-20 mt-auto">
 					<blockquote className="space-y-2">
 						<p className="text-lg text-primary">
-							&ldquo;An alternative to Netlify, Vercel,
-							Heroku.&rdquo;
+							&ldquo;An alternative to Netlify, Vercel, Heroku.&rdquo;
 						</p>
 					</blockquote>
 				</div>

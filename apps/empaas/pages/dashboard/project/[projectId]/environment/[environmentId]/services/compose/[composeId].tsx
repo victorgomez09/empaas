@@ -1,7 +1,18 @@
 import { validateRequest } from "@empaas/server/lib/auth";
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 import copy from "copy-to-clipboard";
-import { Ban, CheckCircle2, ChevronDown, CircuitBoard, HelpCircle, RefreshCcw, Rocket, ServerOff, Terminal } from "lucide-react";
+import {
+	Ban,
+	CheckCircle2,
+	ChevronDown,
+	CircuitBoard,
+	HelpCircle,
+	RefreshCcw,
+	Rocket,
+	ServerOff,
+	Terminal,
+} from "lucide-react";
 import type {
 	GetServerSidePropsContext,
 	InferGetServerSidePropsType,
@@ -12,7 +23,6 @@ import { useRouter } from "next/router";
 import { type ReactElement, useEffect, useState } from "react";
 import { toast } from "sonner";
 import superjson from "superjson";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import { ShowImport } from "@/components/dashboard/application/advanced/import/show-import";
 import { ShowVolumes } from "@/components/dashboard/application/advanced/volumes/show-volumes";
 import { ShowDeployments } from "@/components/dashboard/application/deployments/show-deployments";
@@ -30,15 +40,12 @@ import { UpdateCompose } from "@/components/dashboard/compose/update-compose";
 import { ShowBackups } from "@/components/dashboard/database/backups/show-backups";
 import { ComposeFreeMonitoring } from "@/components/dashboard/monitoring/free/container/show-free-compose-monitoring";
 import { ComposePaidMonitoring } from "@/components/dashboard/monitoring/paid/container/show-paid-compose-monitoring";
+import { DockerTerminalModal } from "@/components/dashboard/settings/web-server/docker-terminal-modal";
 import { DashboardLayout } from "@/components/layouts/dashboard-layout";
+import { DialogAction } from "@/components/shared/dialog-action";
 // import { BreadcrumbSidebar } from "@/components/shared/breadcrumb-sidebar";
 import { StatusTooltip } from "@/components/shared/status-tooltip";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -46,16 +53,23 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { UseKeyboardNav } from "@/hooks/use-keyboard-nav";
 import { appRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
-import { DialogAction } from "@/components/shared/dialog-action";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Switch } from "@/components/ui/switch";
-import { DockerTerminalModal } from "@/components/dashboard/settings/web-server/docker-terminal-modal";
 
 type TabState =
 	| "projects"
@@ -131,14 +145,16 @@ const Service = (
 							</div>
 							<div className="flex items-center gap-2">
 								<span>{data?.name}</span>
-								<span>{'>'}</span>
+								<span>{">"}</span>
 								<div className="flex flex-row h-fit w-fit gap-2">
 									<span
-										className={`text-base cursor-pointer ${!data?.serverId
-											? "text-default"
-											: data?.server?.serverStatus === "active"
+										className={`text-base cursor-pointer ${
+											!data?.serverId
 												? "text-default"
-												: "text-destructive"}`}
+												: data?.server?.serverStatus === "active"
+													? "text-default"
+													: "text-destructive"
+										}`}
 										onClick={() => {
 											if (data?.server?.ipAddress) {
 												copy(data.server.ipAddress);
@@ -163,18 +179,17 @@ const Service = (
 												>
 													<span>
 														You cannot, deploy this application because the
-														server is inactive, please upgrade your plan to
-														add more servers.
+														server is inactive, please upgrade your plan to add
+														more servers.
 													</span>
 												</TooltipContent>
 											</Tooltip>
 										</TooltipProvider>
 									)}
 								</div>
-								<span>{'>'}</span>
+								<span>{">"}</span>
 								<StatusTooltip status={data?.composeStatus} />
 							</div>
-
 						</CardTitle>
 						{data?.description && (
 							<CardDescription>{data?.description}</CardDescription>
@@ -185,9 +200,11 @@ const Service = (
 						</span>
 					</div>
 					<div className="flex flex-col h-fit w-fit gap-2">
-
 						<div className="flex flex-row gap-2 justify-end">
-							<TooltipProvider delayDuration={0} disableHoverableContent={false}>
+							<TooltipProvider
+								delayDuration={0}
+								disableHoverableContent={false}
+							>
 								<DialogAction
 									title="Deploy Compose"
 									description="Are you sure you want to deploy this compose?"
@@ -223,7 +240,10 @@ const Service = (
 											</TooltipTrigger>
 											<TooltipPrimitive.Portal>
 												<TooltipContent sideOffset={5} className="z-[60]">
-													<p>Downloads the source code and performs a complete build</p>
+													<p>
+														Downloads the source code and performs a complete
+														build
+													</p>
 												</TooltipContent>
 											</TooltipPrimitive.Portal>
 										</Tooltip>
@@ -231,7 +251,7 @@ const Service = (
 								</DialogAction>
 
 								{data?.composeType === "docker-compose" &&
-									data?.composeStatus === "idle" ? (
+								data?.composeStatus === "idle" ? (
 									<DialogAction
 										title="Start Compose"
 										description="Are you sure you want to start this compose?"
@@ -265,7 +285,8 @@ const Service = (
 												<TooltipPrimitive.Portal>
 													<TooltipContent sideOffset={5} className="z-[60]">
 														<p>
-															Start the compose (requires a previous successful build)
+															Start the compose (requires a previous successful
+															build)
 														</p>
 													</TooltipContent>
 												</TooltipPrimitive.Portal>
@@ -322,7 +343,10 @@ const Service = (
 											Actions <ChevronDown className="ml-2 h-4 w-4" />
 										</Button>
 									</DropdownMenuTrigger>
-									<DropdownMenuContent align="end" className="flex flex-col gap-2">
+									<DropdownMenuContent
+										align="end"
+										className="flex flex-col gap-2"
+									>
 										<DialogAction
 											title="Reload Compose"
 											description="Are you sure you want to reload this compose?"
@@ -413,10 +437,10 @@ const Service = (
 							<div className="max-w-3xl mx-auto flex flex-col items-center justify-center self-center gap-3">
 								<ServerOff className="size-10 text-muted-foreground self-center" />
 								<span className="text-center text-base text-muted-foreground">
-									This service is hosted on the server {data.server.name},
-									but this server has been disabled because your current
-									plan doesn't include enough servers. Please purchase more
-									servers to regain access to this application.
+									This service is hosted on the server {data.server.name}, but
+									this server has been disabled because your current plan
+									doesn't include enough servers. Please purchase more servers
+									to regain access to this application.
 								</span>
 								<span className="text-center text-base text-muted-foreground">
 									Go to{" "}
@@ -461,23 +485,38 @@ const Service = (
 							</div>
 
 							<div className="col-span-10 w-full h-full">
-								<TabsContent value="general" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="general"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowGeneralCompose composeId={composeId} />
 								</TabsContent>
 
-								<TabsContent value="environment" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="environment"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowEnvironment id={composeId} type="compose" />
 								</TabsContent>
 
-								<TabsContent value="backups" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="backups"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowBackups id={composeId} backupType="compose" />
 								</TabsContent>
 
-								<TabsContent value="schedules" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="schedules"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowSchedules id={composeId} scheduleType="compose" />
 								</TabsContent>
 
-								<TabsContent value="volumeBackups" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="volumeBackups"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowVolumeBackups
 										id={composeId}
 										type="compose"
@@ -485,15 +524,16 @@ const Service = (
 									/>
 								</TabsContent>
 
-								<TabsContent value="monitoring" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="monitoring"
+									className="flex flex-col gap-2 w-full"
+								>
 									{data?.serverId && isCloud ? (
 										<ComposePaidMonitoring
 											serverId={data?.serverId || ""}
 											baseUrl={`${data?.serverId ? `http://${data?.server?.ipAddress}:${data?.server?.metricsConfig?.server?.port}` : "http://localhost:4500"}`}
 											appName={data?.appName || ""}
-											token={
-												data?.server?.metricsConfig?.server?.token || ""
-											}
+											token={data?.server?.metricsConfig?.server?.token || ""}
 											appType={data?.composeType || "docker-compose"}
 										/>
 									) : (
@@ -534,7 +574,10 @@ const Service = (
 									)}
 								</TabsContent>
 
-								<TabsContent value="logs" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="logs"
+									className="flex flex-col gap-2 w-full"
+								>
 									{data?.composeType === "docker-compose" ? (
 										<ShowDockerLogsCompose
 											serverId={data?.serverId || ""}
@@ -549,7 +592,10 @@ const Service = (
 									)}
 								</TabsContent>
 
-								<TabsContent value="deployments" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="deployments"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowDeployments
 										id={composeId}
 										type="compose"
@@ -558,11 +604,17 @@ const Service = (
 									/>
 								</TabsContent>
 
-								<TabsContent value="domains" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="domains"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowDomains id={composeId} type="compose" />
 								</TabsContent>
 
-								<TabsContent value="advanced" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="advanced"
+									className="flex flex-col gap-2 w-full"
+								>
 									<AddCommandCompose composeId={composeId} />
 									<ShowVolumes id={composeId} type="compose" />
 									<ShowImport composeId={composeId} />

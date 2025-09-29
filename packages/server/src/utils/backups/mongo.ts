@@ -3,8 +3,8 @@ import {
 	createDeploymentBackup,
 	updateDeploymentStatus,
 } from "@empaas/server/services/deployment";
-import type { Mongo } from "@empaas/server/services/mongo";
 import { findEnvironmentById } from "@empaas/server/services/environment";
+import type { Mongo } from "@empaas/server/services/mongo";
 import { findProjectById } from "@empaas/server/services/project";
 import { sendDatabaseBackupNotifications } from "../notifications/database-backup";
 import { execAsync, execAsyncRemote } from "../process/execAsync";

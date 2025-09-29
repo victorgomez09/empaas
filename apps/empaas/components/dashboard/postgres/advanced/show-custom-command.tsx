@@ -94,54 +94,54 @@ export const ShowCustomCommand = ({ id, type }: Props) => {
 	};
 
 	return (
-				<Card className="w-full h-full">
-					<CardHeader>
-						<CardTitle className="text-xl">Advanced Settings</CardTitle>
-					</CardHeader>
-					<CardContent className="flex flex-col gap-4">
-						<Form {...form}>
-							<form
-								onSubmit={form.handleSubmit(onSubmit)}
-								className="grid w-full gap-4 "
-							>
-								<div className="grid w-full gap-4">
-									<FormField
-										control={form.control}
-										name="dockerImage"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Docker Image</FormLabel>
-												<FormControl>
-													<Input placeholder="postgres:15" {...field} />
-												</FormControl>
+		<Card className="w-full h-full">
+			<CardHeader>
+				<CardTitle className="text-xl">Advanced Settings</CardTitle>
+			</CardHeader>
+			<CardContent className="flex flex-col gap-4">
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(onSubmit)}
+						className="grid w-full gap-4 "
+					>
+						<div className="grid w-full gap-4">
+							<FormField
+								control={form.control}
+								name="dockerImage"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Docker Image</FormLabel>
+										<FormControl>
+											<Input placeholder="postgres:15" {...field} />
+										</FormControl>
 
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-								</div>
-								<FormField
-									control={form.control}
-									name="command"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Command</FormLabel>
-											<FormControl>
-												<Input placeholder="Custom command" {...field} />
-											</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</div>
+						<FormField
+							control={form.control}
+							name="command"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Command</FormLabel>
+									<FormControl>
+										<Input placeholder="Custom command" {...field} />
+									</FormControl>
 
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<div className="flex w-full justify-end">
-									<Button isLoading={form.formState.isSubmitting} type="submit">
-										Save
-									</Button>
-								</div>
-							</form>
-						</Form>
-					</CardContent>
-				</Card>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<div className="flex w-full justify-end">
+							<Button isLoading={form.formState.isSubmitting} type="submit">
+								Save
+							</Button>
+						</div>
+					</form>
+				</Form>
+			</CardContent>
+		</Card>
 	);
 };
