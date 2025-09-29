@@ -20,6 +20,7 @@ import { setupDockerStatsMonitoringSocketServer } from "./wss/docker-stats";
 import { setupDrawerLogsWebSocketServer } from "./wss/drawer-logs";
 import { setupDeploymentLogsWebSocketServer } from "./wss/listen-deployment";
 import { setupTerminalWebSocketServer } from "./wss/terminal";
+import { initCancelDeployments } from "@empaas/server/index";
 
 config({ path: ".env" });
 const PORT = Number.parseInt(process.env.PORT || "3000", 10);
@@ -53,6 +54,7 @@ void app.prepare().then(async () => {
 			await initCronJobs();
 			await initSchedules();
 			await initVolumeBackupsCronJobs();
+			await initCancelDeployments();
 			await sendEmpaasRestartNotifications();
 		}
 
