@@ -83,7 +83,7 @@ export const UpdateLibsql = ({ libsqlId }: Props) => {
 			.catch(() => {
 				toast.error("Error updating the Libsql");
 			})
-			.finally(() => {});
+			.finally(() => { });
 	};
 
 	return (
@@ -92,9 +92,10 @@ export const UpdateLibsql = ({ libsqlId }: Props) => {
 				<Button
 					variant="ghost"
 					size="icon"
-					className="group hover:bg-blue-500/10 "
+					className="flex items-center gap-1.5 group hover:bg-blue-500/10 w-full"
 				>
-					<PenBoxIcon className="size-3.5  text-primary group-hover:text-blue-500" />
+					<PenBoxIcon className="size-3.5 text-primary group-hover:text-blue-500" />
+					Update
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-lg">

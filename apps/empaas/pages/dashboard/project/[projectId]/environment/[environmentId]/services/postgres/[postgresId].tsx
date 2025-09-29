@@ -39,7 +39,6 @@ import { DockerTerminalModal } from "@/components/dashboard/settings/web-server/
 import { ShowDatabaseAdvancedSettings } from "@/components/dashboard/shared/show-database-advanced-settings";
 import { PostgresqlIcon } from "@/components/icons/data-tools-icons";
 import { DashboardLayout } from "@/components/layouts/dashboard-layout";
-// import { BreadcrumbSidebar } from "@/components/shared/breadcrumb-sidebar";
 import { DialogAction } from "@/components/shared/dialog-action";
 import { DrawerLogs } from "@/components/shared/drawer-logs";
 import { StatusTooltip } from "@/components/shared/status-tooltip";
@@ -73,14 +72,16 @@ type TabState = "projects" | "monitoring" | "settings" | "backups" | "advanced";
 const Postgresql = (
 	props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
+	const { postgresId, activeTab } = props;
+	const router = useRouter();
+	const { projectId, environmentId } = router.query;
+
 	const [_toggleMonitoring, _setToggleMonitoring] = useState(false);
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [filteredLogs, setFilteredLogs] = useState<LogLine[]>([]);
 	const [isDeploying, setIsDeploying] = useState(false);
-	const { postgresId, activeTab } = props;
-	const router = useRouter();
-	const { projectId, environmentId } = router.query;
 	const [tab, setSab] = useState<TabState>(activeTab);
+
 	const { data, refetch } = api.postgres.one.useQuery({ postgresId });
 	const { data: auth } = api.user.get.useQuery();
 	const { data: isCloud } = api.settings.isCloud.useQuery();
@@ -155,13 +156,12 @@ const Postgresql = (
 								<span>{">"}</span>
 								<div className="flex flex-row h-fit w-fit gap-2">
 									<span
-										className={`text-base cursor-pointer ${
-											!data?.serverId
+										className={`text-base cursor-pointer ${!data?.serverId
+											? "text-default"
+											: data?.server?.serverStatus === "active"
 												? "text-default"
-												: data?.server?.serverStatus === "active"
-													? "text-default"
-													: "text-destructive"
-										}`}
+												: "text-destructive"
+											}`}
 										onClick={() => {
 											if (data?.server?.ipAddress) {
 												copy(data.server.ipAddress);
@@ -396,7 +396,7 @@ const Postgresql = (
 													<TooltipTrigger asChild>
 														<div className="flex items-center">
 															<Terminal className="size-4 mr-1" />
-															Open Terminal
+															Terminal
 														</div>
 													</TooltipTrigger>
 													<TooltipPrimitive.Portal>
@@ -487,12 +487,14 @@ const Postgresql = (
 									<ShowInternalPostgresCredentials postgresId={postgresId} />
 									<ShowExternalPostgresCredentials postgresId={postgresId} />
 								</TabsContent>
+
 								<TabsContent
 									value="environment"
 									className="flex flex-col gap-2 w-full"
 								>
 									<ShowEnvironment id={postgresId} type="postgres" />
 								</TabsContent>
+
 								<TabsContent
 									value="monitoring"
 									className="flex flex-col gap-2 w-full"
@@ -500,11 +502,10 @@ const Postgresql = (
 									{data?.serverId && isCloud ? (
 										<ContainerPaidMonitoring
 											appName={data?.appName || ""}
-											baseUrl={`${
-												data?.serverId
-													? `http://${data?.server?.ipAddress}:${data?.server?.metricsConfig?.server?.port}`
-													: "http://localhost:4500"
-											}`}
+											baseUrl={`${data?.serverId
+												? `http://${data?.server?.ipAddress}:${data?.server?.metricsConfig?.server?.port}`
+												: "http://localhost:4500"
+												}`}
 											token={data?.server?.metricsConfig?.server?.token || ""}
 										/>
 									) : (
@@ -513,6 +514,7 @@ const Postgresql = (
 										</>
 									)}
 								</TabsContent>
+
 								<TabsContent
 									value="logs"
 									className="flex flex-col gap-2 w-full"
@@ -522,6 +524,7 @@ const Postgresql = (
 										appName={data?.appName || ""}
 									/>
 								</TabsContent>
+
 								<TabsContent
 									value="backups"
 									className="flex flex-col gap-2 w-full"
@@ -532,6 +535,7 @@ const Postgresql = (
 										backupType="database"
 									/>
 								</TabsContent>
+
 								<TabsContent
 									value="advanced"
 									className="flex flex-col gap-2 w-full"

@@ -35,6 +35,7 @@ import { AdvancedEnvironmentSelector } from "@/components/dashboard/project/adva
 import { DuplicateProject } from "@/components/dashboard/project/duplicate-project";
 import { ProjectEnvironment } from "@/components/dashboard/projects/project-environment";
 import {
+	LibsqlIcon,
 	MariadbIcon,
 	MongodbIcon,
 	MysqlIcon,
@@ -101,14 +102,14 @@ export type Services = {
 	serverId?: string | null;
 	name: string;
 	type:
-		| "mariadb"
-		| "application"
-		| "postgres"
-		| "libsql"
-		| "mysql"
-		| "mongo"
-		| "redis"
-		| "compose";
+	| "mariadb"
+	| "application"
+	| "postgres"
+	| "libsql"
+	| "mysql"
+	| "mongo"
+	| "redis"
+	| "compose";
 	description?: string | null;
 	id: string;
 	createdAt: string;
@@ -879,8 +880,8 @@ const EnvironmentPage = (
 										className={cn(
 											"data-[state=checked]:bg-primary",
 											selectedServices.length > 0 &&
-												selectedServices.length < filteredServices.length &&
-												"bg-primary/50",
+											selectedServices.length < filteredServices.length &&
+											"bg-primary/50",
 										)}
 										onCheckedChange={handleSelectAll}
 									/>

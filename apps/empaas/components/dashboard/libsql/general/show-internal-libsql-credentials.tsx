@@ -19,8 +19,8 @@ export const ShowInternalLibsqlCredentials = ({ libsqlId }: Props) => {
 	const { data } = api.libsql.one.useQuery({ libsqlId });
 	return (
 		<>
-			<div className="flex w-full flex-col gap-5 ">
-				<Card className="bg-background">
+			<div className="flex w-full flex-col gap-5">
+				<Card className="w-full h-full">
 					<CardHeader>
 						<CardTitle className="text-xl">Internal Credentials</CardTitle>
 					</CardHeader>

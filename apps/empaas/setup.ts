@@ -23,6 +23,6 @@ import {
 		await initializeRedis();
 		await initializePostgres();
 	} catch (e) {
-		console.error("Error in empaassetup", e);
+		console.error("Error in empaas-setup", e);
 	}
 })();
