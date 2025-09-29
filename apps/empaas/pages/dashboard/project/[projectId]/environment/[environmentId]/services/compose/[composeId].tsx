@@ -30,6 +30,7 @@ import { ShowDomains } from "@/components/dashboard/application/domains/show-dom
 import { ShowEnvironment } from "@/components/dashboard/application/environment/show-enviroment";
 import { ShowSchedules } from "@/components/dashboard/application/schedules/show-schedules";
 import { ShowVolumeBackups } from "@/components/dashboard/application/volume-backups/show-volume-backups";
+import { ShowWebhooks } from "@/components/dashboard/application/webhooks/show-webhooks";
 import { AddCommandCompose } from "@/components/dashboard/compose/advanced/add-command";
 import { IsolatedDeploymentTab } from "@/components/dashboard/compose/advanced/add-isolation";
 import { DeleteService } from "@/components/dashboard/compose/delete-service";
@@ -78,7 +79,8 @@ type TabState =
 	| "deployments"
 	| "domains"
 	| "monitoring"
-	| "volumeBackups";
+	| "volumeBackups"
+	| "webhooks";
 
 const Service = (
 	props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -471,12 +473,13 @@ const Service = (
 									<TabsTrigger value="environment">Environment</TabsTrigger>
 									<TabsTrigger value="domains">Domains</TabsTrigger>
 									<TabsTrigger value="deployments">Deployments</TabsTrigger>
+									<TabsTrigger value="logs">Logs</TabsTrigger>
 									<TabsTrigger value="backups">Backups</TabsTrigger>
 									<TabsTrigger value="schedules">Schedules</TabsTrigger>
 									<TabsTrigger value="volumeBackups">
 										Volume Backups
 									</TabsTrigger>
-									<TabsTrigger value="logs">Logs</TabsTrigger>
+									<TabsTrigger value="webhooks">Webhooks</TabsTrigger>
 									{((data?.serverId && isCloud) || !data?.server) && (
 										<TabsTrigger value="monitoring">Monitoring</TabsTrigger>
 									)}
@@ -619,6 +622,13 @@ const Service = (
 									<ShowVolumes id={composeId} type="compose" />
 									<ShowImport composeId={composeId} />
 									<IsolatedDeploymentTab composeId={composeId} />
+								</TabsContent>
+
+								<TabsContent
+									value="webhooks"
+									className="flex flex-col gap-2 w-full"
+								>
+									<ShowWebhooks composeId={composeId} />
 								</TabsContent>
 							</div>
 						</Tabs>

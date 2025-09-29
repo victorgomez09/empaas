@@ -71,6 +71,7 @@ export const ShowClusterSettings = ({ id, type }: Props) => {
 		mariadb: () => api.mariadb.update.useMutation(),
 		application: () => api.application.update.useMutation(),
 		mongo: () => api.mongo.update.useMutation(),
+		libsql: () => api.libsql.update.useMutation(),
 	};
 
 	const { mutateAsync, isLoading } = mutationMap[type]

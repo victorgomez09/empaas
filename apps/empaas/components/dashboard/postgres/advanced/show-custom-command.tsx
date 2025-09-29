@@ -39,6 +39,7 @@ export const ShowCustomCommand = ({ id, type }: Props) => {
 		application: () =>
 			api.application.one.useQuery({ applicationId: id }, { enabled: !!id }),
 		mongo: () => api.mongo.one.useQuery({ mongoId: id }, { enabled: !!id }),
+		libsql: () => api.libsql.one.useQuery({ libsqlId: id }, { enabled: !!id }),
 	};
 	const { data, refetch } = queryMap[type]
 		? queryMap[type]()
@@ -51,6 +52,7 @@ export const ShowCustomCommand = ({ id, type }: Props) => {
 		mariadb: () => api.mariadb.update.useMutation(),
 		application: () => api.application.update.useMutation(),
 		mongo: () => api.mongo.update.useMutation(),
+		libsql: () => api.libsql.update.useMutation(),
 	};
 
 	const { mutateAsync } = mutationMap[type]
@@ -81,6 +83,7 @@ export const ShowCustomCommand = ({ id, type }: Props) => {
 			redisId: id || "",
 			mysqlId: id || "",
 			mariadbId: id || "",
+			libsqlId: id || "",
 			dockerImage: formData?.dockerImage,
 			command: formData?.command,
 		})
@@ -127,7 +130,14 @@ export const ShowCustomCommand = ({ id, type }: Props) => {
 								<FormItem>
 									<FormLabel>Command</FormLabel>
 									<FormControl>
-										<Input placeholder="Custom command" {...field} />
+										<Input
+											placeholder={
+												type === "libsql"
+													? "sqld --db-path iku.db --http-listen-addr 0.0.0.0:8080 --grpc-listen-addr 0.0.0.0:5001 --admin-listen-addr 0.0.0.0:5000"
+													: "Custom command"
+											}
+											{...field}
+										/>
 									</FormControl>
 
 									<FormMessage />

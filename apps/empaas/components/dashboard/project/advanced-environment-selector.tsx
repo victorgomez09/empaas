@@ -71,6 +71,21 @@ export const AdvancedEnvironmentSelector = ({
 		},
 	);
 
+	// Get current user's permissions
+	const { data: currentUser } = api.user.get.useQuery();
+
+	// Check if user can create environments
+	const canCreateEnvironments =
+		currentUser?.role === "owner" ||
+		currentUser?.role === "admin" ||
+		currentUser?.canCreateEnvironments === true;
+
+	// Check if user can delete environments
+	const canDeleteEnvironments =
+		currentUser?.role === "owner" ||
+		currentUser?.role === "admin" ||
+		currentUser?.canDeleteEnvironments === true;
+
 	const haveServices =
 		selectedEnvironment &&
 		((selectedEnvironment?.mariadb?.length || 0) > 0 ||
@@ -267,17 +282,19 @@ export const AdvancedEnvironmentSelector = ({
 											<PencilIcon className="h-3 w-3" />
 										</Button>
 
-										<Button
-											variant="ghost"
-											size="sm"
-											className="h-6 w-6 p-0 text-red-600 hover:text-red-700"
-											onClick={(e) => {
-												e.stopPropagation();
-												openDeleteDialog(environment);
-											}}
-										>
-											<TrashIcon className="h-3 w-3" />
-										</Button>
+										{canDeleteEnvironments && (
+											<Button
+												variant="ghost"
+												size="sm"
+												className="h-6 w-6 p-0 text-red-600 hover:text-red-700"
+												onClick={(e) => {
+													e.stopPropagation();
+													openDeleteDialog(environment);
+												}}
+											>
+												<TrashIcon className="h-3 w-3" />
+											</Button>
+										)}
 									</div>
 								)}
 							</div>
@@ -285,13 +302,15 @@ export const AdvancedEnvironmentSelector = ({
 					})}
 
 					<DropdownMenuSeparator />
-					<DropdownMenuItem
-						className="cursor-pointer"
-						onClick={() => setIsCreateDialogOpen(true)}
-					>
-						<PlusIcon className="h-4 w-4 mr-2" />
-						Create Environment
-					</DropdownMenuItem>
+					{canCreateEnvironments && (
+						<DropdownMenuItem
+							className="cursor-pointer"
+							onClick={() => setIsCreateDialogOpen(true)}
+						>
+							<PlusIcon className="h-4 w-4 mr-2" />
+							Create Environment
+						</DropdownMenuItem>
+					)}
 				</DropdownMenuContent>
 			</DropdownMenu>
 

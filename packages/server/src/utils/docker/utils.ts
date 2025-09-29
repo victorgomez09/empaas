@@ -14,6 +14,7 @@ import type { RedisNested } from "../databases/redis";
 import { execAsync, execAsyncRemote } from "../process/execAsync";
 import { spawnAsync } from "../process/spawnAsync";
 import { getRemoteDocker } from "../servers/remote-docker";
+import { LibsqlNested } from "../databases/libsql";
 
 interface RegistryAuth {
 	username: string;
@@ -394,7 +395,13 @@ export const generateConfigContainer = (
 		replicas,
 		mounts,
 		networkSwarm,
+		stopGracePeriodSwarm,
 	} = application;
+
+	const sanitizedStopGracePeriodSwarm =
+		typeof stopGracePeriodSwarm === "bigint"
+			? Number(stopGracePeriodSwarm)
+			: stopGracePeriodSwarm;
 
 	const haveMounts = mounts && mounts.length > 0;
 
@@ -451,6 +458,10 @@ export const generateConfigContainer = (
 			: {
 					Networks: [{ Target: "empaas-network" }],
 				}),
+		...(sanitizedStopGracePeriodSwarm !== null &&
+			sanitizedStopGracePeriodSwarm !== undefined && {
+				StopGracePeriod: sanitizedStopGracePeriodSwarm,
+			}),
 	};
 };
 
@@ -475,6 +486,7 @@ export const generateFileMounts = (
 		| MongoNested
 		| MariadbNested
 		| MysqlNested
+		| LibsqlNested
 		| PostgresNested
 		| RedisNested,
 ) => {

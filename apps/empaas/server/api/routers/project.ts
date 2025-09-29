@@ -139,6 +139,9 @@ export const projectRouter = createTRPCRouter({
 										accessedServices,
 									),
 								},
+								libsql: {
+									where: buildServiceFilter(libsql.libsqlId, accessedServices),
+								},
 								mongo: {
 									where: buildServiceFilter(mongo.mongoId, accessedServices),
 								},
@@ -223,6 +226,9 @@ export const projectRouter = createTRPCRouter({
 							mysql: {
 								where: buildServiceFilter(mysql.mysqlId, accessedServices),
 							},
+							libsql: {
+								where: buildServiceFilter(libsql.libsqlId, accessedServices),
+							},
 							postgres: {
 								where: buildServiceFilter(
 									postgres.postgresId,
@@ -257,6 +263,7 @@ export const projectRouter = createTRPCRouter({
 						mysql: true,
 						postgres: true,
 						redis: true,
+						libsql: true,
 						compose: {
 							with: {
 								domains: true,
@@ -337,6 +344,7 @@ export const projectRouter = createTRPCRouter({
 								"mongo",
 								"mysql",
 								"redis",
+								"libsql",
 								"compose",
 							]),
 						}),
@@ -505,6 +513,35 @@ export const projectRouter = createTRPCRouter({
 										postgresId: newPostgres.postgresId,
 									});
 								}
+								break;
+							}
+							case "libsql": {
+								const { libsqlId, mounts, appName, ...libsql } =
+									await findLibsqlById(id);
+
+								const newAppName = appName.substring(
+									0,
+									appName.lastIndexOf("-"),
+								);
+
+								const newLibsql = await createLibsql({
+									...libsql,
+									appName: newAppName,
+									name: input.duplicateInSameProject
+										? `${libsql.name} (copy)`
+										: libsql.name,
+									environmentId: targetProject?.environmentId || "",
+								});
+
+								for (const mount of mounts) {
+									const { mountId, ...rest } = mount;
+									await createMount({
+										...rest,
+										serviceId: newLibsql.libsqlId,
+										serviceType: "libsql",
+									});
+								}
+
 								break;
 							}
 							case "mariadb": {

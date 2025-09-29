@@ -18,6 +18,7 @@ export const findVolumeBackupById = async (volumeBackupId: string) => {
 			mariadb: true,
 			mongo: true,
 			redis: true,
+			libsql: true,
 			compose: true,
 			destination: true,
 		},

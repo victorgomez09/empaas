@@ -213,6 +213,7 @@ export const ShowProjects = () => {
 												env.mongo.length === 0 &&
 												env.mysql.length === 0 &&
 												env.postgres.length === 0 &&
+												env.libsql.length === 0 &&
 												env.redis.length === 0 &&
 												env.applications.length === 0 &&
 												env.compose.length === 0,
@@ -226,6 +227,7 @@ export const ShowProjects = () => {
 												env.mongo.length +
 												env.mysql.length +
 												env.postgres.length +
+												env.libsql.length +
 												env.redis.length +
 												env.applications.length +
 												env.compose.length,

@@ -11,6 +11,7 @@ import { mysql } from "./mysql";
 import { postgres } from "./postgres";
 import { projects } from "./project";
 import { redis } from "./redis";
+import { libsql } from "./libsql";
 
 export const environments = pgTable("environment", {
 	environmentId: text("environmentId")
@@ -35,6 +36,7 @@ export const environmentRelations = relations(
 			fields: [environments.projectId],
 			references: [projects.projectId],
 		}),
+		libsql: many(libsql),
 		applications: many(applications),
 		mariadb: many(mariadb),
 		postgres: many(postgres),

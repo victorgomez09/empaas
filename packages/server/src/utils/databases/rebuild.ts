@@ -1,5 +1,6 @@
 import { db } from "@empaas/server/db";
 import {
+	libsql,
 	mariadb,
 	mongo,
 	mysql,
@@ -14,8 +15,15 @@ import { deployRedis } from "@empaas/server/services/redis";
 import { eq } from "drizzle-orm";
 import { removeService } from "../docker/utils";
 import { execAsync, execAsyncRemote } from "../process/execAsync";
+import { deployLibsql } from "@empaas/server/services/libsql";
 
-type DatabaseType = "postgres" | "mysql" | "mariadb" | "mongo" | "redis";
+type DatabaseType =
+	| "postgres"
+	| "mysql"
+	| "mariadb"
+	| "mongo"
+	| "redis"
+	| "libsql";
 
 export const rebuildDatabase = async (
 	databaseId: string,
@@ -41,7 +49,9 @@ export const rebuildDatabase = async (
 		}
 	}
 
-	if (type === "postgres") {
+	if (type === "libsql") {
+		await deployLibsql(databaseId);
+	} else if (type === "postgres") {
 		await deployPostgres(databaseId);
 	} else if (type === "mysql") {
 		await deployMySql(databaseId);
@@ -55,6 +65,14 @@ export const rebuildDatabase = async (
 };
 
 const findDatabaseById = async (databaseId: string, type: DatabaseType) => {
+	if (type === "libsql") {
+		return await db.query.libsql.findFirst({
+			where: eq(libsql.libsqlId, databaseId),
+			with: {
+				mounts: true,
+			},
+		});
+	}
 	if (type === "postgres") {
 		return await db.query.postgres.findFirst({
 			where: eq(postgres.postgresId, databaseId),

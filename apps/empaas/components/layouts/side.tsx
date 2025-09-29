@@ -75,7 +75,8 @@ const MENU: NavItem[] = [
 		url: "/dashboard/schedules",
 		icon: Clock,
 		// Only enabled in non-cloud environments
-		isEnabled: ({ isCloud, auth }) => !isCloud && auth?.role === "owner",
+		isEnabled: ({ isCloud, auth }) =>
+			!isCloud && (auth?.role === "owner" || auth?.role === "admin"),
 	},
 	{
 		isSingle: true,
@@ -84,7 +85,13 @@ const MENU: NavItem[] = [
 		icon: GalleryVerticalEnd,
 		// Only enabled for admins and users with access to Traefik files in non-cloud environments
 		isEnabled: ({ auth, isCloud }) =>
-			!!((auth?.role === "owner" || auth?.canAccessToTraefikFiles) && !isCloud),
+			!!(
+				(auth?.role === "owner" || auth?.canAccessToTraefikFiles) &&
+				(auth?.role === "owner" ||
+					auth?.role === "admin" ||
+					auth?.canAccessToTraefikFiles) &&
+				!isCloud
+			),
 	},
 	{
 		isSingle: true,
@@ -93,7 +100,12 @@ const MENU: NavItem[] = [
 		icon: BlocksIcon,
 		// Only enabled for admins and users with access to Docker in non-cloud environments
 		isEnabled: ({ auth, isCloud }) =>
-			!!((auth?.role === "owner" || auth?.canAccessToDocker) && !isCloud),
+			!!(
+				(auth?.role === "owner" ||
+					auth?.role === "admin" ||
+					auth?.canAccessToDocker) &&
+				!isCloud
+			),
 	},
 	{
 		isSingle: true,
@@ -102,7 +114,12 @@ const MENU: NavItem[] = [
 		icon: PieChart,
 		// Only enabled for admins and users with access to Docker in non-cloud environments
 		isEnabled: ({ auth, isCloud }) =>
-			!!((auth?.role === "owner" || auth?.canAccessToDocker) && !isCloud),
+			!!(
+				(auth?.role === "owner" ||
+					auth?.role === "admin" ||
+					auth?.canAccessToDocker) &&
+				!isCloud
+			),
 	},
 	{
 		isSingle: true,
@@ -621,7 +638,9 @@ export default function Page({ children }: Props) {
 																</Avatar>
 															</div>
 														</DropdownMenuItem>
-														{org.ownerId === session?.user?.id && (
+														{(user?.role === "owner" ||
+															user?.role === "admin" ||
+															isCloud) && (
 															<div className="flex items-center gap-2">
 																<AddOrganization organizationId={org.id} />
 																<DialogAction

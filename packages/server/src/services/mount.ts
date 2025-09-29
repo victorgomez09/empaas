@@ -4,7 +4,7 @@ import { db } from "@empaas/server/db";
 import {
 	type apiCreateMount,
 	mounts,
-	type ServiceType,
+	ServiceType,
 } from "@empaas/server/db/schema";
 import {
 	createFile,
@@ -21,6 +21,73 @@ import { eq, type SQL, sql } from "drizzle-orm";
 
 export type Mount = typeof mounts.$inferSelect;
 
+const hasOwnership = (m: Partial<Mount>) =>
+	m.uid !== undefined ||
+	m.gid !== undefined ||
+	(m.mode !== undefined && m.mode !== null && m.mode !== "");
+
+const buildChownArg = (uid?: number | null, gid?: number | null) => {
+	if (uid !== undefined && uid !== null && gid !== undefined && gid !== null) {
+		return `${uid}:${gid}`;
+	}
+	if (uid !== undefined && uid !== null) {
+		return `${uid}`;
+	}
+	if (gid !== undefined && gid !== null) {
+		return `:${gid}`;
+	}
+	return "";
+};
+
+export const applyMountPermissions = async (mountId: string) => {
+	const mount = await findMountById(mountId);
+	const serverId = await getServerId(mount);
+	const chownArg = buildChownArg(mount.uid ?? null, mount.gid ?? null);
+	const haveChown = chownArg !== "";
+	const haveChmod = !!mount.mode;
+	if (!haveChown && !haveChmod) return;
+
+	const run = async (command: string) => {
+		if (serverId) {
+			await execAsyncRemote(serverId, command);
+		} else {
+			await execAsync(command);
+		}
+	};
+
+	if (mount.type === "bind") {
+		const target = mount.hostPath;
+		if (!target) return;
+		const cmd = `if [ -e "${target}" ]; then ${haveChown ? `chown -R ${chownArg} "${target}";` : ""} ${haveChmod ? `chmod -R ${mount.mode} "${target}";` : ""} fi`;
+		await run(cmd);
+		return;
+	}
+
+	if (mount.type === "file") {
+		if (!mount.filePath) return;
+		const basePath = await getBaseFilesPath(mountId);
+		const fullPath = path.join(basePath, mount.filePath);
+		const cmd = `if [ -e "${fullPath}" ]; then ${haveChown ? `chown -R ${chownArg} "${fullPath}";` : ""} ${haveChmod ? `chmod -R ${mount.mode} "${fullPath}";` : ""} fi`;
+		await run(cmd);
+		return;
+	}
+
+	if (mount.type === "volume") {
+		const vol = mount.volumeName;
+		if (!vol) return;
+		const inner = [
+			haveChown ? `chown -R ${chownArg} /mnt` : "",
+			haveChmod ? `chmod -R ${mount.mode} /mnt` : "",
+		]
+			.filter(Boolean)
+			.join(" && ");
+		if (inner === "") return;
+		const cmd = `docker volume inspect "${vol}" >/dev/null 2>&1 || docker volume create "${vol}"; docker run --rm -v "${vol}":/mnt alpine sh -lc '${inner}'`;
+		await run(cmd);
+		return;
+	}
+};
+
 export const createMount = async (input: typeof apiCreateMount._type) => {
 	try {
 		const { serviceId, ...rest } = input;
@@ -36,6 +103,9 @@ export const createMount = async (input: typeof apiCreateMount._type) => {
 				}),
 				...(input.serviceType === "mariadb" && {
 					mariadbId: serviceId,
+				}),
+				...(input.serviceType === "libsql" && {
+					libsqlId: serviceId,
 				}),
 				...(input.serviceType === "mongo" && {
 					mongoId: serviceId,
@@ -63,6 +133,11 @@ export const createMount = async (input: typeof apiCreateMount._type) => {
 		if (value.type === "file") {
 			await createFileMount(value.mountId);
 		}
+
+		if (hasOwnership(value)) {
+			await applyMountPermissions(value.mountId);
+		}
+
 		return value;
 	} catch (error) {
 		console.log(error);
@@ -106,6 +181,15 @@ export const findMountById = async (mountId: string) => {
 		where: eq(mounts.mountId, mountId),
 		with: {
 			application: {
+				with: {
+					environment: {
+						with: {
+							project: true,
+						},
+					},
+				},
+			},
+			libsql: {
 				with: {
 					environment: {
 						with: {
@@ -188,6 +272,9 @@ export const findMountOrganizationId = async (mountId: string) => {
 	if (mount.postgres) {
 		return mount.postgres.environment.project.organizationId;
 	}
+	if (mount.libsql) {
+		return mount.libsql.environment.project.organizationId;
+	}
 	if (mount.mariadb) {
 		return mount.mariadb.environment.project.organizationId;
 	}
@@ -234,6 +321,11 @@ export const updateMount = async (
 	if (mount.type === "file") {
 		await updateFileMount(mountId);
 	}
+
+	if (hasOwnership(mount)) {
+		await applyMountPermissions(mountId);
+	}
+
 	return mount;
 };
 
@@ -246,6 +338,9 @@ export const findMountsByApplicationId = async (
 	switch (serviceType) {
 		case "application":
 			sqlChunks.push(eq(mounts.applicationId, serviceId));
+			break;
+		case "libsql":
+			sqlChunks.push(eq(mounts.libsqlId, serviceId));
 			break;
 		case "postgres":
 			sqlChunks.push(eq(mounts.postgresId, serviceId));
@@ -334,6 +429,10 @@ export const getBaseFilesPath = async (mountId: string) => {
 		const { APPLICATIONS_PATH } = paths(!!mount.application.serverId);
 		absoluteBasePath = path.resolve(APPLICATIONS_PATH);
 		appName = mount.application.appName;
+	} else if (mount.serviceType === "libsql" && mount.libsql) {
+		const { APPLICATIONS_PATH } = paths(!!mount.libsql.serverId);
+		absoluteBasePath = path.resolve(APPLICATIONS_PATH);
+		appName = mount.libsql.appName;
 	} else if (mount.serviceType === "postgres" && mount.postgres) {
 		const { APPLICATIONS_PATH } = paths(!!mount.postgres.serverId);
 		absoluteBasePath = path.resolve(APPLICATIONS_PATH);
@@ -371,6 +470,9 @@ export const getServerId = async (mount: MountNested) => {
 	}
 	if (mount.serviceType === "postgres" && mount?.postgres?.serverId) {
 		return mount.postgres.serverId;
+	}
+	if (mount.serviceType === "libsql" && mount?.libsql?.serverId) {
+		return mount.libsql.serverId;
 	}
 	if (mount.serviceType === "mariadb" && mount?.mariadb?.serverId) {
 		return mount.mariadb.serverId;

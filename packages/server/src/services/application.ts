@@ -10,6 +10,7 @@ import {
 	buildApplication,
 	getBuildCommand,
 	mechanizeDockerContainer,
+	runDeployHook,
 } from "@empaas/server/utils/builders";
 import { sendBuildErrorNotifications } from "@empaas/server/utils/notifications/build-error";
 import { sendBuildSuccessNotifications } from "@empaas/server/utils/notifications/build-success";
@@ -42,10 +43,12 @@ import { createTraefikConfig } from "@empaas/server/utils/traefik/application";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import { encodeBase64 } from "../utils/docker/utils";
+import { extractGitInfo } from "../utils/providers/git-info";
 import { getEmpaasUrl } from "./admin";
 import {
 	createDeployment,
 	createDeploymentPreview,
+	updateDeployment,
 	updateDeploymentStatus,
 } from "./deployment";
 import { type Domain, getDomainHost } from "./domain";
@@ -62,6 +65,36 @@ import {
 import { validUniqueServerAppName } from "./project";
 import { createRollback } from "./rollbacks";
 export type Application = typeof applications.$inferSelect;
+
+const updateDeploymentWithGitInfo = async (
+	application: Application & {
+		appName: string;
+		env: string | null;
+		serverId?: string | null;
+	},
+	deploymentId: string,
+	defaultTitle: string,
+	defaultDescription: string,
+) => {
+	const gitInfoResult = await extractGitInfo({
+		appName: application.appName,
+		serverId: application.serverId,
+		env: application.env,
+	});
+
+	if (gitInfoResult) {
+		const { gitInfo, updatedEnv } = gitInfoResult;
+		application.env = updatedEnv;
+		await updateApplication(application.applicationId, { env: updatedEnv });
+
+		await updateDeployment(deploymentId, {
+			title: gitInfo.gitMessage || defaultTitle,
+			description: gitInfo.gitHash
+				? `Hash: ${gitInfo.gitHash}`
+				: defaultDescription,
+		});
+	}
+};
 
 export const createApplication = async (
 	input: typeof apiCreateApplication._type,
@@ -197,22 +230,58 @@ export const deployApplication = async ({
 				...application,
 				logPath: deployment.logPath,
 			});
+			await updateDeploymentWithGitInfo(
+				application as any,
+				deployment.deploymentId,
+				titleLog,
+				descriptionLog,
+			);
 			await buildApplication(application, deployment.logPath);
 		} else if (application.sourceType === "gitlab") {
 			await cloneGitlabRepository(application, deployment.logPath);
+			await updateDeploymentWithGitInfo(
+				application as any,
+				deployment.deploymentId,
+				titleLog,
+				descriptionLog,
+			);
 			await buildApplication(application, deployment.logPath);
 		} else if (application.sourceType === "gitea") {
 			await cloneGiteaRepository(application, deployment.logPath);
+			await updateDeploymentWithGitInfo(
+				application as any,
+				deployment.deploymentId,
+				titleLog,
+				descriptionLog,
+			);
 			await buildApplication(application, deployment.logPath);
 		} else if (application.sourceType === "bitbucket") {
 			await cloneBitbucketRepository(application, deployment.logPath);
+			await updateDeploymentWithGitInfo(
+				application as any,
+				deployment.deploymentId,
+				titleLog,
+				descriptionLog,
+			);
 			await buildApplication(application, deployment.logPath);
 		} else if (application.sourceType === "docker") {
 			await buildDocker(application, deployment.logPath);
 		} else if (application.sourceType === "git") {
 			await cloneGitRepository(application, deployment.logPath);
+			await updateDeploymentWithGitInfo(
+				application as any,
+				deployment.deploymentId,
+				titleLog,
+				descriptionLog,
+			);
 			await buildApplication(application, deployment.logPath);
 		} else if (application.sourceType === "drop") {
+			await updateDeploymentWithGitInfo(
+				application as any,
+				deployment.deploymentId,
+				titleLog,
+				descriptionLog,
+			);
 			await buildApplication(application, deployment.logPath);
 		}
 
@@ -349,7 +418,22 @@ export const deployRemoteApplication = async ({
 				command += getBuildCommand(application, deployment.logPath);
 			}
 			await execAsyncRemote(application.serverId, command);
+
+			// Run pre-deploy hook (remote) before service is created
+			if (application.preDeployCommand) {
+				try {
+					await runDeployHook(application, application.preDeployCommand);
+				} catch (_) {}
+			}
+
 			await mechanizeDockerContainer(application);
+
+			// Run post-deploy hook (remote) after service is created
+			if (application.postDeployCommand) {
+				try {
+					await runDeployHook(application, application.postDeployCommand);
+				} catch (_) {}
+			}
 		}
 
 		await updateDeploymentStatus(deployment.deploymentId, "done");
@@ -595,7 +679,22 @@ export const deployRemotePreviewApplication = async ({
 
 			command += getBuildCommand(application, deployment.logPath);
 			await execAsyncRemote(application.serverId, command);
+
+			// Pre-deploy hook (remote)
+			if (application.preDeployCommand) {
+				try {
+					await runDeployHook(application, application.preDeployCommand);
+				} catch (_) {}
+			}
+
 			await mechanizeDockerContainer(application);
+
+			// Post-deploy hook (remote)
+			if (application.postDeployCommand) {
+				try {
+					await runDeployHook(application, application.postDeployCommand);
+				} catch (_) {}
+			}
 		}
 
 		const successComment = getIssueComment(
@@ -651,8 +750,23 @@ export const rebuildRemoteApplication = async ({
 				command += getBuildCommand(application, deployment.logPath);
 				await execAsyncRemote(application.serverId, command);
 			}
+			// Pre-deploy hook (remote)
+			if (application.preDeployCommand) {
+				try {
+					await runDeployHook(application, application.preDeployCommand);
+				} catch (_) {}
+			}
+
 			await mechanizeDockerContainer(application);
+
+			// Post-deploy hook (remote)
+			if (application.postDeployCommand) {
+				try {
+					await runDeployHook(application, application.postDeployCommand);
+				} catch (_) {}
+			}
 		}
+
 		await updateDeploymentStatus(deployment.deploymentId, "done");
 		await updateApplicationStatus(applicationId, "done");
 	} catch (error) {

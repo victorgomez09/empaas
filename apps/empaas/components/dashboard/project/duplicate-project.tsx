@@ -35,6 +35,7 @@ export type Services = {
 		| "mysql"
 		| "mongo"
 		| "redis"
+		| "libsql"
 		| "compose";
 	description?: string | null;
 	id: string;

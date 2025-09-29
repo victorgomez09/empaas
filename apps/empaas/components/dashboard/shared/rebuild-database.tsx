@@ -17,7 +17,7 @@ import { api } from "@/utils/api";
 
 interface Props {
 	id: string;
-	type: "postgres" | "mysql" | "mariadb" | "mongo" | "redis";
+	type: "postgres" | "mysql" | "mariadb" | "mongo" | "redis" | "libsql";
 }
 
 export const RebuildDatabase = ({ id, type }: Props) => {
@@ -29,6 +29,7 @@ export const RebuildDatabase = ({ id, type }: Props) => {
 		mariadb: () => api.mariadb.rebuild.useMutation(),
 		mongo: () => api.mongo.rebuild.useMutation(),
 		redis: () => api.redis.rebuild.useMutation(),
+		libsql: () => api.libsql.rebuild.useMutation(),
 	};
 
 	const { mutateAsync, isLoading } = mutationMap[type]();
@@ -41,6 +42,7 @@ export const RebuildDatabase = ({ id, type }: Props) => {
 				mariadbId: type === "mariadb" ? id : "",
 				mongoId: type === "mongo" ? id : "",
 				redisId: type === "redis" ? id : "",
+				libsqlId: type === "libsql" ? id : "",
 			});
 			toast.success("Database rebuilt successfully");
 			await utils.invalidate();

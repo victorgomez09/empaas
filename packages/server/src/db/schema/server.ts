@@ -23,6 +23,7 @@ import { redis } from "./redis";
 import { schedules } from "./schedule";
 import { sshKeys } from "./ssh-key";
 import { generateAppName } from "./utils";
+import { libsql } from "./libsql";
 export const serverStatus = pgEnum("serverStatus", ["active", "inactive"]);
 
 export const server = pgTable("server", {
@@ -106,6 +107,7 @@ export const serverRelations = relations(server, ({ one, many }) => ({
 	compose: many(compose),
 	redis: many(redis),
 	mariadb: many(mariadb),
+	libsql: many(libsql),
 	mongo: many(mongo),
 	mysql: many(mysql),
 	postgres: many(postgres),

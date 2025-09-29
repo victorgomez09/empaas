@@ -183,9 +183,14 @@ export const uploadProcedure = async (opts: any) => {
 };
 
 export const cliProcedure = t.procedure.use(({ ctx, next }) => {
-	if (!ctx.session || !ctx.user || ctx.user.role !== "owner") {
+	if (
+		!ctx.session ||
+		!ctx.user ||
+		(ctx.user.role !== "owner" && ctx.user.role !== "admin")
+	) {
 		throw new TRPCError({ code: "UNAUTHORIZED" });
 	}
+
 	return next({
 		ctx: {
 			// infers the `session` as non-nullable
@@ -197,9 +202,14 @@ export const cliProcedure = t.procedure.use(({ ctx, next }) => {
 });
 
 export const adminProcedure = t.procedure.use(({ ctx, next }) => {
-	if (!ctx.session || !ctx.user || ctx.user.role !== "owner") {
+	if (
+		!ctx.session ||
+		!ctx.user ||
+		(ctx.user.role !== "owner" && ctx.user.role !== "admin")
+	) {
 		throw new TRPCError({ code: "UNAUTHORIZED" });
 	}
+
 	return next({
 		ctx: {
 			// infers the `session` as non-nullable

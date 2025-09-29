@@ -9,6 +9,10 @@ import {
 	findMemberById,
 	updateEnvironmentById,
 } from "@empaas/server";
+import {
+	checkEnvironmentCreationPermission,
+	checkEnvironmentDeletionPermission,
+} from "@empaas/server/index";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -38,6 +42,9 @@ const filterEnvironmentServices = (
 	mysql: environment.mysql.filter((db: any) =>
 		accessedServices.includes(db.mysqlId),
 	),
+	libsql: environment.libsql.filter((db: any) =>
+		accessedServices.includes(db.libsqlId),
+	),
 	postgres: environment.postgres.filter((db: any) =>
 		accessedServices.includes(db.postgresId),
 	),
@@ -54,9 +61,12 @@ export const environmentRouter = createTRPCRouter({
 		.input(apiCreateEnvironment)
 		.mutation(async ({ input, ctx }) => {
 			try {
-				// Check if user has access to the project
-				// This would typically involve checking project ownership/membership
-				// For now, we'll use a basic organization check
+				// Check if user has permission to create environments
+				await checkEnvironmentCreationPermission(
+					ctx.user.id,
+					input.projectId,
+					ctx.session.activeOrganizationId,
+				);
 
 				if (input.name === "production") {
 					throw new TRPCError({
@@ -76,6 +86,9 @@ export const environmentRouter = createTRPCRouter({
 				}
 				return environment;
 			} catch (error) {
+				if (error instanceof TRPCError) {
+					throw error;
+				}
 				throw new TRPCError({
 					code: "BAD_REQUEST",
 					message: `Error creating the environment: ${error instanceof Error ? error.message : error}`,
@@ -187,14 +200,6 @@ export const environmentRouter = createTRPCRouter({
 		.input(apiRemoveEnvironment)
 		.mutation(async ({ input, ctx }) => {
 			try {
-				if (ctx.user.role === "member") {
-					await checkEnvironmentAccess(
-						ctx.user.id,
-						input.environmentId,
-						ctx.session.activeOrganizationId,
-						"access",
-					);
-				}
 				const environment = await findEnvironmentById(input.environmentId);
 				if (
 					environment.project.organizationId !==
@@ -206,27 +211,32 @@ export const environmentRouter = createTRPCRouter({
 					});
 				}
 
+				// Check environment deletion permission
+				await checkEnvironmentDeletionPermission(
+					ctx.user.id,
+					environment.projectId,
+					ctx.session.activeOrganizationId,
+				);
+
 				// Check environment access for members
 				if (ctx.user.role === "member") {
-					const { accessedEnvironments } = await findMemberById(
+					await checkEnvironmentAccess(
 						ctx.user.id,
+						input.environmentId,
 						ctx.session.activeOrganizationId,
+						"access",
 					);
-
-					if (!accessedEnvironments.includes(environment.environmentId)) {
-						throw new TRPCError({
-							code: "FORBIDDEN",
-							message: "You are not allowed to delete this environment",
-						});
-					}
 				}
 
-				const deletedEnvironment = await deleteEnvironment(input.environmentId);
-				return deletedEnvironment;
+				return await deleteEnvironment(input.environmentId);
 			} catch (error) {
+				if (error instanceof TRPCError) {
+					throw error;
+				}
 				throw new TRPCError({
 					code: "BAD_REQUEST",
 					message: `Error deleting the environment: ${error instanceof Error ? error.message : error}`,
+					cause: error,
 				});
 			}
 		}),

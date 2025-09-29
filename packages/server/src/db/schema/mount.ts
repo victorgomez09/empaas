@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgEnum, pgTable, text } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import { z } from "zod";
@@ -10,10 +10,12 @@ import { mongo } from "./mongo";
 import { mysql } from "./mysql";
 import { postgres } from "./postgres";
 import { redis } from "./redis";
+import { libsql } from "./libsql";
 
 export const serviceType = pgEnum("serviceType", [
 	"application",
 	"postgres",
+	"libsql",
 	"mysql",
 	"mariadb",
 	"mongo",
@@ -22,6 +24,10 @@ export const serviceType = pgEnum("serviceType", [
 ]);
 
 export const mountType = pgEnum("mountType", ["bind", "volume", "file"]);
+
+export type ServiceType = NonNullable<
+	z.infer<typeof createSchema>["serviceType"]
+>;
 
 export const mounts = pgTable("mount", {
 	mountId: text("mountId")
@@ -33,6 +39,10 @@ export const mounts = pgTable("mount", {
 	volumeName: text("volumeName"),
 	filePath: text("filePath"),
 	content: text("content"),
+	// Optional ownership and permissions
+	uid: integer("uid"),
+	gid: integer("gid"),
+	mode: text("mode"),
 	serviceType: serviceType("serviceType").notNull().default("application"),
 	mountPath: text("mountPath").notNull(),
 	applicationId: text("applicationId").references(
@@ -40,6 +50,9 @@ export const mounts = pgTable("mount", {
 		{ onDelete: "cascade" },
 	),
 	postgresId: text("postgresId").references(() => postgres.postgresId, {
+		onDelete: "cascade",
+	}),
+	libsqlId: text("libsqlId").references(() => libsql.libsqlId, {
 		onDelete: "cascade",
 	}),
 	mariadbId: text("mariadbId").references(() => mariadb.mariadbId, {
@@ -67,6 +80,10 @@ export const MountssRelations = relations(mounts, ({ one }) => ({
 	postgres: one(postgres, {
 		fields: [mounts.postgresId],
 		references: [postgres.postgresId],
+	}),
+	libsql: one(libsql, {
+		fields: [mounts.libsqlId],
+		references: [libsql.libsqlId],
 	}),
 	mariadb: one(mariadb, {
 		fields: [mounts.mariadbId],
@@ -99,22 +116,11 @@ const createSchema = createInsertSchema(mounts, {
 	mountPath: z.string().min(1),
 	mountId: z.string().optional(),
 	filePath: z.string().optional(),
-	serviceType: z
-		.enum([
-			"application",
-			"postgres",
-			"mysql",
-			"mariadb",
-			"mongo",
-			"redis",
-			"compose",
-		])
-		.default("application"),
+	// Optional ownership and permissions
+	uid: z.number().int().optional(),
+	gid: z.number().int().optional(),
+	mode: z.string().optional(),
 });
-
-export type ServiceType = NonNullable<
-	z.infer<typeof createSchema>["serviceType"]
->;
 
 export const apiCreateMount = createSchema
 	.pick({
@@ -123,8 +129,11 @@ export const apiCreateMount = createSchema
 		volumeName: true,
 		content: true,
 		mountPath: true,
-		serviceType: true,
 		filePath: true,
+		uid: true,
+		gid: true,
+		mode: true,
+		serviceType: true,
 	})
 	.extend({
 		serviceId: z.string().min(1),

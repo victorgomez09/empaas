@@ -43,6 +43,7 @@ export type ServiceType =
 	| "redis"
 	| "mysql"
 	| "mariadb"
+	| "libsql"
 	| "application";
 
 interface Props {
@@ -62,6 +63,7 @@ export const ShowResources = ({ id, type }: Props) => {
 		application: () =>
 			api.application.one.useQuery({ applicationId: id }, { enabled: !!id }),
 		mongo: () => api.mongo.one.useQuery({ mongoId: id }, { enabled: !!id }),
+		libsql: () => api.libsql.one.useQuery({ libsqlId: id }, { enabled: !!id }),
 	};
 	const { data, refetch } = queryMap[type]
 		? queryMap[type]()
@@ -74,6 +76,7 @@ export const ShowResources = ({ id, type }: Props) => {
 		mariadb: () => api.mariadb.update.useMutation(),
 		application: () => api.application.update.useMutation(),
 		mongo: () => api.mongo.update.useMutation(),
+		libsql: () => api.libsql.update.useMutation(),
 	};
 
 	const { mutateAsync, isLoading } = mutationMap[type]
@@ -104,6 +107,7 @@ export const ShowResources = ({ id, type }: Props) => {
 	const onSubmit = async (formData: AddResources) => {
 		await mutateAsync({
 			mongoId: id || "",
+			libsqlId: id || "",
 			postgresId: id || "",
 			redisId: id || "",
 			mysqlId: id || "",

@@ -14,6 +14,7 @@ export type PostgresNested = InferResultType<
 	"postgres",
 	{ mounts: true; environment: { with: { project: true } } }
 >;
+
 export const buildPostgres = async (postgres: PostgresNested) => {
 	const {
 		appName,
@@ -44,6 +45,7 @@ export const buildPostgres = async (postgres: PostgresNested) => {
 		RollbackConfig,
 		UpdateConfig,
 		Networks,
+		StopGracePeriod,
 	} = generateConfigContainer(postgres);
 	const resources = calculateResources({
 		memoryLimit,
@@ -101,6 +103,8 @@ export const buildPostgres = async (postgres: PostgresNested) => {
 				: [],
 		},
 		UpdateConfig,
+		...(StopGracePeriod !== undefined &&
+			StopGracePeriod !== null && { StopGracePeriod }),
 	};
 	try {
 		const service = docker.getService(appName);

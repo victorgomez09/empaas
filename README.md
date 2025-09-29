@@ -6,7 +6,7 @@ Empaas is a free, self-hostable Platform as a Service (PaaS) that simplifies the
 Empaas includes multiple features to make your life easier.
 
 - **Applications**: Deploy any type of application (Node.js, PHP, Python, Go, Ruby, etc.).
-- **Databases**: Create and manage databases with support for MySQL, PostgreSQL, MongoDB, MariaDB, and Redis.
+- **Databases**: Create and manage databases with support for MySQL, PostgreSQL, MongoDB, MariaDB, Redis  and LibSQL.
 - **Backups**: Automate backups for databases to an external storage destination.
 - **Docker Compose**: Native support for Docker Compose to manage complex applications.
 - **Multi Node**: Scale applications to multiple nodes using Docker Swarm to manage the cluster.

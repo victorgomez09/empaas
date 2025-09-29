@@ -145,9 +145,9 @@ const Settings = (
 						<TabsContent value="profile" className="flex flex-col gap-2 w-full">
 							<div className="flex flex-col gap-2 w-full h-full">
 								<ProfileForm />
-								{(data?.canAccessToAPI || data?.role === "owner") && (
-									<ShowApiKeys />
-								)}
+								{(data?.canAccessToAPI ||
+									data?.role === "owner" ||
+									data?.role === "admin") && <ShowApiKeys />}
 
 								{/* {isCloud && <RemoveSelfAccount />} */}
 							</div>
