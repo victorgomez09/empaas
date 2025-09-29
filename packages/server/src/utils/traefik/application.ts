@@ -3,10 +3,10 @@ import path from "node:path";
 import { createInterface } from "node:readline";
 import { paths } from "@empaas/server/constants";
 import type { Domain } from "@empaas/server/services/domain";
+import { parse, stringify } from "yaml";
 import { encodeBase64 } from "../docker/utils";
 import { execAsyncRemote } from "../process/execAsync";
 import type { FileConfig, HttpLoadBalancerService } from "./file-types";
-import { parse, stringify } from "yaml";
 
 export const createTraefikConfig = (appName: string) => {
 	const defaultPort = 3000;
@@ -18,25 +18,25 @@ export const createTraefikConfig = (appName: string) => {
 				...(process.env.NODE_ENV === "production"
 					? {}
 					: {
-						[`${appName}-router-1`]: {
-							rule: domainDefault,
-							service: `${appName}-service-1`,
-							entryPoints: ["web"],
-						},
-					}),
+							[`${appName}-router-1`]: {
+								rule: domainDefault,
+								service: `${appName}-service-1`,
+								entryPoints: ["web"],
+							},
+						}),
 			},
 
 			services: {
 				...(process.env.NODE_ENV === "production"
 					? {}
 					: {
-						[`${appName}-service-1`]: {
-							loadBalancer: {
-								servers: [{ url: serviceURLDefault }],
-								passHostHeader: true,
+							[`${appName}-service-1`]: {
+								loadBalancer: {
+									servers: [{ url: serviceURLDefault }],
+									passHostHeader: true,
+								},
 							},
-						},
-					}),
+						}),
 			},
 		},
 	};
@@ -68,7 +68,7 @@ export const removeTraefikConfig = async (
 		if (fs.existsSync(configPath)) {
 			await fs.promises.unlink(configPath);
 		}
-	} catch { }
+	} catch {}
 };
 
 export const removeTraefikConfigRemote = async (
@@ -79,7 +79,7 @@ export const removeTraefikConfigRemote = async (
 		const { DYNAMIC_TRAEFIK_PATH } = paths(true);
 		const configPath = path.join(DYNAMIC_TRAEFIK_PATH, `${appName}.yml`);
 		await execAsyncRemote(serverId, `rm ${configPath}`);
-	} catch { }
+	} catch {}
 };
 
 export const loadOrCreateConfig = (appName: string): FileConfig => {

@@ -2,6 +2,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { paths } from "@empaas/server/constants";
 import type { User } from "@empaas/server/services/user";
+import { parse, stringify } from "yaml";
 import {
 	loadOrCreateConfig,
 	removeTraefikConfig,
@@ -9,7 +10,6 @@ import {
 } from "./application";
 import type { FileConfig } from "./file-types";
 import type { MainTraefikConfig } from "./types";
-import { parse, stringify } from "yaml";
 
 export const updateServerTraefik = (
 	user: User | null,

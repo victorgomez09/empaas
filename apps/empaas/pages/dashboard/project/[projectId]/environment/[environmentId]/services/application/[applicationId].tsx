@@ -1,3 +1,29 @@
+import { validateRequest } from "@empaas/server/lib/auth";
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { createServerSideHelpers } from "@trpc/react-query/server";
+import copy from "copy-to-clipboard";
+import {
+	Ban,
+	CheckCircle2,
+	ChevronDown,
+	GlobeIcon,
+	Hammer,
+	HelpCircle,
+	RefreshCcw,
+	Rocket,
+	ServerOff,
+	Terminal,
+} from "lucide-react";
+import type {
+	GetServerSidePropsContext,
+	InferGetServerSidePropsType,
+} from "next";
+import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { type ReactElement, useEffect, useState } from "react";
+import { toast } from "sonner";
+import superjson from "superjson";
 import { ShowClusterSettings } from "@/components/dashboard/application/advanced/cluster/show-cluster-settings";
 import { AddCommand } from "@/components/dashboard/application/advanced/general/add-command";
 import { ShowPorts } from "@/components/dashboard/application/advanced/ports/show-port";
@@ -31,7 +57,11 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -44,21 +74,6 @@ import {
 import { UseKeyboardNav } from "@/hooks/use-keyboard-nav";
 import { appRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
-import { validateRequest } from "@empaas/server/lib/auth";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { createServerSideHelpers } from "@trpc/react-query/server";
-import copy from "copy-to-clipboard";
-import { Ban, CheckCircle2, ChevronDown, GlobeIcon, Hammer, HelpCircle, RefreshCcw, Rocket, ServerOff, Terminal } from "lucide-react";
-import type {
-	GetServerSidePropsContext,
-	InferGetServerSidePropsType,
-} from "next";
-import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { type ReactElement, useEffect, useState } from "react";
-import { toast } from "sonner";
-import superjson from "superjson";
 
 type TabState =
 	| "projects"
@@ -142,14 +157,16 @@ const Service = (
 							</div>
 							<div className="flex items-center gap-2">
 								<span>{data?.name}</span>
-								<span>{'>'}</span>
+								<span>{">"}</span>
 								<div className="flex flex-row h-fit w-fit gap-2">
 									<span
-										className={`text-base cursor-pointer ${!data?.serverId
-											? "text-default"
-											: data?.server?.serverStatus === "active"
+										className={`text-base cursor-pointer ${
+											!data?.serverId
 												? "text-default"
-												: "text-destructive"}`}
+												: data?.server?.serverStatus === "active"
+													? "text-default"
+													: "text-destructive"
+										}`}
 										onClick={() => {
 											if (data?.server?.ipAddress) {
 												copy(data.server.ipAddress);
@@ -182,7 +199,7 @@ const Service = (
 										</TooltipProvider>
 									)}
 								</div>
-								<span>{'>'}</span>
+								<span>{">"}</span>
 								<StatusTooltip status={data?.applicationStatus} />
 							</div>
 						</CardTitle>
@@ -197,7 +214,10 @@ const Service = (
 
 					<div className="flex flex-col h-fit w-fit gap-2">
 						<div className="flex flex-row gap-2 items-center justify-end">
-							<TooltipProvider delayDuration={0} disableHoverableContent={false}>
+							<TooltipProvider
+								delayDuration={0}
+								disableHoverableContent={false}
+							>
 								<DialogAction
 									title="Deploy Application"
 									description="Are you sure you want to deploy this application?"
@@ -234,7 +254,8 @@ const Service = (
 											<TooltipPrimitive.Portal>
 												<TooltipContent sideOffset={5} className="z-[60]">
 													<p>
-														Downloads the source code and performs a complete build
+														Downloads the source code and performs a complete
+														build
 													</p>
 												</TooltipContent>
 											</TooltipPrimitive.Portal>
@@ -276,8 +297,8 @@ const Service = (
 												<TooltipPrimitive.Portal>
 													<TooltipContent sideOffset={5} className="z-[60]">
 														<p>
-															Start the application (requires a previous successful
-															build)
+															Start the application (requires a previous
+															successful build)
 														</p>
 													</TooltipContent>
 												</TooltipPrimitive.Portal>
@@ -324,7 +345,6 @@ const Service = (
 									</DialogAction>
 								)}
 
-
 								<DropdownMenu>
 									<DropdownMenuTrigger asChild>
 										<Button
@@ -335,7 +355,10 @@ const Service = (
 											Actions <ChevronDown className="ml-2 h-4 w-4" />
 										</Button>
 									</DropdownMenuTrigger>
-									<DropdownMenuContent align="end" className="flex flex-col gap-2">
+									<DropdownMenuContent
+										align="end"
+										className="flex flex-col gap-2"
+									>
 										<DialogAction
 											title="Reload Application"
 											description="Are you sure you want to reload this application?"
@@ -369,7 +392,9 @@ const Service = (
 													</TooltipTrigger>
 													<TooltipPrimitive.Portal>
 														<TooltipContent sideOffset={5} className="z-[60]">
-															<p>Reload the application without rebuilding it</p>
+															<p>
+																Reload the application without rebuilding it
+															</p>
 														</TooltipContent>
 													</TooltipPrimitive.Portal>
 												</Tooltip>
@@ -409,8 +434,8 @@ const Service = (
 													<TooltipPrimitive.Portal>
 														<TooltipContent sideOffset={5} className="z-[60]">
 															<p>
-																Only rebuilds the application without downloading new
-																code
+																Only rebuilds the application without
+																downloading new code
 															</p>
 														</TooltipContent>
 													</TooltipPrimitive.Portal>
@@ -492,10 +517,10 @@ const Service = (
 							<div className="max-w-3xl mx-auto flex flex-col items-center justify-center self-center gap-3">
 								<ServerOff className="size-10 text-muted-foreground self-center" />
 								<span className="text-center text-base text-muted-foreground">
-									This service is hosted on the server {data.server.name},
-									but this server has been disabled because your current
-									plan doesn't include enough servers. Please purchase more
-									servers to regain access to this application.
+									This service is hosted on the server {data.server.name}, but
+									this server has been disabled because your current plan
+									doesn't include enough servers. Please purchase more servers
+									to regain access to this application.
 								</span>
 								<span className="text-center text-base text-muted-foreground">
 									Go to{" "}
@@ -542,22 +567,29 @@ const Service = (
 							</div>
 
 							<div className="col-span-10 w-full h-full">
-								<TabsContent value="general" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="general"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowGeneralApplication applicationId={applicationId} />
 								</TabsContent>
 
-								<TabsContent value="environment" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="environment"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowEnvironment applicationId={applicationId} />
 								</TabsContent>
 
-								<TabsContent value="monitoring" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="monitoring"
+									className="flex flex-col gap-2 w-full"
+								>
 									{data?.serverId && isCloud ? (
 										<ContainerPaidMonitoring
 											appName={data?.appName || ""}
 											baseUrl={`${data?.serverId ? `http://${data?.server?.ipAddress}:${data?.server?.metricsConfig?.server?.port}` : "http://localhost:4500"}`}
-											token={
-												data?.server?.metricsConfig?.server?.token || ""
-											}
+											token={data?.server?.metricsConfig?.server?.token || ""}
 										/>
 									) : (
 										<>
@@ -584,29 +616,36 @@ const Service = (
 																}
 															/>
 														) : ( */}
-											<ContainerFreeMonitoring
-												appName={data?.appName || ""}
-											/>
+											<ContainerFreeMonitoring appName={data?.appName || ""} />
 											{/* )} */}
 										</>
 									)}
 								</TabsContent>
 
-								<TabsContent value="logs" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="logs"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowDockerLogs
 										appName={data?.appName || ""}
 										serverId={data?.serverId || ""}
 									/>
 								</TabsContent>
 
-								<TabsContent value="schedules" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="schedules"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowSchedules
 										id={applicationId}
 										scheduleType="application"
 									/>
 								</TabsContent>
 
-								<TabsContent value="deployments" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="deployments"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowDeployments
 										id={applicationId}
 										type="application"
@@ -615,7 +654,10 @@ const Service = (
 									/>
 								</TabsContent>
 
-								<TabsContent value="volume-backups" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="volume-backups"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowVolumeBackups
 										id={applicationId}
 										type="application"
@@ -623,15 +665,24 @@ const Service = (
 									/>
 								</TabsContent>
 
-								<TabsContent value="preview-deployments" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="preview-deployments"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowPreviewDeployments applicationId={applicationId} />
 								</TabsContent>
 
-								<TabsContent value="domains" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="domains"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowDomains id={applicationId} type="application" />
 								</TabsContent>
 
-								<TabsContent value="advanced" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="advanced"
+									className="flex flex-col gap-2 w-full"
+								>
 									<div className="flex flex-col gap-4">
 										<AddCommand applicationId={applicationId} />
 										<ShowClusterSettings

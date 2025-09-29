@@ -418,7 +418,7 @@ export const StepTwo = ({ templateInfo, setTemplateInfo }: StepProps) => {
 											<ScrollArea className="w-full rounded-md border">
 												<div className="p-4 space-y-4">
 													{selectedVariant?.configFiles?.length &&
-														selectedVariant?.configFiles?.length > 0 ? (
+													selectedVariant?.configFiles?.length > 0 ? (
 														<>
 															<div className="text-sm text-muted-foreground mb-4">
 																This template requires the following

@@ -68,9 +68,7 @@ export const ShowRegistry = () => {
 												</div>
 
 												<div className="flex flex-row gap-1">
-													<HandleRegistry
-														registryId={registry.registryId}
-													/>
+													<HandleRegistry registryId={registry.registryId} />
 
 													<DialogAction
 														title="Delete Registry"

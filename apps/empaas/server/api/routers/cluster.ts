@@ -1,4 +1,3 @@
-import { getLocalServerIp } from "@/server/wss/terminal";
 import {
 	type DockerNode,
 	execAsync,
@@ -8,6 +7,7 @@ import {
 } from "@empaas/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { getLocalServerIp } from "@/server/wss/terminal";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const clusterRouter = createTRPCRouter({
 	getNodes: protectedProcedure
@@ -68,8 +68,9 @@ export const clusterRouter = createTRPCRouter({
 			}
 
 			return {
-				command: `docker swarm join --token ${result.JoinTokens.Worker
-					} ${ip}:2377`,
+				command: `docker swarm join --token ${
+					result.JoinTokens.Worker
+				} ${ip}:2377`,
 				version: docker_version.Version,
 			};
 		}),
@@ -90,8 +91,9 @@ export const clusterRouter = createTRPCRouter({
 				ip = server?.ipAddress;
 			}
 			return {
-				command: `docker swarm join --token ${result.JoinTokens.Manager
-					} ${ip}:2377`,
+				command: `docker swarm join --token ${
+					result.JoinTokens.Manager
+				} ${ip}:2377`,
 				version: docker_version.Version,
 			};
 		}),

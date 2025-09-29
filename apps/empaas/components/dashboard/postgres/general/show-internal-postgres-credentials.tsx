@@ -9,7 +9,7 @@ interface Props {
 }
 export const ShowInternalPostgresCredentials = ({ postgresId }: Props) => {
 	const { data } = api.postgres.one.useQuery({ postgresId });
-	
+
 	return (
 		<Card className="w-full h-full">
 			<CardHeader>
@@ -28,10 +28,7 @@ export const ShowInternalPostgresCredentials = ({ postgresId }: Props) => {
 					<div className="flex flex-col gap-2">
 						<Label>Password</Label>
 						<div className="flex flex-row gap-4">
-							<ToggleVisibilityInput
-								value={data?.databasePassword}
-								disabled
-							/>
+							<ToggleVisibilityInput value={data?.databasePassword} disabled />
 						</div>
 					</div>
 					<div className="flex flex-col gap-2">

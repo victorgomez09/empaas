@@ -1,8 +1,35 @@
+import { validateRequest } from "@empaas/server/lib/auth";
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { createServerSideHelpers } from "@trpc/react-query/server";
+import copy from "copy-to-clipboard";
+import {
+	Ban,
+	CheckCircle2,
+	ChevronDown,
+	HelpCircle,
+	RefreshCcw,
+	Rocket,
+	ServerOff,
+	Terminal,
+} from "lucide-react";
+import type {
+	GetServerSidePropsContext,
+	InferGetServerSidePropsType,
+} from "next";
+import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { type ReactElement, useState } from "react";
+import { toast } from "sonner";
+import superjson from "superjson";
 import { ShowEnvironment } from "@/components/dashboard/application/environment/show-enviroment";
 import { ShowDockerLogs } from "@/components/dashboard/application/logs/show";
 import { DeleteService } from "@/components/dashboard/compose/delete-service";
 import { ShowBackups } from "@/components/dashboard/database/backups/show-backups";
-import { LogLine, parseLogs } from "@/components/dashboard/docker/logs/utils";
+import {
+	type LogLine,
+	parseLogs,
+} from "@/components/dashboard/docker/logs/utils";
 import { ShowExternalMongoCredentials } from "@/components/dashboard/mongo/general/show-external-mongo-credentials";
 import { ShowInternalMongoCredentials } from "@/components/dashboard/mongo/general/show-internal-mongo-credentials";
 import { UpdateMongo } from "@/components/dashboard/mongo/update-mongo";
@@ -24,7 +51,11 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -36,21 +67,6 @@ import {
 import { UseKeyboardNav } from "@/hooks/use-keyboard-nav";
 import { appRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
-import { validateRequest } from "@empaas/server/lib/auth";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { createServerSideHelpers } from "@trpc/react-query/server";
-import copy from "copy-to-clipboard";
-import { Ban, CheckCircle2, ChevronDown, HelpCircle, RefreshCcw, Rocket, ServerOff, Terminal } from "lucide-react";
-import type {
-	GetServerSidePropsContext,
-	InferGetServerSidePropsType,
-} from "next";
-import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { type ReactElement, useState } from "react";
-import { toast } from "sonner";
-import superjson from "superjson";
 
 type TabState = "projects" | "monitoring" | "settings" | "backups" | "advanced";
 
@@ -138,14 +154,16 @@ const Mongo = (
 							</div>
 							<div className="flex items-center gap-2">
 								<span>{data?.name}</span>
-								<span>{'>'}</span>
+								<span>{">"}</span>
 								<div className="flex flex-row h-fit w-fit gap-2">
 									<span
-										className={`text-base cursor-pointer ${!data?.serverId
-											? "text-default"
-											: data?.server?.serverStatus === "active"
+										className={`text-base cursor-pointer ${
+											!data?.serverId
 												? "text-default"
-												: "text-destructive"}`}
+												: data?.server?.serverStatus === "active"
+													? "text-default"
+													: "text-destructive"
+										}`}
 										onClick={() => {
 											if (data?.server?.ipAddress) {
 												copy(data.server.ipAddress);
@@ -178,7 +196,7 @@ const Mongo = (
 										</TooltipProvider>
 									)}
 								</div>
-								<span>{'>'}</span>
+								<span>{">"}</span>
 								<StatusTooltip status={data?.applicationStatus} />
 							</div>
 						</CardTitle>
@@ -192,7 +210,10 @@ const Mongo = (
 					</div>
 					<div className="flex flex-col h-fit w-fit gap-2">
 						<div className="flex flex-row gap-2 justify-end">
-							<TooltipProvider delayDuration={0} disableHoverableContent={false}>
+							<TooltipProvider
+								delayDuration={0}
+								disableHoverableContent={false}
+							>
 								<DialogAction
 									title="Deploy MongoDB"
 									description="Are you sure you want to deploy this mongo?"
@@ -317,7 +338,10 @@ const Mongo = (
 											Actions <ChevronDown className="ml-2 h-4 w-4" />
 										</Button>
 									</DropdownMenuTrigger>
-									<DropdownMenuContent align="end" className="flex flex-col gap-2">
+									<DropdownMenuContent
+										align="end"
+										className="flex flex-col gap-2"
+									>
 										<DialogAction
 											title="Reload MongoDB"
 											description="Are you sure you want to reload this mongo?"
@@ -350,7 +374,9 @@ const Mongo = (
 													</TooltipTrigger>
 													<TooltipPrimitive.Portal>
 														<TooltipContent sideOffset={5} className="z-[60]">
-															<p>Restart the MongoDB service without rebuilding</p>
+															<p>
+																Restart the MongoDB service without rebuilding
+															</p>
 														</TooltipContent>
 													</TooltipPrimitive.Portal>
 												</Tooltip>
@@ -398,10 +424,10 @@ const Mongo = (
 							<div className="max-w-3xl mx-auto flex flex-col items-center justify-center self-center gap-3">
 								<ServerOff className="size-10 text-muted-foreground self-center" />
 								<span className="text-center text-base text-muted-foreground">
-									This service is hosted on the server {data.server.name},
-									but this server has been disabled because your current
-									plan doesn't include enough servers. Please purchase more
-									servers to regain access to this application.
+									This service is hosted on the server {data.server.name}, but
+									this server has been disabled because your current plan
+									doesn't include enough servers. Please purchase more servers
+									to regain access to this application.
 								</span>
 								<span className="text-center text-base text-muted-foreground">
 									Go to{" "}
@@ -428,9 +454,7 @@ const Mongo = (
 							}}
 						>
 							<div className="flex justify-start col-span-2 h-full overflow-auto">
-								<TabsList
-									className="flex flex-col items-start justify-start h-full !bg-background"
-								>
+								<TabsList className="flex flex-col items-start justify-start h-full !bg-background">
 									<TabsTrigger value="general">General</TabsTrigger>
 									<TabsTrigger value="environment">Environment</TabsTrigger>
 									<TabsTrigger value="logs">Logs</TabsTrigger>
@@ -443,7 +467,10 @@ const Mongo = (
 							</div>
 
 							<div className="col-span-10 w-full h-full">
-								<TabsContent value="general" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="general"
+									className="flex flex-col gap-2 w-full"
+								>
 									<div className="flex flex-col gap-4 pt-2.5">
 										<DrawerLogs
 											isOpen={isDrawerOpen}
@@ -460,18 +487,22 @@ const Mongo = (
 									</div>
 								</TabsContent>
 
-								<TabsContent value="environment" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="environment"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowEnvironment id={mongoId} type="mongo" />
 								</TabsContent>
 
-								<TabsContent value="monitoring" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="monitoring"
+									className="flex flex-col gap-2 w-full"
+								>
 									{data?.serverId && isCloud ? (
 										<ContainerPaidMonitoring
 											appName={data?.appName || ""}
 											baseUrl={`${data?.serverId ? `http://${data?.server?.ipAddress}:${data?.server?.metricsConfig?.server?.port}` : "http://localhost:4500"}`}
-											token={
-												data?.server?.metricsConfig?.server?.token || ""
-											}
+											token={data?.server?.metricsConfig?.server?.token || ""}
 										/>
 									) : (
 										<>
@@ -497,23 +528,27 @@ const Mongo = (
 															/>
 														) : (
 															<div> */}
-											<ContainerFreeMonitoring
-												appName={data?.appName || ""}
-											/>
+											<ContainerFreeMonitoring appName={data?.appName || ""} />
 											{/* </div> */}
 											{/* )} */}
 										</>
 									)}
 								</TabsContent>
 
-								<TabsContent value="logs" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="logs"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowDockerLogs
 										serverId={data?.serverId || ""}
 										appName={data?.appName || ""}
 									/>
 								</TabsContent>
 
-								<TabsContent value="backups" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="backups"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowBackups
 										id={mongoId}
 										databaseType="mongo"
@@ -521,7 +556,10 @@ const Mongo = (
 									/>
 								</TabsContent>
 
-								<TabsContent value="advanced" className="flex flex-col gap-2 w-full">
+								<TabsContent
+									value="advanced"
+									className="flex flex-col gap-2 w-full"
+								>
 									<ShowDatabaseAdvancedSettings id={mongoId} type="mongo" />
 								</TabsContent>
 							</div>

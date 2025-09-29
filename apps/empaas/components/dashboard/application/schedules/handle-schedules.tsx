@@ -68,12 +68,7 @@ const formSchema = z
 		command: z.string(),
 		enabled: z.boolean().default(true),
 		serviceName: z.string(),
-		scheduleType: z.enum([
-			"application",
-			"compose",
-			"server",
-			"empaas-server",
-		]),
+		scheduleType: z.enum(["application", "compose", "server", "empaas-server"]),
 		script: z.string(),
 	})
 	.superRefine((data, ctx) => {

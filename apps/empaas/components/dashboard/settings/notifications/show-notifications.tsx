@@ -110,9 +110,7 @@ export const ShowNotifications = () => {
 																	refetch();
 																})
 																.catch(() => {
-																	toast.error(
-																		"Error deleting notification",
-																	);
+																	toast.error("Error deleting notification");
 																});
 														}}
 													>

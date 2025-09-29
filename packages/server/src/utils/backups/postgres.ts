@@ -3,8 +3,8 @@ import {
 	createDeploymentBackup,
 	updateDeploymentStatus,
 } from "@empaas/server/services/deployment";
-import type { Postgres } from "@empaas/server/services/postgres";
 import { findEnvironmentById } from "@empaas/server/services/environment";
+import type { Postgres } from "@empaas/server/services/postgres";
 import { findProjectById } from "@empaas/server/services/project";
 import { sendDatabaseBackupNotifications } from "../notifications/database-backup";
 import { execAsync, execAsyncRemote } from "../process/execAsync";

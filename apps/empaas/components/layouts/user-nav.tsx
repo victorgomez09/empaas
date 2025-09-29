@@ -1,4 +1,3 @@
-import { ChevronsUpDown } from "lucide-react";
 import { useRouter } from "next/router";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -23,7 +22,7 @@ import { getFallbackAvatarInitials } from "@/lib/utils";
 import { api } from "@/utils/api";
 import useLocale from "@/utils/hooks/use-locale";
 import { ModeToggle } from "../ui/modeToggle";
-import { Button } from "../ui/button";
+
 // import { SidebarMenuButton } from "../ui/sidebar";
 
 const _AUTO_CHECK_UPDATES_INTERVAL_MINUTES = 7;
@@ -43,16 +42,16 @@ export const UserNav = () => {
 					size="lg"
 					className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 				> */}
-					<Avatar className="h-8 w-8 rounded-lg cursor-pointer hover:ring-1 hover:ring-primary">
-						<AvatarImage
-							src={data?.user?.image || ""}
-							alt={data?.user?.image || ""}
-						/>
-						<AvatarFallback className="rounded-lg">
-							{getFallbackAvatarInitials(data?.user?.name)}
-						</AvatarFallback>
-					</Avatar>
-					{/* <div className="grid flex-1 text-left text-sm leading-tight">
+				<Avatar className="h-8 w-8 rounded-lg cursor-pointer hover:ring-1 hover:ring-primary">
+					<AvatarImage
+						src={data?.user?.image || ""}
+						alt={data?.user?.image || ""}
+					/>
+					<AvatarFallback className="rounded-lg">
+						{getFallbackAvatarInitials(data?.user?.name)}
+					</AvatarFallback>
+				</Avatar>
+				{/* <div className="grid flex-1 text-left text-sm leading-tight">
 						<span className="truncate font-semibold">Account</span>
 						<span className="truncate text-xs">{data?.user?.email}</span>
 					</div>

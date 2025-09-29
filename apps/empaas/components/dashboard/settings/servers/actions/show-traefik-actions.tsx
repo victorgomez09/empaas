@@ -58,7 +58,7 @@ export const ShowTraefikActions = ({ serverId }: Props) => {
 								.then(async () => {
 									toast.success("Traefik Reloaded");
 								})
-								.catch(() => { });
+								.catch(() => {});
 						}}
 						className="cursor-pointer"
 					>

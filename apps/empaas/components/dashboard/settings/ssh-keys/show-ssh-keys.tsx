@@ -26,8 +26,8 @@ export const ShowDestinations = () => {
 					SSH Keys
 				</CardTitle>
 				<CardDescription>
-					Create and manage SSH Keys, you can use them to access your
-					servers, git private repositories, and more.
+					Create and manage SSH Keys, you can use them to access your servers,
+					git private repositories, and more.
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
@@ -91,9 +91,7 @@ export const ShowDestinations = () => {
 																sshKeyId: sshKey.sshKeyId,
 															})
 																.then(() => {
-																	toast.success(
-																		"SSH Key deleted successfully",
-																	);
+																	toast.success("SSH Key deleted successfully");
 																	refetch();
 																})
 																.catch(() => {

@@ -53,21 +53,21 @@ export const ShowDomains = ({ id, type }: Props) => {
 	const { data: application } =
 		type === "application"
 			? api.application.one.useQuery(
-				{
-					applicationId: id,
-				},
-				{
-					enabled: !!id,
-				},
-			)
+					{
+						applicationId: id,
+					},
+					{
+						enabled: !!id,
+					},
+				)
 			: api.compose.one.useQuery(
-				{
-					composeId: id,
-				},
-				{
-					enabled: !!id,
-				},
-			);
+					{
+						composeId: id,
+					},
+					{
+						enabled: !!id,
+					},
+				);
 	const [validationStates, setValidationStates] = useState<ValidationStates>(
 		{},
 	);
@@ -78,7 +78,7 @@ export const ShowDomains = ({ id, type }: Props) => {
 		refetch,
 		isLoading: isLoadingDomains,
 	} = type === "application"
-			? api.domain.byApplicationId.useQuery(
+		? api.domain.byApplicationId.useQuery(
 				{
 					applicationId: id,
 				},
@@ -86,7 +86,7 @@ export const ShowDomains = ({ id, type }: Props) => {
 					enabled: !!id,
 				},
 			)
-			: api.domain.byComposeId.useQuery(
+		: api.domain.byComposeId.useQuery(
 				{
 					composeId: id,
 				},
@@ -169,8 +169,7 @@ export const ShowDomains = ({ id, type }: Props) => {
 					<div className="flex w-full flex-col items-center justify-center gap-3 min-h-[40vh]">
 						<GlobeIcon className="size-8 text-muted-foreground" />
 						<span className="text-base text-muted-foreground">
-							To access the application it is required to set at least 1
-							domain
+							To access the application it is required to set at least 1 domain
 						</span>
 						<div className="flex flex-row gap-4 flex-wrap">
 							<AddDomain id={id} type={type}>
@@ -236,9 +235,7 @@ export const ShowDomains = ({ id, type }: Props) => {
 															})
 																.then((_data) => {
 																	refetch();
-																	toast.success(
-																		"Domain deleted successfully",
-																	);
+																	toast.success("Domain deleted successfully");
 																})
 																.catch(() => {
 																	toast.error("Error deleting domain");
@@ -343,9 +340,7 @@ export const ShowDomains = ({ id, type }: Props) => {
 																			? "bg-red-500/10 text-red-500 cursor-pointer"
 																			: "bg-yellow-500/10 text-yellow-500 cursor-pointer"
 																}
-																onClick={() =>
-																	handleValidateDomain(item.host)
-																}
+																onClick={() => handleValidateDomain(item.host)}
 															>
 																{validationState?.isLoading ? (
 																	<>
@@ -356,7 +351,7 @@ export const ShowDomains = ({ id, type }: Props) => {
 																	<>
 																		<CheckCircle2 className="size-3 mr-1" />
 																		{validationState.message &&
-																			validationState.cdnProvider
+																		validationState.cdnProvider
 																			? `Behind ${validationState.cdnProvider}`
 																			: "DNS Valid"}
 																	</>

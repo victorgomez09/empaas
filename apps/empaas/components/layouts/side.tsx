@@ -1,4 +1,23 @@
 "use client";
+import type { inferRouterOutputs } from "@trpc/server";
+import {
+	BarChartHorizontalBigIcon,
+	Bell,
+	BlocksIcon,
+	Clock,
+	Folder,
+	Forward,
+	GalleryVerticalEnd,
+	Loader2,
+	type LucideIcon,
+	Menu,
+	PieChart,
+	Settings,
+	Trash2,
+} from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -18,33 +37,17 @@ import { authClient } from "@/lib/auth-client";
 import { cn, getFallbackAvatarInitials } from "@/lib/utils";
 import type { AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
-import type { inferRouterOutputs } from "@trpc/server";
-import {
-	BarChartHorizontalBigIcon,
-	Bell,
-	BlocksIcon,
-	BookIcon,
-	Clock,
-	Folder,
-	Forward,
-	GalleryVerticalEnd,
-	Loader2,
-	type LucideIcon,
-	Menu,
-	PieChart,
-	Settings,
-	Trash2
-} from "lucide-react";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import { AddOrganization } from "../dashboard/organization/handle-organization";
 import { DialogAction } from "../shared/dialog-action";
-import { Logo } from "../shared/logo";
 import { Accordion } from "../ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "../ui/navigation-menu";
+import {
+	NavigationMenu,
+	NavigationMenuItem,
+	NavigationMenuLink,
+	NavigationMenuList,
+} from "../ui/navigation-menu";
 import { UserNav } from "./user-nav";
 
 // Menu items
@@ -81,10 +84,7 @@ const MENU: NavItem[] = [
 		icon: GalleryVerticalEnd,
 		// Only enabled for admins and users with access to Traefik files in non-cloud environments
 		isEnabled: ({ auth, isCloud }) =>
-			!!(
-				(auth?.role === "owner" || auth?.canAccessToTraefikFiles) &&
-				!isCloud
-			),
+			!!((auth?.role === "owner" || auth?.canAccessToTraefikFiles) && !isCloud),
 	},
 	{
 		isSingle: true,
@@ -423,7 +423,6 @@ export default function Page({ children }: Props) {
 									</div>
 								) : (
 									<>
-
 										{/* Notification Bell */}
 										<DropdownMenu>
 											<DropdownMenuTrigger asChild>
@@ -433,7 +432,7 @@ export default function Page({ children }: Props) {
 													className={cn(
 														"relative",
 														"h-8 w-8 p-1.5 mx-auto",
-														"!focus:ring-none"
+														"!focus:ring-none",
 													)}
 												>
 													<Bell className="size-4" />
@@ -450,11 +449,16 @@ export default function Page({ children }: Props) {
 												sideOffset={4}
 												className="w-80"
 											>
-												<DropdownMenuLabel>Pending Invitations</DropdownMenuLabel>
+												<DropdownMenuLabel>
+													Pending Invitations
+												</DropdownMenuLabel>
 												<div className="flex flex-col gap-2">
 													{invitations && invitations.length > 0 ? (
 														invitations.map((invitation) => (
-															<div key={invitation.id} className="flex flex-col gap-2">
+															<div
+																key={invitation.id}
+																className="flex flex-col gap-2"
+															>
 																<DropdownMenuItem
 																	className="flex flex-col items-start gap-1 p-3"
 																	onSelect={(e) => e.preventDefault()}
@@ -464,7 +468,9 @@ export default function Page({ children }: Props) {
 																	</div>
 																	<div className="text-xs text-muted-foreground">
 																		Expires:{" "}
-																		{new Date(invitation.expiresAt).toLocaleString()}
+																		{new Date(
+																			invitation.expiresAt,
+																		).toLocaleString()}
 																	</div>
 																	<div className="text-xs text-muted-foreground">
 																		Role: {invitation.role}
@@ -476,16 +482,21 @@ export default function Page({ children }: Props) {
 																	type="default"
 																	onClick={async () => {
 																		const { error } =
-																			await authClient.organization.acceptInvitation({
-																				invitationId: invitation.id,
-																			});
+																			await authClient.organization.acceptInvitation(
+																				{
+																					invitationId: invitation.id,
+																				},
+																			);
 
 																		if (error) {
 																			toast.error(
-																				error.message || "Error accepting invitation",
+																				error.message ||
+																					"Error accepting invitation",
 																			);
 																		} else {
-																			toast.success("Invitation accepted successfully");
+																			toast.success(
+																				"Invitation accepted successfully",
+																			);
 																			await refetchInvitations();
 																			await refetch();
 																		}
@@ -515,7 +526,9 @@ export default function Page({ children }: Props) {
 														alt={activeOrganization?.logo || ""}
 													/>
 													<AvatarFallback className="rounded-lg">
-														{getFallbackAvatarInitials(activeOrganization?.name)}
+														{getFallbackAvatarInitials(
+															activeOrganization?.name,
+														)}
 													</AvatarFallback>
 												</Avatar>
 												{/* <Button
@@ -573,7 +586,10 @@ export default function Page({ children }: Props) {
 													Organizations
 												</DropdownMenuLabel>
 												{organizations?.map((org) => (
-													<div className="flex flex-row justify-between" key={org.name}>
+													<div
+														className="flex flex-row justify-between"
+														key={org.name}
+													>
 														<DropdownMenuItem
 															onClick={async () => {
 																await authClient.organization.setActive({
@@ -583,7 +599,9 @@ export default function Page({ children }: Props) {
 															}}
 															className="w-full gap-2 p-2 cursor-pointer"
 														>
-															<div className="flex flex-col gap-4">{org.name}</div>
+															<div className="flex flex-col gap-4">
+																{org.name}
+															</div>
 															<div className="flex size-6 items-center justify-center rounded-sm border">
 																{/* <Logo
 																	className={cn(
@@ -623,7 +641,7 @@ export default function Page({ children }: Props) {
 																			.catch((error) => {
 																				toast.error(
 																					error?.message ||
-																					"Error deleting organization",
+																						"Error deleting organization",
 																				);
 																			});
 																	}}
@@ -712,9 +730,7 @@ export default function Page({ children }: Props) {
 					</div>
 				</div>
 			</section>
-			<div className="p-2 w-full h-full">
-				{children}
-			</div>
+			<div className="p-2 w-full h-full">{children}</div>
 		</div>
 		// <SidebarProvider
 		// 	defaultOpen={defaultOpen}
@@ -1013,8 +1029,7 @@ type SingleNavItem = {
 // Consists of a single item or a group of items
 // If `isSingle` is true or undefined, the item is a single item
 // If `isSingle` is false, the item is a group of items
-export type NavItem =
-	| SingleNavItem
+export type NavItem = SingleNavItem;
 
 const renderMenuItem = (item: NavItem, pathname: string) => {
 	return (

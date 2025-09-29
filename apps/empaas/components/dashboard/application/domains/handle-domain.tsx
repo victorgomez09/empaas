@@ -137,21 +137,21 @@ export const AddDomain = ({ id, type, domainId = "", children }: Props) => {
 	const { data: application } =
 		type === "application"
 			? api.application.one.useQuery(
-				{
-					applicationId: id,
-				},
-				{
-					enabled: !!id,
-				},
-			)
+					{
+						applicationId: id,
+					},
+					{
+						enabled: !!id,
+					},
+				)
 			: api.compose.one.useQuery(
-				{
-					composeId: id,
-				},
-				{
-					enabled: !!id,
-				},
-			);
+					{
+						composeId: id,
+					},
+					{
+						enabled: !!id,
+					},
+				);
 
 	const { mutateAsync, isError, error, isLoading } = domainId
 		? api.domain.update.useMutation()

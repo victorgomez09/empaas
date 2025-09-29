@@ -39,7 +39,7 @@ export const getBitbucketCloneUrl = (
 	if (!bitbucketProvider) {
 		throw new Error("Bitbucket provider is required");
 	}
-	
+
 	if (bitbucketProvider.apiToken) {
 		return `https://x-bitbucket-api-token-auth:${bitbucketProvider.apiToken}@${repoClone}`;
 	}

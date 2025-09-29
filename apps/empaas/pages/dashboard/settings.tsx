@@ -1,17 +1,13 @@
-import { IS_CLOUD } from "@empaas/server/constants";
 import { validateRequest } from "@empaas/server/lib/auth";
 import { createServerSideHelpers } from "@trpc/react-query/server";
-import { useState, type ReactElement } from "react";
-import superjson from "superjson";
-import { DashboardLayout } from "@/components/layouts/dashboard-layout";
-import { appRouter } from "@/server/api/root";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import router from "next/router";
+import { Settings as SettingsIcon } from "lucide-react";
 import type {
 	GetServerSidePropsContext,
 	InferGetServerSidePropsType,
 } from "next";
+import router from "next/router";
+import { type ReactElement, useState } from "react";
+import superjson from "superjson";
 import { ShowBackups } from "@/components/dashboard/database/backups/show-backups";
 import { AiForm } from "@/components/dashboard/settings/ai-form";
 import { ShowApiKeys } from "@/components/dashboard/settings/api/show-api-keys";
@@ -24,16 +20,40 @@ import { ShowGitProviders } from "@/components/dashboard/settings/git/show-git-p
 import { ShowNotifications } from "@/components/dashboard/settings/notifications/show-notifications";
 import { ProfileForm } from "@/components/dashboard/settings/profile/profile-form";
 import { ShowServers } from "@/components/dashboard/settings/servers/show-servers";
-import { WebDomain } from "@/components/dashboard/settings/web-domain";
-import { WebServer } from "@/components/dashboard/settings/web-server";
-import { api } from "@/utils/api";
-import { Settings as SettingsIcon } from "lucide-react";
 import { ShowInvitations } from "@/components/dashboard/settings/users/show-invitations";
 import { ShowUsers } from "@/components/dashboard/settings/users/show-users";
+import { WebDomain } from "@/components/dashboard/settings/web-domain";
+import { WebServer } from "@/components/dashboard/settings/web-server";
+import { DashboardLayout } from "@/components/layouts/dashboard-layout";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { appRouter } from "@/server/api/root";
+import { api } from "@/utils/api";
 
-type TabState = "ai" | "billing" | "certificate" | "cluster" | "destinations" | "git-providers" | "notifications" | "profile" | "registry" | "server" | "servers" | "ssh-keys" | "users";
+type TabState =
+	| "ai"
+	| "billing"
+	| "certificate"
+	| "cluster"
+	| "destinations"
+	| "git-providers"
+	| "notifications"
+	| "profile"
+	| "registry"
+	| "server"
+	| "servers"
+	| "ssh-keys"
+	| "users";
 
-const Settings = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Settings = (
+	props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) => {
 	const { activeTab } = props;
 	const [tab, setSab] = useState<TabState>(activeTab);
 
@@ -47,9 +67,7 @@ const Settings = (props: InferGetServerSidePropsType<typeof getServerSideProps>)
 					<SettingsIcon className="size-6 text-muted-foreground self-center" />
 					Settings
 				</CardTitle>
-				<CardDescription>
-					Manage all system options from here.
-				</CardDescription>
+				<CardDescription>Manage all system options from here.</CardDescription>
 			</CardHeader>
 
 			<CardContent>
@@ -66,9 +84,7 @@ const Settings = (props: InferGetServerSidePropsType<typeof getServerSideProps>)
 					}}
 				>
 					<div className="flex justify-start col-span-2 h-full overflow-auto">
-						<TabsList
-							className="flex flex-col items-start justify-start h-full !bg-background"
-						>
+						<TabsList className="flex flex-col items-start justify-start h-full !bg-background">
 							<TabsTrigger value="ai">Ai</TabsTrigger>
 							<TabsTrigger value="billing">Billing</TabsTrigger>
 							<TabsTrigger value="certificate">Certificate</TabsTrigger>
@@ -94,7 +110,10 @@ const Settings = (props: InferGetServerSidePropsType<typeof getServerSideProps>)
 							<ShowBilling />
 						</TabsContent>
 
-						<TabsContent value="certificate" className="flex flex-col gap-2 w-full">
+						<TabsContent
+							value="certificate"
+							className="flex flex-col gap-2 w-full"
+						>
 							<ShowCertificates />
 						</TabsContent>
 
@@ -102,28 +121,42 @@ const Settings = (props: InferGetServerSidePropsType<typeof getServerSideProps>)
 							<ShowNodes />
 						</TabsContent>
 
-						<TabsContent value="destinations" className="flex flex-col gap-2 w-full">
+						<TabsContent
+							value="destinations"
+							className="flex flex-col gap-2 w-full"
+						>
 							<ShowDestinations />
 						</TabsContent>
 
-						<TabsContent value="git-providers" className="flex flex-col gap-2 w-full">
+						<TabsContent
+							value="git-providers"
+							className="flex flex-col gap-2 w-full"
+						>
 							<ShowGitProviders />
 						</TabsContent>
 
-						<TabsContent value="notifications" className="flex flex-col gap-2 w-full">
+						<TabsContent
+							value="notifications"
+							className="flex flex-col gap-2 w-full"
+						>
 							<ShowNotifications />
 						</TabsContent>
 
 						<TabsContent value="profile" className="flex flex-col gap-2 w-full">
 							<div className="flex flex-col gap-2 w-full h-full">
 								<ProfileForm />
-								{(data?.canAccessToAPI || data?.role === "owner") && <ShowApiKeys />}
+								{(data?.canAccessToAPI || data?.role === "owner") && (
+									<ShowApiKeys />
+								)}
 
 								{/* {isCloud && <RemoveSelfAccount />} */}
 							</div>
 						</TabsContent>
 
-						<TabsContent value="registry" className="flex flex-col gap-2 w-full">
+						<TabsContent
+							value="registry"
+							className="flex flex-col gap-2 w-full"
+						>
 							<ShowRegistry />
 						</TabsContent>
 
@@ -147,7 +180,10 @@ const Settings = (props: InferGetServerSidePropsType<typeof getServerSideProps>)
 							<ShowServers />
 						</TabsContent>
 
-						<TabsContent value="ssh-keys" className="flex flex-col gap-2 w-full">
+						<TabsContent
+							value="ssh-keys"
+							className="flex flex-col gap-2 w-full"
+						>
 							<ShowDestinations />
 						</TabsContent>
 
@@ -161,7 +197,7 @@ const Settings = (props: InferGetServerSidePropsType<typeof getServerSideProps>)
 				</Tabs>
 			</CardContent>
 		</Card>
-	)
+	);
 };
 
 export default Settings;

@@ -74,9 +74,7 @@ export const ShowUsers = () => {
 											<TableHead className="text-center">Role</TableHead>
 											<TableHead className="text-center">2FA</TableHead>
 
-											<TableHead className="text-center">
-												Created At
-											</TableHead>
+											<TableHead className="text-center">Created At</TableHead>
 											<TableHead className="text-right">Actions</TableHead>
 										</TableRow>
 									</TableHeader>
@@ -112,23 +110,16 @@ export const ShowUsers = () => {
 													<TableCell className="text-right flex justify-end">
 														<DropdownMenu>
 															<DropdownMenuTrigger asChild>
-																<Button
-																	variant="ghost"
-																	className="h-8 w-8 p-0"
-																>
+																<Button variant="ghost" className="h-8 w-8 p-0">
 																	<span className="sr-only">Open menu</span>
 																	<MoreHorizontal className="h-4 w-4" />
 																</Button>
 															</DropdownMenuTrigger>
 															<DropdownMenuContent align="end">
-																<DropdownMenuLabel>
-																	Actions
-																</DropdownMenuLabel>
+																<DropdownMenuLabel>Actions</DropdownMenuLabel>
 
 																{member.role !== "owner" && (
-																	<AddUserPermissions
-																		userId={member.user.id}
-																	/>
+																	<AddUserPermissions userId={member.user.id} />
 																)}
 
 																{member.role !== "owner" && (
@@ -157,9 +148,7 @@ export const ShowUsers = () => {
 																			>
 																				<DropdownMenuItem
 																					className="w-full cursor-pointer text-red-500 hover:!text-red-600"
-																					onSelect={(e) =>
-																						e.preventDefault()
-																					}
+																					onSelect={(e) => e.preventDefault()}
 																				>
 																					Delete User
 																				</DropdownMenuItem>
@@ -213,9 +202,7 @@ export const ShowUsers = () => {
 																					);
 																					refetch();
 																				} else {
-																					toast.error(
-																						"Error unlinking user",
-																					);
+																					toast.error("Error unlinking user");
 																				}
 																			}}
 																		>

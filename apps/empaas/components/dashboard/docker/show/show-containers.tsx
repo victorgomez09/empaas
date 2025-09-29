@@ -95,13 +95,10 @@ export const ShowContainers = ({ serverId }: Props) => {
 							<Input
 								placeholder="Filter by name..."
 								value={
-									(table.getColumn("name")?.getFilterValue() as string) ??
-									""
+									(table.getColumn("name")?.getFilterValue() as string) ?? ""
 								}
 								onChange={(event) =>
-									table
-										.getColumn("name")
-										?.setFilterValue(event.target.value)
+									table.getColumn("name")?.setFilterValue(event.target.value)
 								}
 								className="md:max-w-sm"
 							/>
@@ -159,9 +156,9 @@ export const ShowContainers = ({ serverId }: Props) => {
 															{header.isPlaceholder
 																? null
 																: flexRender(
-																	header.column.columnDef.header,
-																	header.getContext(),
-																)}
+																		header.column.columnDef.header,
+																		header.getContext(),
+																	)}
 														</TableHead>
 													);
 												})}

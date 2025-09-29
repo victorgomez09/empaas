@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
 export const Logo = ({ className = "size-14", logoUrl }: Props) => {
 	if (logoUrl) {
 		return (
-			<img
+			<Image
 				src={logoUrl}
 				alt="Organization Logo"
 				className={cn(className, "object-contain rounded-sm")}

@@ -40,13 +40,12 @@ export const ShowTraefikSystem = ({ serverId }: Props) => {
 					Traefik File System
 				</CardTitle>
 				<CardDescription>
-					Manage all the files and directories in {"'/etc/empaas/traefik'"}
-					.
+					Manage all the files and directories in {"'/etc/empaas/traefik'"}.
 				</CardDescription>
 
 				<AlertBlock type="warning">
-					Adding invalid configuration to existing files, can break your
-					Traefik instance, preventing access to your applications.
+					Adding invalid configuration to existing files, can break your Traefik
+					instance, preventing access to your applications.
 				</AlertBlock>
 			</CardHeader>
 
@@ -69,8 +68,7 @@ export const ShowTraefikSystem = ({ serverId }: Props) => {
 						{directories?.length === 0 && (
 							<div className="w-full flex-col gap-2 flex items-center justify-center h-[55vh]">
 								<span className="text-muted-foreground text-lg font-medium">
-									No directories or files detected in{" "}
-									{"'/etc/empaas/traefik'"}
+									No directories or files detected in {"'/etc/empaas/traefik'"}
 								</span>
 								<Folder className="size-8 text-muted-foreground" />
 							</div>

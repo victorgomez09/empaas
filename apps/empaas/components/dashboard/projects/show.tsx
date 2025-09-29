@@ -142,9 +142,7 @@ export const ShowProjects = () => {
 							<FolderInput className="size-6 text-muted-foreground self-center" />
 							Projects
 						</CardTitle>
-						<CardDescription>
-							Create and manage your projects
-						</CardDescription>
+						<CardDescription>Create and manage your projects</CardDescription>
 					</CardHeader>
 
 					{(auth?.role === "owner" || auth?.canCreateProjects) && (
@@ -237,16 +235,12 @@ export const ShowProjects = () => {
 									const haveServicesWithDomains = project?.environments
 										.map(
 											(env) =>
-												env.applications.length > 0 ||
-												env.compose.length > 0,
+												env.applications.length > 0 || env.compose.length > 0,
 										)
 										.some(Boolean);
 
 									return (
-										<div
-											key={project.projectId}
-											className="w-full lg:max-w-md"
-										>
+										<div key={project.projectId} className="w-full lg:max-w-md">
 											<Link
 												href={`/dashboard/project/${project.projectId}/environment/${project?.environments?.[0]?.environmentId}`}
 											>
@@ -269,88 +263,87 @@ export const ShowProjects = () => {
 																{project.environments.some(
 																	(env) => env.applications.length > 0,
 																) && (
-																		<DropdownMenuGroup>
-																			<DropdownMenuLabel>
-																				Applications
-																			</DropdownMenuLabel>
-																			{project.environments.map((env) =>
-																				env.applications.map((app) => (
-																					<div key={app.applicationId}>
+																	<DropdownMenuGroup>
+																		<DropdownMenuLabel>
+																			Applications
+																		</DropdownMenuLabel>
+																		{project.environments.map((env) =>
+																			env.applications.map((app) => (
+																				<div key={app.applicationId}>
+																					<DropdownMenuSeparator />
+																					<DropdownMenuGroup>
+																						<DropdownMenuLabel className="font-normal capitalize text-xs flex items-center justify-between">
+																							{app.name}
+																							<StatusTooltip
+																								status={app.applicationStatus}
+																							/>
+																						</DropdownMenuLabel>
 																						<DropdownMenuSeparator />
-																						<DropdownMenuGroup>
-																							<DropdownMenuLabel className="font-normal capitalize text-xs flex items-center justify-between">
-																								{app.name}
-																								<StatusTooltip
-																									status={
-																										app.applicationStatus
-																									}
-																								/>
-																							</DropdownMenuLabel>
-																							<DropdownMenuSeparator />
-																							{app.domains.map((domain) => (
-																								<DropdownMenuItem
-																									key={domain.domainId}
-																									asChild
-																								>
-																									<Link
-																										className="space-x-4 text-xs cursor-pointer justify-between"
-																										target="_blank"
-																										href={`${domain.https ? "https" : "http"}://${domain.host}${domain.path}`}
-																									>
-																										<span className="truncate">
-																											{domain.host}
-																										</span>
-																										<ExternalLinkIcon className="size-4 shrink-0" />
-																									</Link>
-																								</DropdownMenuItem>
-																							))}
-																						</DropdownMenuGroup>
-																					</div>
-																				)),
-																			)}
-																		</DropdownMenuGroup>
-																	)}
-																{project.environments.some(
-																	(env) => env.compose.length > 0,
-																) && (
-																		<DropdownMenuGroup>
-																			<DropdownMenuLabel>
-																				Compose
-																			</DropdownMenuLabel>
-																			{project.environments.map((env) =>
-																				env.compose.map((comp) => (
-																					<div key={comp.composeId}>
-																						<DropdownMenuSeparator />
-																						<DropdownMenuGroup>
-																							<DropdownMenuLabel className="font-normal capitalize text-xs flex items-center justify-between">
-																								{comp.name}
-																								<StatusTooltip
-																									status={comp.composeStatus}
-																								/>
-																							</DropdownMenuLabel>
-																							<DropdownMenuSeparator />
-																							{comp.domains.map((domain) => (
-																								<DropdownMenuItem
-																									key={domain.domainId}
-																									asChild
-																								><Link
+																						{app.domains.map((domain) => (
+																							<DropdownMenuItem
+																								key={domain.domainId}
+																								asChild
+																							>
+																								<Link
 																									className="space-x-4 text-xs cursor-pointer justify-between"
 																									target="_blank"
 																									href={`${domain.https ? "https" : "http"}://${domain.host}${domain.path}`}
 																								>
-																										<span className="truncate">
-																											{domain.host}
-																										</span>
-																										<ExternalLinkIcon className="size-4 shrink-0" />
-																									</Link>
-																								</DropdownMenuItem>
-																							))}
-																						</DropdownMenuGroup>
-																					</div>
-																				)),
-																			)}
-																		</DropdownMenuGroup>
-																	)}
+																									<span className="truncate">
+																										{domain.host}
+																									</span>
+																									<ExternalLinkIcon className="size-4 shrink-0" />
+																								</Link>
+																							</DropdownMenuItem>
+																						))}
+																					</DropdownMenuGroup>
+																				</div>
+																			)),
+																		)}
+																	</DropdownMenuGroup>
+																)}
+																{project.environments.some(
+																	(env) => env.compose.length > 0,
+																) && (
+																	<DropdownMenuGroup>
+																		<DropdownMenuLabel>
+																			Compose
+																		</DropdownMenuLabel>
+																		{project.environments.map((env) =>
+																			env.compose.map((comp) => (
+																				<div key={comp.composeId}>
+																					<DropdownMenuSeparator />
+																					<DropdownMenuGroup>
+																						<DropdownMenuLabel className="font-normal capitalize text-xs flex items-center justify-between">
+																							{comp.name}
+																							<StatusTooltip
+																								status={comp.composeStatus}
+																							/>
+																						</DropdownMenuLabel>
+																						<DropdownMenuSeparator />
+																						{comp.domains.map((domain) => (
+																							<DropdownMenuItem
+																								key={domain.domainId}
+																								asChild
+																							>
+																								<Link
+																									className="space-x-4 text-xs cursor-pointer justify-between"
+																									target="_blank"
+																									href={`${domain.https ? "https" : "http"}://${domain.host}${domain.path}`}
+																								>
+																									<span className="truncate">
+																										{domain.host}
+																									</span>
+																									<ExternalLinkIcon className="size-4 shrink-0" />
+																								</Link>
+																							</DropdownMenuItem>
+																						))}
+																					</DropdownMenuGroup>
+																				</div>
+																			)),
+																		)}
+																	</DropdownMenuGroup>
+																)}
 																{/* 
 																		{project.compose.length > 0 && (
 																			<DropdownMenuGroup>
@@ -425,92 +418,84 @@ export const ShowProjects = () => {
 																		<DropdownMenuLabel className="font-normal">
 																			Actions
 																		</DropdownMenuLabel>
-																		<div
-																			onClick={(e) => e.stopPropagation()}
-																		>
+																		<div onClick={(e) => e.stopPropagation()}>
 																			<ProjectEnvironment
 																				projectId={project.projectId}
 																			/>
 																		</div>
-																		<div
-																			onClick={(e) => e.stopPropagation()}
-																		>
+																		<div onClick={(e) => e.stopPropagation()}>
 																			<HandleProject
 																				projectId={project.projectId}
 																			/>
 																		</div>
 
-																		<div
-																			onClick={(e) => e.stopPropagation()}
-																		>
+																		<div onClick={(e) => e.stopPropagation()}>
 																			{(auth?.role === "owner" ||
 																				auth?.canDeleteProjects) && (
-																					<AlertDialog>
-																						<AlertDialogTrigger className="w-full">
-																							<DropdownMenuItem
-																								className="w-full cursor-pointer  space-x-3"
-																								onSelect={(e) =>
-																									e.preventDefault()
-																								}
-																							>
-																								<TrashIcon className="size-4" />
-																								<span>Delete</span>
-																							</DropdownMenuItem>
-																						</AlertDialogTrigger>
-																						<AlertDialogContent>
-																							<AlertDialogHeader>
-																								<AlertDialogTitle>
-																									Are you sure to delete this
-																									project?
-																								</AlertDialogTitle>
-																								{!emptyServices ? (
-																									<div className="flex flex-row gap-4 rounded-lg bg-yellow-50 p-2 dark:bg-yellow-950">
-																										<AlertTriangle className="text-yellow-600 dark:text-yellow-400" />
-																										<span className="text-sm text-yellow-600 dark:text-yellow-400">
-																											You have active
-																											services, please delete
-																											them first
-																										</span>
-																									</div>
-																								) : (
-																									<AlertDialogDescription>
-																										This action cannot be
-																										undone
-																									</AlertDialogDescription>
-																								)}
-																							</AlertDialogHeader>
-																							<AlertDialogFooter>
-																								<AlertDialogCancel>
-																									Cancel
-																								</AlertDialogCancel>
-																								<AlertDialogAction
-																									disabled={!emptyServices}
-																									onClick={async () => {
-																										await mutateAsync({
-																											projectId:
-																												project.projectId,
+																				<AlertDialog>
+																					<AlertDialogTrigger className="w-full">
+																						<DropdownMenuItem
+																							className="w-full cursor-pointer  space-x-3"
+																							onSelect={(e) =>
+																								e.preventDefault()
+																							}
+																						>
+																							<TrashIcon className="size-4" />
+																							<span>Delete</span>
+																						</DropdownMenuItem>
+																					</AlertDialogTrigger>
+																					<AlertDialogContent>
+																						<AlertDialogHeader>
+																							<AlertDialogTitle>
+																								Are you sure to delete this
+																								project?
+																							</AlertDialogTitle>
+																							{!emptyServices ? (
+																								<div className="flex flex-row gap-4 rounded-lg bg-yellow-50 p-2 dark:bg-yellow-950">
+																									<AlertTriangle className="text-yellow-600 dark:text-yellow-400" />
+																									<span className="text-sm text-yellow-600 dark:text-yellow-400">
+																										You have active services,
+																										please delete them first
+																									</span>
+																								</div>
+																							) : (
+																								<AlertDialogDescription>
+																									This action cannot be undone
+																								</AlertDialogDescription>
+																							)}
+																						</AlertDialogHeader>
+																						<AlertDialogFooter>
+																							<AlertDialogCancel>
+																								Cancel
+																							</AlertDialogCancel>
+																							<AlertDialogAction
+																								disabled={!emptyServices}
+																								onClick={async () => {
+																									await mutateAsync({
+																										projectId:
+																											project.projectId,
+																									})
+																										.then(() => {
+																											toast.success(
+																												"Project deleted successfully",
+																											);
 																										})
-																											.then(() => {
-																												toast.success(
-																													"Project deleted successfully",
-																												);
-																											})
-																											.catch(() => {
-																												toast.error(
-																													"Error deleting this project",
-																												);
-																											})
-																											.finally(() => {
-																												utils.project.all.invalidate();
-																											});
-																									}}
-																								>
-																									Delete
-																								</AlertDialogAction>
-																							</AlertDialogFooter>
-																						</AlertDialogContent>
-																					</AlertDialog>
-																				)}
+																										.catch(() => {
+																											toast.error(
+																												"Error deleting this project",
+																											);
+																										})
+																										.finally(() => {
+																											utils.project.all.invalidate();
+																										});
+																								}}
+																							>
+																								Delete
+																							</AlertDialogAction>
+																						</AlertDialogFooter>
+																					</AlertDialogContent>
+																				</AlertDialog>
+																			)}
 																		</div>
 																	</DropdownMenuContent>
 																</DropdownMenu>
@@ -524,9 +509,7 @@ export const ShowProjects = () => {
 															</DateTooltip>
 															<span>
 																{totalServices}{" "}
-																{totalServices === 1
-																	? "service"
-																	: "services"}
+																{totalServices === 1 ? "service" : "services"}
 															</span>
 														</div>
 													</CardFooter>

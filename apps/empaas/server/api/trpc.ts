@@ -7,8 +7,8 @@
  * need to use are documented accordingly near the end.
  */
 
-import { validateRequest } from "@empaas/server/lib/auth";
 import type { OpenApiMeta } from "@dokploy/trpc-openapi";
+import { validateRequest } from "@empaas/server/lib/auth";
 import { initTRPC, TRPCError } from "@trpc/server";
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import {

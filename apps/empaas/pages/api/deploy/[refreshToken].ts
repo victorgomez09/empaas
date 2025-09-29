@@ -1,8 +1,5 @@
-import {
-	type Bitbucket,
-	IS_CLOUD,
-	shouldDeploy,
-} from "@empaas/server";
+import { type Bitbucket, IS_CLOUD, shouldDeploy } from "@empaas/server";
+import { getBitbucketHeaders } from "@empaas/server/utils/providers/bitbucket";
 import { eq } from "drizzle-orm";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { db } from "@/server/db";
@@ -10,7 +7,6 @@ import { applications } from "@/server/db/schema";
 import type { DeploymentJob } from "@/server/queues/queue-types";
 import { myQueue } from "@/server/queues/queueSetup";
 import { deploy } from "@/server/utils/deploy";
-import { getBitbucketHeaders } from "@empaas/server/utils/providers/bitbucket";
 
 export default async function handler(
 	req: NextApiRequest,

@@ -92,7 +92,7 @@ export const gracefulShutdown = async (signal: string) => {
 	await firstWorker.close();
 	await secondWorker.close();
 	await thirdWorker.close();
-	
+
 	process.exit(0);
 };
 

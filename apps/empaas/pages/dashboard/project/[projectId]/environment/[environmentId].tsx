@@ -101,13 +101,13 @@ export type Services = {
 	serverId?: string | null;
 	name: string;
 	type:
-	| "mariadb"
-	| "application"
-	| "postgres"
-	| "mysql"
-	| "mongo"
-	| "redis"
-	| "compose";
+		| "mariadb"
+		| "application"
+		| "postgres"
+		| "mysql"
+		| "mongo"
+		| "redis"
+		| "compose";
 	description?: string | null;
 	id: string;
 	createdAt: string;
@@ -833,8 +833,8 @@ const EnvironmentPage = (
 										className={cn(
 											"data-[state=checked]:bg-primary",
 											selectedServices.length > 0 &&
-											selectedServices.length < filteredServices.length &&
-											"bg-primary/50",
+												selectedServices.length < filteredServices.length &&
+												"bg-primary/50",
 										)}
 										onCheckedChange={handleSelectAll}
 									/>
@@ -867,10 +867,7 @@ const EnvironmentPage = (
 											type="default"
 											onClick={handleBulkStart}
 										>
-											<Button
-												variant="ghost"
-												className="w-full justify-start"
-											>
+											<Button variant="ghost" className="w-full justify-start">
 												<CheckCircle2 className="mr-2 h-4 w-4" />
 												Start
 											</Button>
@@ -884,10 +881,7 @@ const EnvironmentPage = (
 												selectedServices.length === 0 || isBulkActionLoading
 											}
 										>
-											<Button
-												variant="ghost"
-												className="w-full justify-start"
-											>
+											<Button variant="ghost" className="w-full justify-start">
 												<Play className="mr-2 h-4 w-4" />
 												Deploy
 											</Button>
@@ -906,54 +900,52 @@ const EnvironmentPage = (
 												Stop
 											</Button>
 										</DialogAction>
-										{(auth?.role === "owner" ||
-											auth?.canDeleteServices) && (
-												<>
-													<DialogAction
-														title="Delete Services"
-														description={
-															<div className="space-y-3">
-																<p>
-																	Are you sure you want to delete{" "}
-																	{selectedServices.length} services? This
-																	action cannot be undone.
-																</p>
-																{selectedServicesWithRunningStatus.length >
-																	0 && (
-																		<AlertBlock type="warning">
-																			Warning:{" "}
-																			{selectedServicesWithRunningStatus.length}{" "}
-																			of the selected services are currently
-																			running. Please stop these services first
-																			before deleting:{" "}
-																			{selectedServicesWithRunningStatus
-																				.map((s) => s.name)
-																				.join(", ")}
-																		</AlertBlock>
-																	)}
-															</div>
-														}
-														type="destructive"
-														disabled={
-															selectedServicesWithRunningStatus.length > 0
-														}
-														onClick={() => setIsBulkDeleteDialogOpen(true)}
+										{(auth?.role === "owner" || auth?.canDeleteServices) && (
+											<>
+												<DialogAction
+													title="Delete Services"
+													description={
+														<div className="space-y-3">
+															<p>
+																Are you sure you want to delete{" "}
+																{selectedServices.length} services? This action
+																cannot be undone.
+															</p>
+															{selectedServicesWithRunningStatus.length > 0 && (
+																<AlertBlock type="warning">
+																	Warning:{" "}
+																	{selectedServicesWithRunningStatus.length} of
+																	the selected services are currently running.
+																	Please stop these services first before
+																	deleting:{" "}
+																	{selectedServicesWithRunningStatus
+																		.map((s) => s.name)
+																		.join(", ")}
+																</AlertBlock>
+															)}
+														</div>
+													}
+													type="destructive"
+													disabled={
+														selectedServicesWithRunningStatus.length > 0
+													}
+													onClick={() => setIsBulkDeleteDialogOpen(true)}
+												>
+													<Button
+														variant="ghost"
+														className="w-full justify-start text-destructive"
 													>
-														<Button
-															variant="ghost"
-															className="w-full justify-start text-destructive"
-														>
-															<Trash2 className="mr-2 h-4 w-4" />
-															Delete
-														</Button>
-													</DialogAction>
-													<DuplicateProject
-														environmentId={environmentId}
-														services={applications}
-														selectedServiceIds={selectedServices}
-													/>
-												</>
-											)}
+														<Trash2 className="mr-2 h-4 w-4" />
+														Delete
+													</Button>
+												</DialogAction>
+												<DuplicateProject
+													environmentId={environmentId}
+													services={applications}
+													selectedServiceIds={selectedServices}
+												/>
+											</>
+										)}
 
 										<Dialog
 											open={isMoveDialogOpen}
@@ -972,8 +964,8 @@ const EnvironmentPage = (
 												<DialogHeader>
 													<DialogTitle>Move Services</DialogTitle>
 													<DialogDescription>
-														Select the target project and environment to
-														move {selectedServices.length} services
+														Select the target project and environment to move{" "}
+														{selectedServices.length} services
 													</DialogDescription>
 												</DialogHeader>
 												<div className="flex flex-col gap-4">
@@ -1029,9 +1021,7 @@ const EnvironmentPage = (
 																	</label>
 																	<Select
 																		value={selectedTargetEnvironment}
-																		onValueChange={
-																			setSelectedTargetEnvironment
-																		}
+																		onValueChange={setSelectedTargetEnvironment}
 																	>
 																		<SelectTrigger>
 																			<SelectValue placeholder="Select target environment" />
@@ -1040,8 +1030,7 @@ const EnvironmentPage = (
 																			{selectedProjectEnvironments
 																				?.filter(
 																					(env) =>
-																						env.environmentId !==
-																						environmentId,
+																						env.environmentId !== environmentId,
 																				)
 																				.map((env) => (
 																					<SelectItem
@@ -1208,12 +1197,8 @@ const EnvironmentPage = (
 										<SelectValue placeholder="Sort by..." />
 									</SelectTrigger>
 									<SelectContent>
-										<SelectItem value="createdAt-desc">
-											Newest first
-										</SelectItem>
-										<SelectItem value="createdAt-asc">
-											Oldest first
-										</SelectItem>
+										<SelectItem value="createdAt-desc">Newest first</SelectItem>
+										<SelectItem value="createdAt-asc">Oldest first</SelectItem>
 										<SelectItem value="name-asc">Name (A-Z)</SelectItem>
 										<SelectItem value="name-desc">Name (Z-A)</SelectItem>
 										<SelectItem value="type-asc">Type (A-Z)</SelectItem>
@@ -1332,15 +1317,11 @@ const EnvironmentPage = (
 															? "opacity-100 translate-y-0"
 															: "opacity-0 group-hover:translate-y-0 group-hover:opacity-100",
 													)}
-													onClick={(e) =>
-														handleServiceSelect(service.id, e)
-													}
+													onClick={(e) => handleServiceSelect(service.id, e)}
 												>
 													<div className="h-full w-full flex items-center justify-center">
 														<Checkbox
-															checked={selectedServices.includes(
-																service.id,
-															)}
+															checked={selectedServices.includes(service.id)}
 															className="data-[state=checked]:bg-primary"
 														/>
 													</div>

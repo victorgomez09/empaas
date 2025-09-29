@@ -172,10 +172,9 @@ export const ShowBilling = () => {
 												<div className="flex flex-row gap-2 items-center">
 													<p className="text-2xl font-semibold tracking-tight text-primary ">
 														${" "}
-														{calculatePrice(
-															serverQuantity,
-															isAnnual,
-														).toFixed(2)}{" "}
+														{calculatePrice(serverQuantity, isAnnual).toFixed(
+															2,
+														)}{" "}
 														USD
 													</p>
 													|
@@ -190,9 +189,7 @@ export const ShowBilling = () => {
 											) : (
 												<p className="text-2xl font-semibold tracking-tight text-primary ">
 													${" "}
-													{calculatePrice(serverQuantity, isAnnual).toFixed(
-														2,
-													)}{" "}
+													{calculatePrice(serverQuantity, isAnnual).toFixed(2)}{" "}
 													USD
 												</p>
 											)}

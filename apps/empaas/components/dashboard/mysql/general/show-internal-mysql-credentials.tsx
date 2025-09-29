@@ -27,10 +27,7 @@ export const ShowInternalMysqlCredentials = ({ mysqlId }: Props) => {
 					<div className="flex flex-col gap-2">
 						<Label>Password</Label>
 						<div className="flex flex-row gap-4">
-							<ToggleVisibilityInput
-								disabled
-								value={data?.databasePassword}
-							/>
+							<ToggleVisibilityInput disabled value={data?.databasePassword} />
 						</div>
 					</div>
 					<div className="flex flex-col gap-2">

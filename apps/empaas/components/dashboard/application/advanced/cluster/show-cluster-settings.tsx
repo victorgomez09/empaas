@@ -81,8 +81,8 @@ export const ShowClusterSettings = ({ id, type }: Props) => {
 		defaultValues: {
 			...(type === "application" && data && "registryId" in data
 				? {
-					registryId: data?.registryId || "",
-				}
+						registryId: data?.registryId || "",
+					}
 				: {}),
 			replicas: data?.replicas || 1,
 		},
@@ -94,8 +94,8 @@ export const ShowClusterSettings = ({ id, type }: Props) => {
 			form.reset({
 				...(type === "application" && data && "registryId" in data
 					? {
-						registryId: data?.registryId || "",
-					}
+							registryId: data?.registryId || "",
+						}
 					: {}),
 				replicas: data?.replicas || 1,
 			});
@@ -112,11 +112,11 @@ export const ShowClusterSettings = ({ id, type }: Props) => {
 			mongoId: id || "",
 			...(type === "application"
 				? {
-					registryId:
-						data?.registryId === "none" || !data?.registryId
-							? null
-							: data?.registryId,
-				}
+						registryId:
+							data?.registryId === "none" || !data?.registryId
+								? null
+								: data?.registryId,
+					}
 				: {}),
 			replicas: data?.replicas,
 		})

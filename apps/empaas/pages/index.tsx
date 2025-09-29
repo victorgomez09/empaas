@@ -479,7 +479,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 					},
 				};
 			}
-		} catch { }
+		} catch {}
 
 		return {
 			props: {

@@ -105,7 +105,7 @@ export const initializeStandaloneTraefik = async ({
 		const container = docker.getContainer(containerName);
 		await container.remove({ force: true });
 		await new Promise((resolve) => setTimeout(resolve, 5000));
-	} catch { }
+	} catch {}
 
 	try {
 		await docker.createContainer(settings);
@@ -258,22 +258,22 @@ export const getDefaultTraefikConfig = () => {
 		providers: {
 			...(process.env.NODE_ENV === "development"
 				? {
-					docker: {
-						defaultRule:
-							"Host(`{{ trimPrefix `/` .Name }}.docker.localhost`)",
-					},
-				}
+						docker: {
+							defaultRule:
+								"Host(`{{ trimPrefix `/` .Name }}.docker.localhost`)",
+						},
+					}
 				: {
-					swarm: {
-						exposedByDefault: false,
-						watch: true,
-					},
-					docker: {
-						exposedByDefault: false,
-						watch: true,
-						network: "empaas-network",
-					},
-				}),
+						swarm: {
+							exposedByDefault: false,
+							watch: true,
+						},
+						docker: {
+							exposedByDefault: false,
+							watch: true,
+							network: "empaas-network",
+						},
+					}),
 			file: {
 				directory: "/etc/empaas/traefik/dynamic",
 				watch: true,
