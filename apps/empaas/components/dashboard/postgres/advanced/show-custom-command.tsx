@@ -131,13 +131,13 @@ export const ShowCustomCommand = ({ id, type }: Props) => {
 									<FormLabel>Command</FormLabel>
 									<FormControl>
 										<Input
-													placeholder={
-														type === "libsql"
-															? "sqld --db-path iku.db --http-listen-addr 0.0.0.0:8080 --grpc-listen-addr 0.0.0.0:5001 --admin-listen-addr 0.0.0.0:5000"
-															: "Custom command"
-													}
-													{...field}
-												/>
+											placeholder={
+												type === "libsql"
+													? "sqld --db-path iku.db --http-listen-addr 0.0.0.0:8080 --grpc-listen-addr 0.0.0.0:5001 --admin-listen-addr 0.0.0.0:5000"
+													: "Custom command"
+											}
+											{...field}
+										/>
 									</FormControl>
 
 									<FormMessage />

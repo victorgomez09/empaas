@@ -95,7 +95,7 @@ export const DeleteService = ({ id, type }: Props) => {
 			await mutateAsync({
 				mongoId: id || "",
 				postgresId: id || "",
-					libsqlId: id || "",
+				libsqlId: id || "",
 				redisId: id || "",
 				mysqlId: id || "",
 				mariadbId: id || "",

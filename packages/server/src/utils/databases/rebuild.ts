@@ -17,7 +17,13 @@ import { removeService } from "../docker/utils";
 import { execAsync, execAsyncRemote } from "../process/execAsync";
 import { deployLibsql } from "@empaas/server/services/libsql";
 
-type DatabaseType = "postgres" | "mysql" | "mariadb" | "mongo" | "redis" | "libsql";
+type DatabaseType =
+	| "postgres"
+	| "mysql"
+	| "mariadb"
+	| "mongo"
+	| "redis"
+	| "libsql";
 
 export const rebuildDatabase = async (
 	databaseId: string,

@@ -134,7 +134,8 @@ export const apiCreateMount = createSchema
 		gid: true,
 		mode: true,
 		serviceType: true,
-	}).extend({
+	})
+	.extend({
 		serviceId: z.string().min(1),
 	});
 
