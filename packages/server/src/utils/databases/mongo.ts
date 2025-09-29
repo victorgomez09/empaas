@@ -91,7 +91,7 @@ ${command ?? "wait $MONGOD_PID"}`;
 		RollbackConfig,
 		UpdateConfig,
 		Networks,
-		StopGracePeriod
+		StopGracePeriod,
 	} = generateConfigContainer(mongo);
 
 	const resources = calculateResources({

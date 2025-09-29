@@ -25,6 +25,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
 	Tooltip,
 	TooltipContent,
@@ -32,7 +33,6 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { api } from "@/utils/api";
-import { Input } from "@/components/ui/input";
 
 const HealthCheckSwarmSchema = z
 	.object({
@@ -190,7 +190,9 @@ interface Props {
 const hasStopGracePeriodSwarm = (
 	value: unknown,
 ): value is { stopGracePeriodSwarm: bigint | number | string | null } =>
-	typeof value === "object" && value !== null && "stopGracePeriodSwarm" in value;
+	typeof value === "object" &&
+	value !== null &&
+	"stopGracePeriodSwarm" in value;
 
 export const AddSwarmSettings = ({ id, type }: Props) => {
 	const queryMap = {

@@ -394,7 +394,7 @@ export const generateConfigContainer = (
 		replicas,
 		mounts,
 		networkSwarm,
-		stopGracePeriodSwarm
+		stopGracePeriodSwarm,
 	} = application;
 
 	const sanitizedStopGracePeriodSwarm =
@@ -459,8 +459,8 @@ export const generateConfigContainer = (
 				}),
 		...(sanitizedStopGracePeriodSwarm !== null &&
 			sanitizedStopGracePeriodSwarm !== undefined && {
-			StopGracePeriod: sanitizedStopGracePeriodSwarm,
-		}),
+				StopGracePeriod: sanitizedStopGracePeriodSwarm,
+			}),
 	};
 };
 

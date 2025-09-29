@@ -45,7 +45,7 @@ export const buildPostgres = async (postgres: PostgresNested) => {
 		RollbackConfig,
 		UpdateConfig,
 		Networks,
-		StopGracePeriod
+		StopGracePeriod,
 	} = generateConfigContainer(postgres);
 	const resources = calculateResources({
 		memoryLimit,

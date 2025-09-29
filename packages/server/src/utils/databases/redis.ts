@@ -43,7 +43,7 @@ export const buildRedis = async (redis: RedisNested) => {
 		RollbackConfig,
 		UpdateConfig,
 		Networks,
-		StopGracePeriod
+		StopGracePeriod,
 	} = generateConfigContainer(redis);
 	const resources = calculateResources({
 		memoryLimit,
