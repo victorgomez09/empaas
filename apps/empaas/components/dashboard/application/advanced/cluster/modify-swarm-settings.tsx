@@ -131,7 +131,14 @@ type SwarmSettingsForm = z.infer<typeof SwarmSettingsFormSchema>;
 
 interface Props {
 	id: string;
-	type: "postgres" | "mariadb" | "mongo" | "mysql" | "redis" | "libsql" | "application";
+	type:
+		| "postgres"
+		| "mariadb"
+		| "mongo"
+		| "mysql"
+		| "redis"
+		| "libsql"
+		| "application";
 }
 
 // Individual form components

@@ -77,7 +77,7 @@ export const volumeBackupsRelations = relations(
 			fields: [volumeBackups.applicationId],
 			references: [applications.applicationId],
 		}),
-			libsql: one(libsql, {
+		libsql: one(libsql, {
 			fields: [volumeBackups.libsqlId],
 			references: [libsql.libsqlId],
 		}),

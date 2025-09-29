@@ -82,8 +82,7 @@ const Libsql = (
 			<div className="flex flex-col gap-4">
 				<Head>
 					<title>
-						Database: {data?.name} - {data?.environment?.project?.name} |
-						Empaas
+						Database: {data?.name} - {data?.environment?.project?.name} | Empaas
 					</title>
 				</Head>
 				<Card className="h-full bg-sidebar  p-2.5 rounded-xl w-full">

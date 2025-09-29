@@ -39,7 +39,7 @@ import { RestoreBackup } from "./restore-backup";
 
 interface Props {
 	id: string;
-		databaseType?:
+	databaseType?:
 		| Exclude<ServiceType, "application" | "redis" | "libsql">
 		| "web-server";
 	backupType?: "database" | "compose";

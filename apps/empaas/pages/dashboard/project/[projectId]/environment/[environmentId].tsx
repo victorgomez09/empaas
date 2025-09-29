@@ -149,7 +149,7 @@ export const extractServicesFromEnvironment = (
 			serverId: item.serverId,
 		})) || [];
 
-		const libsql: Services[] =
+	const libsql: Services[] =
 		environment.libsql?.map((item) => ({
 			appName: item.appName,
 			name: item.name,
@@ -1392,8 +1392,8 @@ const EnvironmentPage = (
 																	<PostgresqlIcon className="h-7 w-7" />
 																)}
 																{service.type === "libsql" && (
-																			<LibsqlIcon className="h-7 w-7" />
-																		)}
+																	<LibsqlIcon className="h-7 w-7" />
+																)}
 																{service.type === "redis" && (
 																	<RedisIcon className="h-7 w-7" />
 																)}

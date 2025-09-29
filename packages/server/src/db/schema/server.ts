@@ -107,7 +107,7 @@ export const serverRelations = relations(server, ({ one, many }) => ({
 	compose: many(compose),
 	redis: many(redis),
 	mariadb: many(mariadb),
-		libsql: many(libsql),
+	libsql: many(libsql),
 	mongo: many(mongo),
 	mysql: many(mysql),
 	postgres: many(postgres),
