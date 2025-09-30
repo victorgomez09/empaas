@@ -1,11 +1,12 @@
 import { Terminal } from "@xterm/xterm";
-import React, { useEffect, useRef, useState } from "react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 import { FitAddon } from "xterm-addon-fit";
 import "@xterm/xterm/css/xterm.css";
 import { AttachAddon } from "@xterm/addon-attach";
 import { useTheme } from "next-themes";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Props {
 	id: string;
@@ -22,7 +23,6 @@ export const DockerTerminal: React.FC<Props> = ({
 	const [activeWay, setActiveWay] = useState<string | undefined>("bash");
 	const [isConnected, setIsConnected] = useState(false);
 	const { resolvedTheme } = useTheme();
-
 
 	useEffect(() => {
 		const container = document.getElementById(id);

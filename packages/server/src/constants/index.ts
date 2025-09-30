@@ -1,5 +1,5 @@
-import path from "node:path";
 import fs from "node:fs";
+import path from "node:path";
 import Docker from "dockerode";
 
 export const IS_CLOUD = process.env.IS_CLOUD === "true";
@@ -41,7 +41,8 @@ const getDockerConfig = () => {
 			}
 		} catch (e) {
 			console.info(
-				`Docker socket initialization failed for ${candidate.label} (${candidate.path}): ${e instanceof Error ? e.message : "Unknown error"
+				`Docker socket initialization failed for ${candidate.label} (${candidate.path}): ${
+					e instanceof Error ? e.message : "Unknown error"
 				}`,
 			);
 		}

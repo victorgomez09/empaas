@@ -13,7 +13,6 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import {
 	Select,
 	SelectContent,
@@ -67,9 +66,8 @@ export const DockerTerminalModal = ({
 		if (!open && !containerId) {
 			setMainDialogOpen(false);
 			return;
-		} else {
-			setMainDialogOpen(true);
 		}
+		setMainDialogOpen(true);
 	};
 
 	const handleConfirm = () => {

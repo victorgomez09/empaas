@@ -7,6 +7,7 @@ import {
 	postgres,
 	redis,
 } from "@empaas/server/db/schema";
+import { deployLibsql } from "@empaas/server/services/libsql";
 import { deployMariadb } from "@empaas/server/services/mariadb";
 import { deployMongo } from "@empaas/server/services/mongo";
 import { deployMySql } from "@empaas/server/services/mysql";
@@ -15,7 +16,6 @@ import { deployRedis } from "@empaas/server/services/redis";
 import { eq } from "drizzle-orm";
 import { removeService } from "../docker/utils";
 import { execAsync, execAsyncRemote } from "../process/execAsync";
-import { deployLibsql } from "@empaas/server/services/libsql";
 
 type DatabaseType =
 	| "postgres"

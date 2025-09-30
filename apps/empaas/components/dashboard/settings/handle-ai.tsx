@@ -25,16 +25,9 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { Switch } from "@/components/ui/switch";
 import { api } from "@/utils/api";
-import { SearchableSelect } from "@/components/ui/searchable-select";
 
 const Schema = z.object({
 	name: z.string().min(1, { message: "Name is required" }),

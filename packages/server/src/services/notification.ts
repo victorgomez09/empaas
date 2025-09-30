@@ -1,15 +1,18 @@
 import { db } from "@empaas/server/db";
 import {
+	type apiCreateCustom,
 	type apiCreateDiscord,
 	type apiCreateEmail,
 	type apiCreateGotify,
 	type apiCreateSlack,
 	type apiCreateTelegram,
+	type apiUpdateCustom,
 	type apiUpdateDiscord,
 	type apiUpdateEmail,
 	type apiUpdateGotify,
 	type apiUpdateSlack,
 	type apiUpdateTelegram,
+	custom,
 	discord,
 	email,
 	gotify,
@@ -482,6 +485,94 @@ export const updateGotifyNotification = async (
 	});
 };
 
+export const createCustomNotification = async (
+	input: typeof apiCreateCustom._type,
+	organizationId: string,
+) => {
+	await db.transaction(async (tx) => {
+		const newCustom = await tx
+			.insert(custom)
+			.values({
+				endpoint: input.endpoint,
+				headers: input.headers,
+			})
+			.returning()
+			.then((value) => value[0]);
+
+		if (!newCustom) {
+			throw new TRPCError({
+				code: "BAD_REQUEST",
+				message: "Error input: Inserting custom",
+			});
+		}
+
+		const newDestination = await tx
+			.insert(notifications)
+			.values({
+				customId: newCustom.customId,
+				name: input.name,
+				appDeploy: input.appDeploy,
+				appBuildError: input.appBuildError,
+				databaseBackup: input.databaseBackup,
+				empaasRestart: input.empaasRestart,
+				dockerCleanup: input.dockerCleanup,
+				notificationType: "custom",
+				organizationId: organizationId,
+				serverThreshold: input.serverThreshold,
+			})
+			.returning()
+			.then((value) => value[0]);
+
+		if (!newDestination) {
+			throw new TRPCError({
+				code: "BAD_REQUEST",
+				message: "Error input: Inserting notification",
+			});
+		}
+
+		return newDestination;
+	});
+};
+
+export const updateCustomNotification = async (
+	input: typeof apiUpdateCustom._type,
+) => {
+	await db.transaction(async (tx) => {
+		const newDestination = await tx
+			.update(notifications)
+			.set({
+				name: input.name,
+				appDeploy: input.appDeploy,
+				appBuildError: input.appBuildError,
+				databaseBackup: input.databaseBackup,
+				empaasRestart: input.empaasRestart,
+				dockerCleanup: input.dockerCleanup,
+				organizationId: input.organizationId,
+				serverThreshold: input.serverThreshold,
+			})
+			.where(eq(notifications.notificationId, input.notificationId))
+			.returning()
+			.then((value) => value[0]);
+
+		if (!newDestination) {
+			throw new TRPCError({
+				code: "BAD_REQUEST",
+				message: "Error Updating notification",
+			});
+		}
+
+		await tx
+			.update(custom)
+			.set({
+				endpoint: input.endpoint,
+				headers: input.headers,
+			})
+			.where(eq(custom.customId, input.customId));
+
+		return newDestination;
+	});
+};
+
 export const findNotificationById = async (notificationId: string) => {
 	const notification = await db.query.notifications.findFirst({
 		where: eq(notifications.notificationId, notificationId),
@@ -491,6 +582,7 @@ export const findNotificationById = async (notificationId: string) => {
 			discord: true,
 			email: true,
 			gotify: true,
+			custom: true,
 		},
 	});
 	if (!notification) {
