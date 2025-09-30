@@ -390,6 +390,7 @@ const Service = (
 										<DockerTerminalModal
 											appName={data?.appName || ""}
 											serverId={data?.serverId || ""}
+											appType={data?.composeType || "docker-compose"}
 										>
 											<Button
 												variant="ghost"
