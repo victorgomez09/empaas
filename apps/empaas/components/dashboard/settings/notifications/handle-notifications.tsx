@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import {
 	DiscordIcon,
+	GotifyIcon,
 	SlackIcon,
 	TelegramIcon,
 } from "@/components/icons/notification-icons";
@@ -121,7 +122,7 @@ export const notificationsMap = {
 		label: "Email",
 	},
 	gotify: {
-		icon: <MessageCircleMore size={29} className="text-muted-foreground" />,
+		icon: <GotifyIcon />,
 		label: "Gotify",
 	},
 };
