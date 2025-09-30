@@ -83,7 +83,7 @@ export const UpdateLibsql = ({ libsqlId }: Props) => {
 			.catch(() => {
 				toast.error("Error updating the Libsql");
 			})
-			.finally(() => { });
+			.finally(() => {});
 	};
 
 	return (

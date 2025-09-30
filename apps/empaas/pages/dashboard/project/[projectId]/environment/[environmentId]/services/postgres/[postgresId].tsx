@@ -156,12 +156,13 @@ const Postgresql = (
 								<span>{">"}</span>
 								<div className="flex flex-row h-fit w-fit gap-2">
 									<span
-										className={`text-base cursor-pointer ${!data?.serverId
-											? "text-default"
-											: data?.server?.serverStatus === "active"
+										className={`text-base cursor-pointer ${
+											!data?.serverId
 												? "text-default"
-												: "text-destructive"
-											}`}
+												: data?.server?.serverStatus === "active"
+													? "text-default"
+													: "text-destructive"
+										}`}
 										onClick={() => {
 											if (data?.server?.ipAddress) {
 												copy(data.server.ipAddress);
@@ -502,10 +503,11 @@ const Postgresql = (
 									{data?.serverId && isCloud ? (
 										<ContainerPaidMonitoring
 											appName={data?.appName || ""}
-											baseUrl={`${data?.serverId
-												? `http://${data?.server?.ipAddress}:${data?.server?.metricsConfig?.server?.port}`
-												: "http://localhost:4500"
-												}`}
+											baseUrl={`${
+												data?.serverId
+													? `http://${data?.server?.ipAddress}:${data?.server?.metricsConfig?.server?.port}`
+													: "http://localhost:4500"
+											}`}
 											token={data?.server?.metricsConfig?.server?.token || ""}
 										/>
 									) : (

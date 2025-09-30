@@ -15,6 +15,7 @@ import { applications } from "./application";
 import { certificates } from "./certificate";
 import { compose } from "./compose";
 import { deployments } from "./deployment";
+import { libsql } from "./libsql";
 import { mariadb } from "./mariadb";
 import { mongo } from "./mongo";
 import { mysql } from "./mysql";
@@ -23,7 +24,6 @@ import { redis } from "./redis";
 import { schedules } from "./schedule";
 import { sshKeys } from "./ssh-key";
 import { generateAppName } from "./utils";
-import { libsql } from "./libsql";
 export const serverStatus = pgEnum("serverStatus", ["active", "inactive"]);
 
 export const server = pgTable("server", {

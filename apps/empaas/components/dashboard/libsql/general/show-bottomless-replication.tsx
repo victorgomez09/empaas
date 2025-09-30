@@ -127,17 +127,17 @@ export const ShowBottomlessReplication = ({
 								className={cn(
 									"w-full justify-between !bg-input",
 									!bottomlessReplicationDestinationId &&
-									"text-muted-foreground",
+										"text-muted-foreground",
 								)}
 							>
 								{isLoadingDestinations
 									? "Loading...."
 									: bottomlessReplicationDestinationId
 										? destinations?.find(
-											(destination) =>
-												destination.destinationId ===
-												bottomlessReplicationDestinationId,
-										)?.name
+												(destination) =>
+													destination.destinationId ===
+													bottomlessReplicationDestinationId,
+											)?.name
 										: "Select Destination"}
 								<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 							</Button>

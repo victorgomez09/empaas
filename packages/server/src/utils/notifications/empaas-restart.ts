@@ -5,6 +5,7 @@ import { renderAsync } from "@react-email/components";
 import { format } from "date-fns";
 import { eq } from "drizzle-orm";
 import {
+	sendCustomNotification,
 	sendDiscordNotification,
 	sendEmailNotification,
 	sendGotifyNotification,
@@ -23,11 +24,12 @@ export const sendEmpaasRestartNotifications = async () => {
 			telegram: true,
 			slack: true,
 			gotify: true,
+			custom: true,
 		},
 	});
 
 	for (const notification of notificationList) {
-		const { email, discord, telegram, slack, gotify } = notification;
+		const { email, discord, telegram, slack, gotify, custom } = notification;
 
 		if (email) {
 			const template = await renderAsync(
@@ -114,6 +116,21 @@ export const sendEmpaasRestartNotifications = async () => {
 							],
 						},
 					],
+				});
+			} catch (error) {
+				console.log(error);
+			}
+		}
+
+		if (custom) {
+			try {
+				await sendCustomNotification(custom, {
+					title: "Empaas Server Restarted",
+					message: "Empaas server has been restarted successfully",
+					timestamp: date.toISOString(),
+					date: date.toLocaleString(),
+					status: "success",
+					type: "empaas-restart",
 				});
 			} catch (error) {
 				console.log(error);

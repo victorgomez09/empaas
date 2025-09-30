@@ -4,7 +4,7 @@ import { db } from "@empaas/server/db";
 import {
 	type apiCreateMount,
 	mounts,
-	ServiceType,
+	type ServiceType,
 } from "@empaas/server/db/schema";
 import {
 	createFile,

@@ -1,7 +1,17 @@
 import { validateRequest } from "@empaas/server/lib/auth";
-import { createServerSideHelpers } from "@trpc/react-query/server";
-import { Ban, CheckCircle2, ChevronDown, HelpCircle, RefreshCcw, Rocket, ServerOff, Terminal } from "lucide-react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { createServerSideHelpers } from "@trpc/react-query/server";
+import copy from "copy-to-clipboard";
+import {
+	Ban,
+	CheckCircle2,
+	ChevronDown,
+	HelpCircle,
+	RefreshCcw,
+	Rocket,
+	ServerOff,
+	Terminal,
+} from "lucide-react";
 import type {
 	GetServerSidePropsContext,
 	InferGetServerSidePropsType,
@@ -10,21 +20,29 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { type ReactElement, useState } from "react";
+import { toast } from "sonner";
 import superjson from "superjson";
 import { ShowEnvironment } from "@/components/dashboard/application/environment/show-enviroment";
 import { ShowDockerLogs } from "@/components/dashboard/application/logs/show";
 import { DeleteService } from "@/components/dashboard/compose/delete-service";
+import {
+	type LogLine,
+	parseLogs,
+} from "@/components/dashboard/docker/logs/utils";
 import { ShowBottomlessReplication } from "@/components/dashboard/libsql/general/show-bottomless-replication";
 import { ShowExternalLibsqlCredentials } from "@/components/dashboard/libsql/general/show-external-libsql-credentials";
 import { ShowInternalLibsqlCredentials } from "@/components/dashboard/libsql/general/show-internal-libsql-credentials";
 import { UpdateLibsql } from "@/components/dashboard/libsql/update-libsql";
 import { ContainerFreeMonitoring } from "@/components/dashboard/monitoring/free/container/show-free-container-monitoring";
 import { ContainerPaidMonitoring } from "@/components/dashboard/monitoring/paid/container/show-paid-container-monitoring";
+import { DockerTerminalModal } from "@/components/dashboard/settings/web-server/docker-terminal-modal";
 import { ShowDatabaseAdvancedSettings } from "@/components/dashboard/shared/show-database-advanced-settings";
 import { LibsqlIcon } from "@/components/icons/data-tools-icons";
 import { DashboardLayout } from "@/components/layouts/dashboard-layout";
+import { DialogAction } from "@/components/shared/dialog-action";
+import { DrawerLogs } from "@/components/shared/drawer-logs";
 import { StatusTooltip } from "@/components/shared/status-tooltip";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -32,6 +50,11 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -43,13 +66,6 @@ import {
 import { UseKeyboardNav } from "@/hooks/use-keyboard-nav";
 import { appRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
-import copy from "copy-to-clipboard";
-import { DialogAction } from "@/components/shared/dialog-action";
-import { LogLine, parseLogs } from "@/components/dashboard/docker/logs/utils";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { DockerTerminalModal } from "@/components/dashboard/settings/web-server/docker-terminal-modal";
-import { DrawerLogs } from "@/components/shared/drawer-logs";
 
 type TabState = "projects" | "monitoring" | "settings" | "backups" | "advanced";
 
@@ -141,12 +157,13 @@ const Libsql = (
 									<span>{">"}</span>
 									<div className="flex flex-row h-fit w-fit gap-2">
 										<span
-											className={`text-base cursor-pointer ${!data?.serverId
-												? "text-default"
-												: data?.server?.serverStatus === "active"
+											className={`text-base cursor-pointer ${
+												!data?.serverId
 													? "text-default"
-													: "text-destructive"
-												}`}
+													: data?.server?.serverStatus === "active"
+														? "text-default"
+														: "text-destructive"
+											}`}
 											onClick={() => {
 												if (data?.server?.ipAddress) {
 													copy(data.server.ipAddress);
@@ -171,8 +188,8 @@ const Libsql = (
 													>
 														<span>
 															You cannot, deploy this application because the
-															server is inactive, please upgrade your plan to add
-															more servers.
+															server is inactive, please upgrade your plan to
+															add more servers.
 														</span>
 													</TooltipContent>
 												</Tooltip>
@@ -303,9 +320,7 @@ const Libsql = (
 													</TooltipTrigger>
 													<TooltipPrimitive.Portal>
 														<TooltipContent sideOffset={5} className="z-[60]">
-															<p>
-																Stop the currently running LibSQL database
-															</p>
+															<p>Stop the currently running LibSQL database</p>
 														</TooltipContent>
 													</TooltipPrimitive.Portal>
 												</Tooltip>
@@ -360,8 +375,7 @@ const Libsql = (
 														<TooltipPrimitive.Portal>
 															<TooltipContent sideOffset={5} className="z-[60]">
 																<p>
-																	Restart the LibSQL service without
-																	rebuilding
+																	Restart the LibSQL service without rebuilding
 																</p>
 															</TooltipContent>
 														</TooltipPrimitive.Portal>
@@ -409,10 +423,10 @@ const Libsql = (
 								<div className="max-w-3xl mx-auto flex flex-col items-center justify-center self-center gap-3">
 									<ServerOff className="size-10 text-muted-foreground self-center" />
 									<span className="text-center text-base text-muted-foreground">
-										This service is hosted on the server {data.server.name},
-										but this server has been disabled because your current
-										plan doesn't include enough servers. Please purchase more
-										servers to regain access to this application.
+										This service is hosted on the server {data.server.name}, but
+										this server has been disabled because your current plan
+										doesn't include enough servers. Please purchase more servers
+										to regain access to this application.
 									</span>
 									<span className="text-center text-base text-muted-foreground">
 										Go to{" "}
@@ -469,34 +483,42 @@ const Libsql = (
 										</div>
 									</TabsContent>
 
-									<TabsContent value="environment" className="flex flex-col gap-2 w-full">
+									<TabsContent
+										value="environment"
+										className="flex flex-col gap-2 w-full"
+									>
 										<ShowEnvironment id={libsqlId} type="libsql" />
 									</TabsContent>
 
-									<TabsContent value="monitoring" className="flex flex-col gap-2 w-full">
+									<TabsContent
+										value="monitoring"
+										className="flex flex-col gap-2 w-full"
+									>
 										{data?.serverId && isCloud ? (
 											<ContainerPaidMonitoring
 												appName={data?.appName || ""}
 												baseUrl={`${data?.serverId ? `http://${data?.server?.ipAddress}:${data?.server?.metricsConfig?.server?.port}` : "http://localhost:4500"}`}
-												token={
-													data?.server?.metricsConfig?.server?.token || ""
-												}
+												token={data?.server?.metricsConfig?.server?.token || ""}
 											/>
 										) : (
-											<ContainerFreeMonitoring
-												appName={data?.appName || ""}
-											/>
+											<ContainerFreeMonitoring appName={data?.appName || ""} />
 										)}
 									</TabsContent>
 
-									<TabsContent value="logs" className="flex flex-col gap-2 w-full">
+									<TabsContent
+										value="logs"
+										className="flex flex-col gap-2 w-full"
+									>
 										<ShowDockerLogs
 											serverId={data?.serverId || ""}
 											appName={data?.appName || ""}
 										/>
 									</TabsContent>
 
-									<TabsContent value="backups" className="flex flex-col gap-2 w-full">
+									<TabsContent
+										value="backups"
+										className="flex flex-col gap-2 w-full"
+									>
 										<ShowBottomlessReplication
 											libsqlId={libsqlId}
 											enableBottomlessReplication={
@@ -508,11 +530,11 @@ const Libsql = (
 										/>
 									</TabsContent>
 
-									<TabsContent value="advanced" className="flex flex-col gap-2 w-full">
-										<ShowDatabaseAdvancedSettings
-											id={libsqlId}
-											type="libsql"
-										/>
+									<TabsContent
+										value="advanced"
+										className="flex flex-col gap-2 w-full"
+									>
+										<ShowDatabaseAdvancedSettings id={libsqlId} type="libsql" />
 									</TabsContent>
 								</div>
 							</Tabs>

@@ -102,14 +102,14 @@ export type Services = {
 	serverId?: string | null;
 	name: string;
 	type:
-	| "mariadb"
-	| "application"
-	| "postgres"
-	| "libsql"
-	| "mysql"
-	| "mongo"
-	| "redis"
-	| "compose";
+		| "mariadb"
+		| "application"
+		| "postgres"
+		| "libsql"
+		| "mysql"
+		| "mongo"
+		| "redis"
+		| "compose";
 	description?: string | null;
 	id: string;
 	createdAt: string;
@@ -880,8 +880,8 @@ const EnvironmentPage = (
 										className={cn(
 											"data-[state=checked]:bg-primary",
 											selectedServices.length > 0 &&
-											selectedServices.length < filteredServices.length &&
-											"bg-primary/50",
+												selectedServices.length < filteredServices.length &&
+												"bg-primary/50",
 										)}
 										onCheckedChange={handleSelectAll}
 									/>

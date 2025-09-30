@@ -11,6 +11,7 @@ export const notificationType = pgEnum("notificationType", [
 	"discord",
 	"email",
 	"gotify",
+	"custom",
 ]);
 
 export const notifications = pgTable("notification", {
@@ -42,6 +43,9 @@ export const notifications = pgTable("notification", {
 		onDelete: "cascade",
 	}),
 	gotifyId: text("gotifyId").references(() => gotify.gotifyId, {
+		onDelete: "cascade",
+	}),
+	customId: text("customId").references(() => custom.customId, {
 		onDelete: "cascade",
 	}),
 	organizationId: text("organizationId")
@@ -101,6 +105,15 @@ export const gotify = pgTable("gotify", {
 	decoration: boolean("decoration"),
 });
 
+export const custom = pgTable("custom", {
+	customId: text("customId")
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => nanoid()),
+	endpoint: text("endpoint").notNull(),
+	headers: text("headers"), // JSON string
+});
+
 export const notificationsRelations = relations(notifications, ({ one }) => ({
 	slack: one(slack, {
 		fields: [notifications.slackId],
@@ -121,6 +134,10 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
 	gotify: one(gotify, {
 		fields: [notifications.gotifyId],
 		references: [gotify.gotifyId],
+	}),
+	custom: one(custom, {
+		fields: [notifications.customId],
+		references: [custom.customId],
 	}),
 	organization: one(organization, {
 		fields: [notifications.organizationId],
@@ -290,6 +307,32 @@ export const apiFindOneNotification = notificationsSchema
 	})
 	.required();
 
+export const apiCreateCustom = notificationsSchema
+	.pick({
+		appBuildError: true,
+		databaseBackup: true,
+		empaasRestart: true,
+		name: true,
+		appDeploy: true,
+		dockerCleanup: true,
+		serverThreshold: true,
+	})
+	.extend({
+		endpoint: z.string().min(1),
+		headers: z.string().optional(),
+	});
+
+export const apiUpdateCustom = apiCreateCustom.partial().extend({
+	notificationId: z.string().min(1),
+	customId: z.string().min(1),
+	organizationId: z.string().optional(),
+});
+
+export const apiTestCustomConnection = z.object({
+	endpoint: z.string().min(1),
+	headers: z.string().optional(),
+});
+
 export const apiSendTest = notificationsSchema
 	.extend({
 		botToken: z.string(),
@@ -305,5 +348,7 @@ export const apiSendTest = notificationsSchema
 		serverUrl: z.string(),
 		appToken: z.string(),
 		priority: z.number(),
+		endpoint: z.string(),
+		headers: z.string(),
 	})
 	.partial();
