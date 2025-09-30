@@ -1,4 +1,3 @@
-import { generateOpenApiDocument } from "@empaas/trpc-openapi";
 import {
 	canAccessToTraefikFiles,
 	checkGPUStatus,
@@ -44,6 +43,8 @@ import {
 	writeTraefikConfigInPath,
 	writeTraefikSetup,
 } from "@empaas/server";
+import { getDockerResourceType } from "@empaas/server/index";
+import { generateOpenApiDocument } from "@empaas/trpc-openapi";
 import { TRPCError } from "@trpc/server";
 import { eq, sql } from "drizzle-orm";
 import { scheduledJobs, scheduleJob } from "node-schedule";
@@ -72,7 +73,6 @@ import {
 	protectedProcedure,
 	publicProcedure,
 } from "../trpc";
-import { getDockerResourceType } from "@empaas/server/index";
 
 export const settingsRouter = createTRPCRouter({
 	reloadServer: adminProcedure.mutation(async () => {
