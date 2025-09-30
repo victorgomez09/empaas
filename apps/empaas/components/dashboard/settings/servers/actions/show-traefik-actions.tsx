@@ -20,16 +20,21 @@ interface Props {
 }
 export const ShowTraefikActions = ({ serverId }: Props) => {
 	const { t } = useTranslation("settings");
-	const { mutateAsync: reloadTraefik, isLoading: reloadTraefikIsLoading } =
-		api.settings.reloadTraefik.useMutation();
 
-	const { mutateAsync: toggleDashboard, isLoading: toggleDashboardIsLoading } =
-		api.settings.toggleDashboard.useMutation();
-
+	const { data: dashboardPort } = api.settings.getTraefikDashboardPort.useQuery(
+		{
+			serverId,
+		},
+	);
 	const { data: haveTraefikDashboardPortEnabled, refetch: refetchDashboard } =
 		api.settings.haveTraefikDashboardPortEnabled.useQuery({
 			serverId,
 		});
+
+	const { mutateAsync: reloadTraefik, isLoading: reloadTraefikIsLoading } =
+		api.settings.reloadTraefik.useMutation();
+	const { mutateAsync: toggleDashboard, isLoading: toggleDashboardIsLoading } =
+		api.settings.toggleDashboard.useMutation();
 
 	return (
 		<DropdownMenu>
@@ -87,26 +92,29 @@ export const ShowTraefikActions = ({ serverId }: Props) => {
 
 					<DropdownMenuItem
 						onClick={async () => {
-							await toggleDashboard({
-								enableDashboard: !haveTraefikDashboardPortEnabled,
-								serverId: serverId,
-							})
-								.then(async () => {
-									toast.success(
-										`${haveTraefikDashboardPortEnabled ? "Disabled" : "Enabled"} Dashboard`,
-									);
-									refetchDashboard();
-								})
-								.catch(() => {
-									toast.error(
-										`${haveTraefikDashboardPortEnabled ? "Disabled" : "Enabled"} Dashboard`,
-									);
+							try {
+								await toggleDashboard({
+									enableDashboard: !haveTraefikDashboardPortEnabled,
+									serverId: serverId,
 								});
+
+								toast.success(
+									`${haveTraefikDashboardPortEnabled ? "Disabled" : "Enabled"} Dashboard${dashboardPort ? ` on port ${dashboardPort}` : ""}`,
+								);
+								refetchDashboard();
+							} catch (error) {
+								console.error("Dashboard toggle error:", error);
+								toast.error(
+									`Failed to ${haveTraefikDashboardPortEnabled ? "disable" : "enable"} dashboard. Check logs for details.`,
+								);
+							}
 						}}
 						className="w-full cursor-pointer space-x-3"
 					>
 						<span>
-							{haveTraefikDashboardPortEnabled ? "Disable" : "Enable"} Dashboard
+							{haveTraefikDashboardPortEnabled
+								? `Disable Dashboard${dashboardPort ? ` (Port ${dashboardPort})` : ""}`
+								: "Enable Dashboard"}
 						</span>
 					</DropdownMenuItem>
 					<ManageTraefikPorts serverId={serverId}>
