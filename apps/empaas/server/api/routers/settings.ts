@@ -44,7 +44,7 @@ import {
 	writeTraefikSetup,
 } from "@empaas/server";
 import { getDockerResourceType } from "@empaas/server/index";
-import { generateOpenApiDocument } from "@empaas/trpc-openapi";
+import { generateOpenApiDocument } from "@dokploy/trpc-openapi";
 import { TRPCError } from "@trpc/server";
 import { eq, sql } from "drizzle-orm";
 import { scheduledJobs, scheduleJob } from "node-schedule";
