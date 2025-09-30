@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { api } from "@/utils/api";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 
 const Schema = z.object({
 	name: z.string().min(1, { message: "Name is required" }),
@@ -235,23 +236,20 @@ export const HandleAi = ({ aiId }: Props) => {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Model</FormLabel>
-										<Select
-											onValueChange={field.onChange}
-											value={field.value || ""}
-										>
-											<FormControl>
-												<SelectTrigger>
-													<SelectValue placeholder="Select a model" />
-												</SelectTrigger>
-											</FormControl>
-											<SelectContent>
-												{models.map((model) => (
-													<SelectItem key={model.id} value={model.id}>
-														{model.id}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
+										<FormControl>
+											<SearchableSelect
+												options={models.map((model) => ({
+													value: model.id,
+													label: model.id,
+												}))}
+												value={field.value || ""}
+												onValueChange={field.onChange}
+												placeholder="Select a model"
+												searchPlaceholder="Search models..."
+												emptyText="No models found."
+												disabled={isLoadingServerModels}
+											/>
+										</FormControl>
 										<FormDescription>Select an AI model to use</FormDescription>
 										<FormMessage />
 									</FormItem>
